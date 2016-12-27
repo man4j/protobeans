@@ -24,11 +24,6 @@
     </dependency>
     
     <dependency>
-      <groupId>com.ning</groupId>
-      <artifactId>async-http-client</artifactId>
-    </dependency>
-    
-    <dependency>
       <groupId>io.undertow</groupId>
       <artifactId>undertow-servlet</artifactId>
     </dependency>

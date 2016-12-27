@@ -28,12 +28,6 @@
     
     <dependency>
       <groupId>org.protobeans</groupId>
-      <artifactId>protobeans-testcontainers-mysql</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.protobeans</groupId>
       <artifactId>protobeans-flyway</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -50,6 +44,13 @@
           <artifactId>commons-logging</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.protobeans</groupId>
+      <artifactId>protobeans-testcontainers-mysql</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
     </dependency>
     
     <dependency>

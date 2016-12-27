@@ -8,10 +8,15 @@
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
-  <artifactId>protobeans-testcontainers-mysql</artifactId>
+  <artifactId>protobeans-testcontainers-selenium</artifactId>
   <packaging>jar</packaging>
   
   <dependencies>
+  <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
+    
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
@@ -19,7 +24,17 @@
 
     <dependency>
       <groupId>org.testcontainers</groupId>
-      <artifactId>mysql</artifactId> 
+      <artifactId>selenium</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-java</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.jcraft</groupId>
+      <artifactId>jsch</artifactId>
     </dependency>
   </dependencies>
 </project>

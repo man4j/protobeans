@@ -22,12 +22,6 @@
     
     <dependency>
       <groupId>org.protobeans</groupId>
-      <artifactId>protobeans-mysql</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.protobeans</groupId>
       <artifactId>protobeans-undertow</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -53,6 +47,20 @@
     </dependency>
     
     <dependency>
+      <groupId>com.ning</groupId>
+      <artifactId>async-http-client</artifactId>
+      <version>1.9.38</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.protobeans</groupId>
+      <artifactId>protobeans-testcontainers-selenium</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
@@ -64,6 +72,7 @@
       <groupId>org.skyscreamer</groupId>
       <artifactId>jsonassert</artifactId>
       <version>1.4.0</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   
