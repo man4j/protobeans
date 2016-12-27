@@ -4,6 +4,8 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.protobeans.core.EntryPoint;
 import org.protobeans.jdbc.annotation.EnableJdbc;
@@ -21,7 +23,7 @@ public class Main {
         return new UserService();
     }
     
-    @PostConstruct
+    @EventListener(ContextRefreshedEvent.class)
     void start() {
         userService.insertUsers();
     }

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.WebApplicationInitializer;
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.mvc.annotation.EnableMvc;
+import org.protobeans.mvc.util.ProtoBeansDefinitionScanner;
 import org.protobeans.mvc.util.ResourcesVersionBean;
 
 @Configuration
@@ -22,9 +23,13 @@ public class MvcConfig {
     private ApplicationContext ctx;
     
     @Bean
+    public ProtoBeansDefinitionScanner protoBeansDefinitionScanner() {
+        return new ProtoBeansDefinitionScanner(basePackageClasses);
+    }
+    
+    @Bean
     public Class<? extends WebApplicationInitializer> mvcInitializer() {
         MvcInitializer.rootApplicationContext = ctx;
-        MvcInitializer.basePackageClasses = basePackageClasses;
         
         return MvcInitializer.class; 
     }

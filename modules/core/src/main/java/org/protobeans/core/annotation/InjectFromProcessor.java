@@ -5,19 +5,30 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.ReflectionUtils;
 
 public class InjectFromProcessor implements BeanPostProcessor {
+    private static final Logger logger = LoggerFactory.getLogger(InjectFromProcessor.class);
+    
     @Autowired
     private ApplicationContext ctx;
     
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        InjectFrom injectFrom = ctx.findAnnotationOnBean(beanName, InjectFrom.class);
+        InjectFrom injectFrom = null;
+        
+        try {
+            injectFrom = ctx.findAnnotationOnBean(beanName, InjectFrom.class);
+        } catch (NoSuchBeanDefinitionException e) {
+            logger.warn(e.getMessage());
+        }
         
         if (injectFrom != null) {
             Class<? extends Annotation> annotationClass = injectFrom.value();

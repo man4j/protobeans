@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Collections;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.protobeans.core.EntryPoint;
 import org.protobeans.freemarker.annotation.EnableFreemarker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 
 import freemarker.core.ParseException;
 import freemarker.template.MalformedTemplateNameException;
@@ -20,7 +20,7 @@ public class Main {
     @Autowired
     freemarker.template.Configuration freemarker;
     
-    @PostConstruct
+    @EventListener(ContextRefreshedEvent.class)
     void start() throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, TemplateException, IOException {
         StringWriter writer = new StringWriter();
         

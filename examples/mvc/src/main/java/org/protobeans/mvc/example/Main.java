@@ -1,7 +1,11 @@
 package org.protobeans.mvc.example;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+
+import java.nio.charset.StandardCharsets;
+
 import org.protobeans.core.EntryPoint;
 import org.protobeans.i18n.annotation.EnableI18n;
 import org.protobeans.mvc.annotation.EnableMvc;
@@ -30,7 +34,8 @@ public class Main {
     
     @Bean
     MessageConvertersBean messageConvertersBean() {
-        return new MessageConvertersBean(new MappingJackson2HttpMessageConverter(mapper()));
+        return new MessageConvertersBean(new MappingJackson2HttpMessageConverter(mapper()))
+                           .addConverter(new StringHttpMessageConverter(StandardCharsets.UTF_8));
     }
     
     public static void main(String[] args) {

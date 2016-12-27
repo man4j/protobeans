@@ -25,6 +25,7 @@
     <module>modules/i18n</module>
     <module>modules/undertow</module>
     <module>modules/mvc</module>
+    <module>modules/testcontainers-mysql</module>
   </modules>
   
   <dependencies>
@@ -71,6 +72,18 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-jdbc</artifactId>
+        <version>${version.spring}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-test</artifactId>
         <version>${version.spring}</version>
         <exclusions>
           <exclusion>

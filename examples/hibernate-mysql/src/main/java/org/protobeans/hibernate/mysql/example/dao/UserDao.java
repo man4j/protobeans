@@ -6,5 +6,7 @@ import org.protobeans.hibernate.mysql.example.model.User;
 
 @Repository
 public class UserDao extends BaseDao<User> {
-    //empty
+    public long count() {
+        return em.createQuery("SELECT count(*) FROM User", Long.class).getSingleResult();
+    }
 }

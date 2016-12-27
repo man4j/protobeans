@@ -7,6 +7,8 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.protobeans.core.EntryPoint;
 import org.protobeans.i18n.annotation.EnableI18n;
 
@@ -20,7 +22,7 @@ public class Main {
     @Autowired
     HelloService helloService;
     
-    @PostConstruct
+    @EventListener(ContextRefreshedEvent.class)
     void start() {
         helloService.sayHello();
     }
