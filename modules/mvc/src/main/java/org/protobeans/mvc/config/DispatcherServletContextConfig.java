@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -23,6 +24,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableWebMvc
 @Configuration
 public class DispatcherServletContextConfig extends WebMvcConfigurerAdapter {
+    public static WebApplicationContext webApplicationContext;
+    
     @Autowired
     private MessageSource messageSource;
     
@@ -39,7 +42,8 @@ public class DispatcherServletContextConfig extends WebMvcConfigurerAdapter {
     private ProtoBeansDefinitionScanner protoBeansDefinitionScanner;
     
     @PostConstruct
-    public void scanComponents() {
+    public void init() {
+        webApplicationContext = (WebApplicationContext) ctx;
         protoBeansDefinitionScanner.scan(ctx);
     }
     

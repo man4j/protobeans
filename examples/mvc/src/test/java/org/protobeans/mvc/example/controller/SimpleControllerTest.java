@@ -1,5 +1,9 @@
 package org.protobeans.mvc.example.controller;
 
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,27 +12,20 @@ import org.protobeans.mvc.example.Main;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ning.http.client.AsyncHttpClient;
+
+import io.undertow.util.Headers;
 
 @RunWith(SpringRunner.class)
-@WebAppConfiguration("classpath:/")
-@ContextHierarchy({
-    @ContextConfiguration(classes=Main.class),//parent web application context 
-    @ContextConfiguration(classes=DispatcherServletContextConfig.class)//child web application context
-})
+@ContextConfiguration(classes=Main.class) 
 public class SimpleControllerTest {
-    @Autowired
-    private WebApplicationContext wac;
-    
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -36,7 +33,7 @@ public class SimpleControllerTest {
     
     @Before
     public void initMockMvc() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(DispatcherServletContextConfig.webApplicationContext).build();
     }
     
     @Test
@@ -51,5 +48,23 @@ public class SimpleControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/hello").accept(MediaType.TEXT_PLAIN))
                                                             .andExpect(MockMvcResultMatchers.content().string(expectedStringResult))
                                                             .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+    
+    @Test
+    public void shouldWorkWithRest() throws IOException, InterruptedException, ExecutionException {
+        String expectedStringResult = "hello";
+        String expectedJsonResult = objectMapper.writeValueAsString(expectedStringResult);
+        
+        try (AsyncHttpClient client = new AsyncHttpClient()) {
+            String response = client.prepareGet("http://localhost:8080/hello").addHeader(Headers.ACCEPT_STRING, MediaType.APPLICATION_JSON_VALUE)
+                                                                              .execute().get().getResponseBody();
+            
+            Assert.assertEquals(expectedJsonResult, response);
+            
+            response = client.prepareGet("http://localhost:8080/hello").addHeader(Headers.ACCEPT_STRING, MediaType.TEXT_PLAIN_VALUE)
+                                                                       .execute().get().getResponseBody();
+
+            Assert.assertEquals(expectedStringResult, response);
+        }
     }
 }
