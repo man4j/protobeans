@@ -1,14 +1,18 @@
-package org.protobeans.mvc.config;
+package org.protobeans.webservices.config;
 
 import javax.servlet.ServletContext;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import org.springframework.ws.transport.http.support.AbstractAnnotationConfigMessageDispatcherServletInitializer;
 
-public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class WsServletInitializer extends AbstractAnnotationConfigMessageDispatcherServletInitializer {
     public static ApplicationContext rootApplicationContext;
+    
+    public static String[] mappings;
+    
+    public static Class<?>[] configClasses;
     
     @Override
     protected Class<?>[] getRootConfigClasses() {
@@ -17,14 +21,19 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class<?>[] {DispatcherServletContextConfig.class};
+        return configClasses;
     }
 
     @Override
-    protected String[] getServletMappings() {
-        return new String[] {"/"};
+    public boolean isTransformWsdlLocations() {
+        return true;
     }
-
+    
+    @Override
+    protected String[] getServletMappings() {
+        return mappings;
+    }
+    
     @SuppressWarnings("resource")
     @Override
     protected void registerContextLoaderListener(ServletContext servletContext) {
