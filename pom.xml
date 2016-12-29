@@ -28,6 +28,7 @@
     <module>modules/testcontainers-mysql</module>
     <module>modules/testcontainers-selenium</module>
     <module>modules/webservices</module>
+    <module>modules/gmail</module>
   </modules>
   
   <dependencies>
@@ -131,6 +132,18 @@
         </exclusions>
       </dependency>
       
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context-support</artifactId>
+        <version>${version.spring}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      
       <!-- Spring-WS -->
       <dependency>
         <groupId>org.springframework.ws</groupId>
@@ -185,6 +198,12 @@
         <groupId>org.flywaydb</groupId>
         <artifactId>flyway-core</artifactId>
         <version>4.0.3</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>mail</artifactId>
+        <version>1.4.7</version>
       </dependency>
       
       <dependency>
