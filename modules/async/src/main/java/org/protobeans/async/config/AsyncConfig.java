@@ -11,11 +11,14 @@ import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Configuration
+@org.springframework.scheduling.annotation.EnableAsync
 @InjectFrom(EnableAsync.class)
 public class AsyncConfig implements AsyncConfigurer {
     private int corePoolSize;
     
     private int maxPoolSize;
+    
+    private boolean interruptOnClose;
     
     @Override
     public Executor getAsyncExecutor() {
@@ -24,7 +27,7 @@ public class AsyncConfig implements AsyncConfigurer {
         executor.setCorePoolSize(corePoolSize);
         executor.setMaxPoolSize(maxPoolSize);
         executor.setQueueCapacity(0);
-        executor.setWaitForTasksToCompleteOnShutdown(true);
+        executor.setWaitForTasksToCompleteOnShutdown(!interruptOnClose);
         executor.setAwaitTerminationSeconds(Integer.MAX_VALUE);
         executor.setThreadNamePrefix("ProtoBeansAsyncExecutor-");
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());

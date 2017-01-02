@@ -30,6 +30,7 @@
     <module>modules/webservices</module>
     <module>modules/gmail</module>
     <module>modules/async</module>
+    <module>modules/scheduler</module>
   </modules>
   
   <dependencies>
