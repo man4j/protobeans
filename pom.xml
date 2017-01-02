@@ -29,6 +29,7 @@
     <module>modules/testcontainers-selenium</module>
     <module>modules/webservices</module>
     <module>modules/gmail</module>
+    <module>modules/async</module>
   </modules>
   
   <dependencies>
