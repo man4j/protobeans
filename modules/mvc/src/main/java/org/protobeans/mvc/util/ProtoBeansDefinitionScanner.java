@@ -1,6 +1,5 @@
 package org.protobeans.mvc.util;
 
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -18,7 +17,7 @@ public class ProtoBeansDefinitionScanner {
         if (basePackageClasses.length > 0) {
             ClassPathBeanDefinitionScanner beanDefinitionScanner = new ClassPathBeanDefinitionScanner((BeanDefinitionRegistry) ctx.getBeanFactory());
 
-            beanDefinitionScanner.scan(Stream.of(basePackageClasses).map(c -> c.getPackage().getName()).collect(Collectors.toList()).toArray(new String[] {}));
+            beanDefinitionScanner.scan(Stream.of(basePackageClasses).map(c -> c.getPackage().getName()).toArray(String[]::new));
         }
     }
 }

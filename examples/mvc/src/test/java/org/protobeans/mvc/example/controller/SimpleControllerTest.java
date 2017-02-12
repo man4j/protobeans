@@ -33,36 +33,39 @@ public class SimpleControllerTest {
     
     @Before
     public void initMockMvc() {
+        //WebApplicationContext knows which Servlet it is associated with (by having a link to the ServletContext)
         mockMvc = MockMvcBuilders.webAppContextSetup(DispatcherServletContextConfig.webApplicationContext).build();
     }
     
     @Test
     public void shouldWork() throws Exception {
-        String expectedStringResult = "hello";
+        String expectedStringResult = "Hello, Вася!";
         String expectedJsonResult = objectMapper.writeValueAsString(expectedStringResult);
         
-        mockMvc.perform(MockMvcRequestBuilders.get("/hello").accept(MediaType.APPLICATION_JSON))
-                                                            .andExpect(MockMvcResultMatchers.content().json(expectedJsonResult))
-                                                            .andExpect(MockMvcResultMatchers.status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get("/echo?param=Вася")
+                                              .accept(MediaType.APPLICATION_JSON))
+                                              .andExpect(MockMvcResultMatchers.content().json(expectedJsonResult))
+                                              .andExpect(MockMvcResultMatchers.status().isOk());
         
-        mockMvc.perform(MockMvcRequestBuilders.get("/hello").accept(MediaType.TEXT_PLAIN))
-                                                            .andExpect(MockMvcResultMatchers.content().string(expectedStringResult))
-                                                            .andExpect(MockMvcResultMatchers.status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get("/echo?param=Вася")
+                                              .accept(MediaType.TEXT_PLAIN))
+                                              .andExpect(MockMvcResultMatchers.content().string(expectedStringResult))
+                                              .andExpect(MockMvcResultMatchers.status().isOk());
     }
     
     @Test
     public void shouldWorkWithRest() throws IOException, InterruptedException, ExecutionException {
-        String expectedStringResult = "hello";
+        String expectedStringResult = "Hello, Вася!";
         String expectedJsonResult = objectMapper.writeValueAsString(expectedStringResult);
         
         try (AsyncHttpClient client = new AsyncHttpClient()) {
-            String response = client.prepareGet("http://localhost:8080/hello").addHeader(Headers.ACCEPT_STRING, MediaType.APPLICATION_JSON_VALUE)
-                                                                              .execute().get().getResponseBody();
+            String response = client.prepareGet("http://localhost:8080/echo?param=Вася").addHeader(Headers.ACCEPT_STRING, MediaType.APPLICATION_JSON_VALUE)
+                                                                                         .execute().get().getResponseBody();
             
             Assert.assertEquals(expectedJsonResult, response);
             
-            response = client.prepareGet("http://localhost:8080/hello").addHeader(Headers.ACCEPT_STRING, MediaType.TEXT_PLAIN_VALUE)
-                                                                       .execute().get().getResponseBody();
+            response = client.prepareGet("http://localhost:8080/echo?param=Вася").addHeader(Headers.ACCEPT_STRING, MediaType.TEXT_PLAIN_VALUE)
+                                                                                  .execute().get().getResponseBody();
 
             Assert.assertEquals(expectedStringResult, response);
         }

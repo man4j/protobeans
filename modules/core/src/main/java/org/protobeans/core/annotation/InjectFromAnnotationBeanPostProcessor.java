@@ -4,6 +4,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +16,8 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.ReflectionUtils;
 
-public class InjectFromProcessor implements BeanPostProcessor {
-    private static final Logger logger = LoggerFactory.getLogger(InjectFromProcessor.class);
+public class InjectFromAnnotationBeanPostProcessor implements BeanPostProcessor {
+    private static final Logger logger = LoggerFactory.getLogger(InjectFromAnnotationBeanPostProcessor.class);
     
     @Autowired
     private ApplicationContext ctx;
@@ -48,9 +50,18 @@ public class InjectFromProcessor implements BeanPostProcessor {
                                 String injectedString = (String) injectedValue;
                                 
                                 if (injectedString.startsWith("s:")) {
-                                    String systemProperty = injectedString.split(":")[1];
+                                    String propName = injectedString.split(":")[1];
                                     
-                                    f.set(bean, System.getProperty(systemProperty));
+                                    Optional<String> value = Stream.of(System.getProperty(propName.toLowerCase()), 
+                                                                       System.getProperty(propName.toUpperCase()), 
+                                                                       System.getenv(propName.toLowerCase()), 
+                                                                       System.getenv(propName.toUpperCase())).filter(v -> v != null).findFirst();
+                                    
+                                    if (!value.isPresent()) {
+                                        throw new IllegalStateException("Can not find system property or env variable: " + propName);
+                                    }
+                                    
+                                    f.set(bean, value.get());
                                 } else {
                                     f.set(bean, injectedString);
                                 }

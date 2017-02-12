@@ -31,6 +31,7 @@
     <module>modules/gmail</module>
     <module>modules/async</module>
     <module>modules/scheduler</module>
+    <module>modules/security</module>
   </modules>
   
   <dependencies>
@@ -197,6 +198,12 @@
       </dependency>
       
       <dependency>
+        <groupId>org.hibernate.javax.persistence</groupId>
+        <artifactId>hibernate-jpa-2.1-api</artifactId>
+        <version>1.0.0.Final</version>
+      </dependency>
+      
+      <dependency>
         <groupId>org.flywaydb</groupId>
         <artifactId>flyway-core</artifactId>
         <version>4.0.3</version>
@@ -273,6 +280,50 @@
         <groupId>com.fasterxml.jackson.datatype</groupId>
         <artifactId>jackson-datatype-jsr310</artifactId>
         <version>${version.jackson}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-web</artifactId>
+        <version>4.2.1.RELEASE</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.springframework</groupId>
+            <artifactId>*</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.springframework.social</groupId>
+        <artifactId>spring-social-security</artifactId>
+        <version>1.1.4.RELEASE</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.springframework</groupId>
+            <artifactId>*</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>*</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>*</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+    
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-config</artifactId>
+        <version>4.2.1.RELEASE</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.springframework</groupId>
+            <artifactId>*</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
     </dependencies>
   </dependencyManagement>

@@ -5,7 +5,7 @@ import java.io.StringWriter;
 import java.util.Collections;
 
 import org.protobeans.core.EntryPoint;
-import org.protobeans.freemarker.annotation.EnableFreemarker;
+import org.protobeans.freemarker.annotation.EnableFreeMarker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -15,7 +15,7 @@ import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateNotFoundException;
 
-@EnableFreemarker(devMode = "true")
+@EnableFreeMarker(devMode = "true")
 public class Main {
     @Autowired
     freemarker.template.Configuration freemarker;

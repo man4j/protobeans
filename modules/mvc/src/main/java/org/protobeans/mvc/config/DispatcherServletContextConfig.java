@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.protobeans.mvc.util.FreeMarkerVariables;
 import org.protobeans.mvc.util.MessageConvertersBean;
 import org.protobeans.mvc.util.ProtoBeansDefinitionScanner;
 import org.protobeans.mvc.util.ResourcesVersionBean;
@@ -45,6 +46,15 @@ public class DispatcherServletContextConfig extends WebMvcConfigurerAdapter {
     public void init() {
         webApplicationContext = (WebApplicationContext) ctx;
         protoBeansDefinitionScanner.scan(ctx);
+    }
+    
+    @Bean
+    public FreeMarkerVariables freeMarkerVariables() {
+        FreeMarkerVariables freeMarkerVariables = new FreeMarkerVariables();
+        
+        freeMarkerVariables.setVariable("resourcesPrefix", resourcesVersionBean.getResourcesUrl() + resourcesVersionBean.getLastModified());
+        
+        return freeMarkerVariables;
     }
     
     @Override

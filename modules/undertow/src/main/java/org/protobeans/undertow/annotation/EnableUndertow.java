@@ -23,4 +23,6 @@ public @interface EnableUndertow {
     String resourcesPath() default "notexistent_resource_path";
     
     String welcomePage() default "index.html";
+    
+    String errorPage() default "";
 }

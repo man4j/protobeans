@@ -19,4 +19,6 @@ public @interface EnableFlyway {
     String user();
     
     String password();
+    
+    boolean waitDb() default false;
 }

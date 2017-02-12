@@ -4,9 +4,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.protobeans.mvc.example.MyService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -22,12 +19,6 @@ public class CountryEndpoint {
     public static final String ECHO_RESPONSE_LOCAL_NAME = "getCountryResponse";
     
     private final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-    
-    @Autowired
-    private MyService myService;
-    
-    @Autowired
-    private ApplicationContext ctx;
     
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getCountryRequest")
     @ResponsePayload

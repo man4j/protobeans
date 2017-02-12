@@ -44,6 +44,8 @@ public class UndertowConfig {
     
     private String welcomePage;
     
+    private String errorPage;
+    
     @Autowired(required = false)
     private List<Class<? extends WebApplicationInitializer>> springInitializers = new ArrayList<>();
     
@@ -54,6 +56,10 @@ public class UndertowConfig {
                       .setClassLoader(this.getClass().getClassLoader())
                       .addWelcomePage(welcomePage)
                       .setResourceManager(new ClassPathResourceManager(this.getClass().getClassLoader(), resourcesPath));
+        
+        if (!errorPage.isEmpty()) {
+            deploymentInfo.addErrorPage(Servlets.errorPage(errorPage));
+        }
         
         for (Initializer initializer : initializers) {
             deploymentInfo.addServletContainerInitalizer(new ServletContainerInitializerInfo(initializer.initializer(), new HashSet<>(Arrays.asList(initializer.handleTypes()))));

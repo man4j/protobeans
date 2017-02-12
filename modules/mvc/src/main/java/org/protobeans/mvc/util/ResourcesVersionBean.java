@@ -8,25 +8,9 @@ public class ResourcesVersionBean {
     private long lastModified;
 
     public ResourcesVersionBean(String resourcesPath, String resourcesUrl) {
-        if (!resourcesUrl.endsWith("/")) {
-            resourcesUrl += "/";
-        }
-        
-        if (!resourcesUrl.startsWith("/")) {
-            resourcesUrl = "/" + resourcesUrl;
-        }
-        
-        if (!resourcesPath.endsWith("/")) {
-            resourcesPath += "/";
-        }
-        
-        if (!resourcesPath.startsWith("/")) {
-            resourcesPath = "/" + resourcesPath;
-        }
-        
-        this.resourcesPath = resourcesPath;
-        this.resourcesUrl = resourcesUrl;
-        this.lastModified = FileUtils.getLastModified(resourcesPath);
+        this.resourcesPath = PathUtils.dashedPath(resourcesPath);
+        this.resourcesUrl = PathUtils.dashedPath(resourcesUrl);
+        this.lastModified = FileUtils.getLastModified(this.resourcesPath);
     }
     
     public String getResourcesPath() {

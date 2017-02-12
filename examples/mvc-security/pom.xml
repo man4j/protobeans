@@ -1,0 +1,160 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.protobeans</groupId>
+  <version>0.0.1-SNAPSHOT</version>
+  <artifactId>protobeans-mvc-security-example</artifactId>
+  <packaging>jar</packaging>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.protobeans</groupId>
+      <artifactId>protobeans-security</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.protobeans</groupId>
+      <artifactId>protobeans-undertow</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.protobeans</groupId>
+      <artifactId>protobeans-freemarker</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+                
+    <!-- Test -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>4.3.4.RELEASE</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.ning</groupId>
+      <artifactId>async-http-client</artifactId>
+      <version>1.9.38</version>
+      <scope>test</scope>
+    </dependency>
+        
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <!-- For testing spring-mvc json responses -->
+    <dependency>
+      <groupId>org.skyscreamer</groupId>
+      <artifactId>jsonassert</artifactId>
+      <version>1.4.0</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  
+  <build>
+    <plugins>
+      <!-- preserve original last modified for static resources -->
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.8</version>
+        <executions>
+          <execution>
+            <phase>prepare-package</phase>
+            <configuration>
+              <tasks>
+                <copy todir="${project.build.outputDirectory}" preservelastmodified="true" overwrite="true">
+                  <fileset dir="src/main/resources" />
+                </copy>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <!-- current version not preserve last modified for static resources (patch allready on github -->
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.4.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>            
+            <configuration>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>${project.groupId}.mvc.example.Main</mainClass>
+                </transformer>  
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/spring.handlers</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/spring.schemas</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/services/com.sun.tools.xjc.Plugin</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/cxf/cxf.extension</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.XmlAppendingTransformer">
+                  <resource>META-INF/extensions.xml</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.XmlAppendingTransformer">
+                  <resource>META-INF/cxf/extensions.xml</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/cxf/bus-extensions.txt</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.XmlAppendingTransformer">
+                  <resource>META-INF/cxf/bus-extensions.xml</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.XmlAppendingTransformer">
+                  <resource>META-INF/wsdl.plugin.xml</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.XmlAppendingTransformer">
+                  <resource>META-INF/tools.service.validator.xml</resource>
+                </transformer>                  
+                <transformer implementation="org.apache.maven.plugins.shade.resource.XmlAppendingTransformer">
+                  <resource>META-INF/cxf/java2wsbeans.xml</resource>
+                </transformer>                                 
+              </transformers>   
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>             
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
