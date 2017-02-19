@@ -1,9 +1,11 @@
-package org.protobeans.mvcsecurity.example.form;
+package org.protobeans.security.model;
 
 import java.util.Locale;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.protobeans.security.validation.SignIn;
 
+@SignIn
 public class SignInForm {
     @NotBlank(message = "{form.email.empty}")
     private String email = "";

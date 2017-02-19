@@ -52,7 +52,8 @@ public class InjectFromAnnotationBeanPostProcessor implements BeanPostProcessor 
                                 if (injectedString.startsWith("s:")) {
                                     String propName = injectedString.split(":")[1];
                                     
-                                    Optional<String> value = Stream.of(System.getProperty(propName.toLowerCase()), 
+                                    Optional<String> value = Stream.of(System.getProperty(propName),
+                                                                       System.getProperty(propName.toLowerCase()), 
                                                                        System.getProperty(propName.toUpperCase()), 
                                                                        System.getenv(propName.toLowerCase()), 
                                                                        System.getenv(propName.toUpperCase())).filter(v -> v != null).findFirst();

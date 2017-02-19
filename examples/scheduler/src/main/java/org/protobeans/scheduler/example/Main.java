@@ -6,7 +6,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 @EnableScheduler(poolSize = 10)
 public class Main {
-    
     @Scheduled(fixedDelay = 1_000)
     void scheduledMethod() {
         System.out.println(Thread.currentThread().getName());

@@ -14,9 +14,9 @@ import org.springframework.context.annotation.Import;
 @Import(AsyncConfig.class)
 @Configuration
 public @interface EnableAsync {
-    int corePoolSize() default 0;
-    
-    int maxPoolSize() default Integer.MAX_VALUE;
-    
-    boolean interruptOnClose() default false;
+//    int corePoolSize() default 0;
+//    
+//    int maxPoolSize() default Integer.MAX_VALUE;
+//    
+//    boolean interruptOnClose() default false;
 }

@@ -1,11 +1,11 @@
 package org.protobeans.security.config;
 
 import java.util.Arrays;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.protobeans.mvc.util.PathUtils;
+import org.protobeans.security.advice.SecurityControllerAdvice;
 import org.protobeans.security.annotation.Anonymous;
 import org.protobeans.security.annotation.PermitAll;
 import org.protobeans.security.service.SecurityService;
@@ -26,7 +26,7 @@ import org.springframework.security.web.authentication.rememberme.TokenBasedReme
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan(basePackageClasses=SecurityService.class)
+@ComponentScan(basePackageClasses={SecurityService.class, SecurityControllerAdvice.class})
 public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
@@ -53,7 +53,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                                 .mvcMatchers(anonymousPatterns).anonymous()
                                 .anyRequest().authenticated()
             .and()
-            .rememberMe().rememberMeServices(rememberMeServices()).authenticationSuccessHandler(new CurrentUrlAuthenticationSuccessHandler())
+            .rememberMe().rememberMeServices(rememberMeServices()).key("123").authenticationSuccessHandler(new CurrentUrlAuthenticationSuccessHandler())
             .and()
             .exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(securityUrlsBean.getLoginUrl())).accessDeniedHandler((req, res, e) -> {res.setStatus(HttpServletResponse.SC_FORBIDDEN);})
             .and()
@@ -62,6 +62,6 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
     
     @Bean
     public TokenBasedRememberMeServices rememberMeServices() {
-        return new TokenBasedRememberMeServices(UUID.randomUUID().toString(), userDetailsService);
+        return new TokenBasedRememberMeServices("123", userDetailsService);
     }
 }

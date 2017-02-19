@@ -6,8 +6,7 @@ import org.protobeans.security.annotation.EnableSecurity;
 import org.protobeans.security.util.SecurityUrlsBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.web.WebApplicationInitializer;
 
 @Configuration
@@ -15,6 +14,7 @@ import org.springframework.web.WebApplicationInitializer;
 public class SecurityConfig {
     static {
         CoreConfig.addWebAppContextConfigClass(SecurityWebConfig.class);
+        CoreConfig.addWebAppContextConfigClass(GlobalMethodSecurityConfig.class);
     }
 
     private String[] ignoreUrls;
@@ -31,8 +31,11 @@ public class SecurityConfig {
         return SecurityInitializer.class; 
     }
     
+    /**
+     * We use old deprecated encoder for compatibility with TokenBasedRememberMeServices
+     */
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public ShaPasswordEncoder passwordEncoder() {
+        return new ShaPasswordEncoder();
     }
 }

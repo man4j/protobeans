@@ -30,8 +30,7 @@ public class FreeMarkerConfig {
         
         DefaultObjectWrapper wrapper = (DefaultObjectWrapper) freemarker.template.Configuration.getDefaultObjectWrapper(freemarker.template.Configuration.VERSION_2_3_24);
         
-        MultiTemplateLoader tl = new MultiTemplateLoader(new TemplateLoader[] {new SpringTemplateLoader(new DefaultResourceLoader(), "classpath:/templates"), 
-                                                                               new SpringTemplateLoader(new DefaultResourceLoader(), "classpath:/org/springframework/web/servlet/view/freemarker")});
+        MultiTemplateLoader tl = new MultiTemplateLoader(new TemplateLoader[] {new SpringTemplateLoader(new DefaultResourceLoader(), "classpath:/templates")}); 
         
         config.setAutoFlush(false);
         config.setLogTemplateExceptions(false);
@@ -47,6 +46,9 @@ public class FreeMarkerConfig {
         config.setSharedVariable("statics",  wrapper.getStaticModels());//access from template: ${statics["java.lang.System"].currentTimeMillis()}
         
         config.addAutoImport("ui", "/lib/composition.ftlh");
+        config.addAutoImport("f", "/lib/forms.ftlh");
+        config.addAutoImport("u", "/lib/util.ftlh");
+        config.addAutoImport("s", "/lib/security.ftlh");
         
         return config;
     }

@@ -1,6 +1,6 @@
 <@ui.composition '/base.ftlh'>  
   <#assign title in ui>
-    Admin  
+    Check Email  
   </#assign>
   
   <@ui.addScript>
@@ -12,9 +12,6 @@
     <li>
       <a href="<@f.url '/' />">Главная</a>
     </li>
-    <li>
-      <a href="<@f.url '/logout' />">Выйти</a>
-    </li>
   </#assign>
   
   <#assign content in ui>
@@ -22,11 +19,10 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
-            <img class="img-responsive" src="<@u.r 'img/profile.png' />" alt="">
+            <img style="width:200px;" class="img-responsive" src="<@u.r 'img/email3.png' />" alt="">
             <div class="intro-text">
-              <span class="skills">Welcome, ${user.username}!</span>
+              <span class="skills">Check Email!</span>
               <hr class="star-light">
-              <span class="skills">This is admin page!</span>
             </div>
           </div>
         </div>

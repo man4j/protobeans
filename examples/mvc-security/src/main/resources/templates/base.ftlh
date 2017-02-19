@@ -1,7 +1,3 @@
-<#import "/lib/composition.ftlh" as ui />
-<#import "/lib/util.ftlh" as util />
-<#import "/spring.ftl" as spring/>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,7 +14,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
   <!-- Theme CSS -->
-  <link href="<@util.r 'css/freelancer.min.css' />" rel="stylesheet">
+  <link href="<@u.r 'css/freelancer.min.css' />" rel="stylesheet">
 
   <!-- Custom Fonts -->
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -32,18 +28,12 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
 
-  <link rel="icon" type="image/png" href="<@util.r 'favicon.png' />">
+  <link rel="icon" type="image/png" href="<@u.r 'favicon.png' />">
 </head>
 
 <body id="page-top" class="index">    
   <!-- Navigation -->
   <nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom" style="padding-top:0px;">
-    <div class="alert alert-success" id="success-alert" style="border-radius:0px;margin-bottom:0px;display:none;">
-      <button type="button" class="close" data-dismiss="alert">x</button>
-      <div style="text-align: center;vertical-align: middle;">
-        <strong><span id="alertText">Success!</span></strong>
-      </div>
-    </div>
     <div class="container">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header page-scroll" style="padding-top:20px;">
@@ -57,9 +47,7 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-top:20px;">
         <ul class="nav navbar-nav navbar-right">
-          <li class="hidden">
-            <a href="#page-top"></a>
-          </li>
+          <@ui.insert navbar! />
         </ul>
       </div>
       <!-- /.navbar-collapse -->
@@ -67,23 +55,6 @@
     <!-- /.container-fluid -->
   </nav>
 
-  <!-- Header -->
-  <header>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-          <img class="img-responsive" src="img/profile.png" alt="">
-          <div class="intro-text">
-
-            <span class="name">Start Coding!</span>
-            <hr class="star-light">
-            <span class="skills">Web Developer - Graphic Artist - User Experience Designer</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
-  
   <@ui.insert content! />
 
   <!-- Footer -->
@@ -151,31 +122,9 @@
   <!-- Plugin JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
 
-  <!-- Contact Form JavaScript -->
-  <script src="<@util.r 'js/jqBootstrapValidation.js' />"></script>
-
   <!-- Theme JavaScript -->
-  <script src="<@util.r 'js/freelancer.min.js"' /></script>
+  <script src="<@u.r 'js/freelancer.min.js' />"</script>
   
   <@ui.insertScripts />
-
-  <script>
-    function getParameterByName(name) {
-        var url = window.location.href;
-        name = name.replace(/[\[\]]/g, "\\$&");
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
-    }
- 
-    if (getParameterByName("successAlert")) {   
-      $("#alertText").text(getParameterByName("successAlert"));
-      $("#success-alert").fadeTo(2000, 500).slideUp(500, function() {
-        $("#success-alert").slideUp(500);
-      });
-    }
-  </script>
 </body>
 </html>

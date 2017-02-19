@@ -8,6 +8,4 @@ public interface ProfileService {
     AbstractProfile getByConfirmUuid(String uuid);
 
     AbstractProfile update(AbstractProfile profile);
-
-    AbstractProfile create(String email, String password, boolean confirmed);
 }

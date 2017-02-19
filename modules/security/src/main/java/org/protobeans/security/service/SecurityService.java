@@ -23,6 +23,12 @@ import org.springframework.stereotype.Service;
 public class SecurityService {
     @Autowired
     private ProfileService profileService;
+    
+    @Autowired
+    private HttpServletRequest request;
+    
+    @Autowired
+    private HttpServletResponse response;
 
     @Autowired
     private TokenBasedRememberMeServices tokenBasedRememberMeServices;
@@ -39,7 +45,7 @@ public class SecurityService {
         return null;
     }
 
-    public void auth(AbstractProfile profile, HttpServletRequest request, HttpServletResponse response, boolean rememberMe) {
+    public void auth(AbstractProfile profile, boolean rememberMe) {
         Authentication auth = getAuthentication(profile);
         
         SecurityContextHolder.getContext().setAuthentication(auth);

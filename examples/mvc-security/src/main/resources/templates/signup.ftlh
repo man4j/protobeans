@@ -1,6 +1,6 @@
 <@ui.composition '/base.ftlh'>  
   <#assign title in ui>
-    Sign In  
+    Sign Up 
   </#assign>
   
   <@ui.addScript>
@@ -13,7 +13,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
-            <h3>Login Form</h3>
+            <h3>Register Form</h3>
             <hr class="star-primary">
           </div>
         </div>
@@ -26,7 +26,7 @@
         
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2">
-            <form action="<@f.url '/signin' />" method="POST">
+            <form action="<@f.url '/signup' />" method="POST">
               <div class="row control-group">
                 <div class="form-group col-xs-12 floating-label-form-group controls">
                   <label>Email Address</label>
@@ -39,12 +39,13 @@
                   <@f.formPasswordInput 'form.password' 'form-control' 'err form-control' 'placeholder="Password" maxlength="50" autocomplete="off"' />
                 </div>
               </div>
-              <div class="checkbox">
-                <label for="rememberMe" style="color:grey;">
-                  <@f.formCheckbox 'form.rememberMe' />
-                  <@f.messageText 'signin.rememberMe' 'Запомнить меня' />
-                </label>
+              <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group controls">
+                  <label>Confirm password</label>
+                  <@f.formPasswordInput 'form.confirmPassword' 'form-control' 'err form-control' 'placeholder="Confirm password" maxlength="50" autocomplete="off"' />
+                </div>
               </div>
+              <br />
               <div class="row">
                 <div class="form-group col-xs-2">
                   <button type="submit" class="btn btn-success btn-lg" style="width:150%;">Submit</button>
@@ -53,7 +54,7 @@
               <hr />
               <div class="row">
                 <div class="form-group col-xs-4 col-lg-offset-9">
-                  <a href="<@f.url 'signup' />"><@f.messageText 'signup' 'Регистрация'/></a>
+                  <a href="<@f.url '/signin' />"><@f.messageText 'signin' 'Авторизация'/></a>
                   <span style="color:grey;">&nbsp;|&nbsp;</span>
                   <a href="#"><@f.messageText 'help' 'Помощь'/></a>
                 </div>
