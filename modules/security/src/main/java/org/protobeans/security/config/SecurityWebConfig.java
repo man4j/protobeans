@@ -11,6 +11,7 @@ import org.protobeans.security.annotation.PermitAll;
 import org.protobeans.security.service.SecurityService;
 import org.protobeans.security.util.CurrentUrlAuthenticationSuccessHandler;
 import org.protobeans.security.util.SecurityUrlsBean;
+import org.protobeans.security.validation.SignIn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +27,7 @@ import org.springframework.security.web.authentication.rememberme.TokenBasedReme
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan(basePackageClasses={SecurityService.class, SecurityControllerAdvice.class})
+@ComponentScan(basePackageClasses={SecurityService.class, SecurityControllerAdvice.class, SignIn.class})
 public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;

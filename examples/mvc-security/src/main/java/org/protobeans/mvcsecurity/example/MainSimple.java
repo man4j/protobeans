@@ -9,7 +9,6 @@ import org.protobeans.mvc.annotation.EnableMvc;
 import org.protobeans.mvcsecurity.example.controller.MainController;
 import org.protobeans.mvcsecurity.example.service.InMemoryProfileService;
 import org.protobeans.security.annotation.EnableSecurity;
-import org.protobeans.security.validation.SignIn;
 import org.protobeans.undertow.annotation.EnableUndertow;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -17,7 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableFreeMarker(devMode = "true")
 @EnableMvc(resourcesPath = "static", resourcesUrl = "static", basePackageClasses = MainController.class)
 @EnableSecurity(ignoreUrls = "static", loginUrl = "/signin")
-@ComponentScan(basePackageClasses={InMemoryProfileService.class, SignIn.class})
+@ComponentScan(basePackageClasses={InMemoryProfileService.class})
 @EnableI18n(isCached = "true")
 @EnableGMail(user = "s:gmailUser", password = "s:gmailPassword")
 @EnableAsync

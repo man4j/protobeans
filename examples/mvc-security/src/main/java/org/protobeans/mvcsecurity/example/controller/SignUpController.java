@@ -9,7 +9,6 @@ import org.protobeans.mvcsecurity.example.service.InMemoryProfileService;
 import org.protobeans.mvcsecurity.example.service.MessageGenerator;
 import org.protobeans.security.annotation.Anonymous;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SignUpController {
     @Autowired
     private InMemoryProfileService profileService;
-    
-    @Autowired
-    private ShaPasswordEncoder passwordEncoder;
     
     @Autowired
     private EmailService emailService;
@@ -42,7 +38,7 @@ public class SignUpController {
     String processForm(@ModelAttribute("form") @Valid MySignUpForm form, BindingResult result) {
         if (result.hasErrors()) return "/signup";
         
-        UserProfile p = profileService.create(form.getEmail(), passwordEncoder.encodePassword(form.getPassword(), form.getEmail()), form.getUserName());
+        UserProfile p = profileService.create(form.getEmail(), form.getPassword(), form.getUserName());
         
         emailService.sendMessage(form.getEmail(), messageGenerator.generateEmailSignInMessage(form.getPassword(), p.getConfirmUuid()));
 

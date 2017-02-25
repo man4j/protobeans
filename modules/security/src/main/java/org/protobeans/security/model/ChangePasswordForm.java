@@ -3,17 +3,15 @@ package org.protobeans.security.model;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
-import org.protobeans.security.validation.EmailNotExists;
+import org.protobeans.security.validation.CurrentPassword;
 import org.protobeans.security.validation.FieldEquality;
 
-@FieldEquality(field1 = "password", field2 = "confirmPassword", message = "{signup.passwordsNotEquals}")
-public class SignUpForm {
+@FieldEquality(field1 = "password", field2 = "confirmPassword", message = "{change.passwordsNotEquals}")
+public class ChangePasswordForm {
     @NotBlank(message = "{form.email.empty}")
-    @Email(message = "{form.email.notCorrect}")
-    @EmailNotExists
-    private String email = "";
+    @CurrentPassword
+    private String oldPassword = "";
 
     @Size(min = 6, max = 18, message = "{form.password.size}")
     @Pattern(regexp = "[a-zA-Z0-9_-]*", message = "{form.password.format}")
@@ -23,12 +21,12 @@ public class SignUpForm {
     @Pattern(regexp = "[a-zA-Z0-9_-]*", message = "{form.confirmPassword.format}")
     private String confirmPassword = "";
 
-    public String getEmail() {
-        return email;
+    public String getOldPassword() {
+        return oldPassword;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 
     public String getPassword() {

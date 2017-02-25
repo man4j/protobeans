@@ -11,9 +11,9 @@ import javax.validation.Payload;
 
 @Target(FIELD)
 @Retention(RUNTIME)
-@Constraint(validatedBy = EmailExistsValidator.class)
-public @interface EmailExists {
-    String message() default "{emailNotExists}";
+@Constraint(validatedBy = CurrentPasswordValidator.class)
+public @interface CurrentPassword {
+    String message() default "{passwordNotEquals}";
 
     Class<?>[] groups() default {};
 

@@ -19,7 +19,6 @@ public class InMemoryProfileService implements ProfileService {
     private ShaPasswordEncoder passwordEncoder;
 
     private Map<String, UserProfile> byEmail = new ConcurrentHashMap<>();
-    private Map<String, UserProfile> byUuid = new ConcurrentHashMap<>();
     
     @PostConstruct
     public void init() {
@@ -41,24 +40,34 @@ public class InMemoryProfileService implements ProfileService {
 
     @Override
     public UserProfile getByConfirmUuid(String uuid) {
-        throw new UnsupportedOperationException();
+        for (UserProfile p : byEmail.values()) {
+            if (uuid.equals(p.getConfirmUuid())) {
+                return p;
+            }
+        }
+        
+        return null;
     }
 
     @Override
     public UserProfile update(AbstractProfile profile) {
-        throw new UnsupportedOperationException();
+        //noop
+        return (UserProfile) profile;
+    }
+    
+    public void updatePassword(AbstractProfile profile, String newPassword) {
+        profile.setPassword(passwordEncoder.encodePassword(newPassword, profile.getEmail()));
     }
 
     public UserProfile create(String email, String password, String userName) {
         UserProfile p = new UserProfile();
         
         p.setEmail(email);
-        p.setPassword(passwordEncoder.encodePassword("123456", password));
+        p.setPassword(passwordEncoder.encodePassword(password, email));
         p.setUserName(userName);
         p.setConfirmUuid(UUID.randomUUID().toString());
         
         byEmail.put(p.getEmail(), p);
-        byUuid.put(p.getConfirmUuid(), p);
         
         return p;
     }

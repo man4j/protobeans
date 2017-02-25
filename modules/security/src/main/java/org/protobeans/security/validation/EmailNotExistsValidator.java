@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmailExistsValidator implements ConstraintValidator<EmailExists, String> {
+public class EmailNotExistsValidator implements ConstraintValidator<EmailNotExists, String> {
     @Autowired
     private ProfileService profileService;
     
     @Override
-    public void initialize(EmailExists constraintAnnotation) {
+    public void initialize(EmailNotExists constraintAnnotation) {
         //empty
     }
 
@@ -21,6 +21,6 @@ public class EmailExistsValidator implements ConstraintValidator<EmailExists, St
     public boolean isValid(String email, ConstraintValidatorContext context) {
         if (email == null || email.trim().isEmpty()) return true;
         
-        return profileService.getByEmail(email) != null;
+        return profileService.getByEmail(email) == null;
     }
 }

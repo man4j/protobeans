@@ -41,7 +41,7 @@
           <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
         </button>
 
-        <a class="navbar-brand" href="#page-top">Start Here</a>
+        <a class="navbar-brand" href="/">Start Here</a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
