@@ -26,7 +26,7 @@
         
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2">
-            <form action="<@f.url '/signin' />" method="POST">
+            <@f.form '/signin'>
               <div class="row control-group">
                 <div class="form-group col-xs-12 floating-label-form-group controls">
                   <label>Email Address</label>
@@ -58,7 +58,7 @@
                   <a href="<@f.url 'restore' />"><@f.messageText 'forgot_password' 'Забыли пароль?'/></a>
                 </div>
               </div>
-            </form>
+            </@f.form>
           </div>
         </div>
       </div>

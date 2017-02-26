@@ -26,7 +26,7 @@
         
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2">
-            <form action="<@f.url '/signup' />" method="POST">
+            <@f.form '/signup'>
               <div class="row control-group">
                 <div class="form-group col-xs-12 floating-label-form-group controls">
                   <label>Email Address</label>
@@ -59,7 +59,7 @@
                   <a href="#"><@f.messageText 'help' 'Помощь'/></a>
                 </div>
               </div>
-            </form>
+            </@f.form>
           </div>
         </div>
       </div>

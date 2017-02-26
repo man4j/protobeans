@@ -125,6 +125,12 @@
     </#if>
 </#macro>
 
+<#macro form action id ="" name="" method="POST" enctype="application/x-www-form-urlencoded">
+  <form action="<@f.url action />" id="${id}" name="${name}" method="${method}" enctype="${enctype}">
+    <input type="hidden" name="_csrf" value="${_csrf.token}" />
+    <#nested />
+  </form>
+</#macro>
 <#--
  * formInput
  *

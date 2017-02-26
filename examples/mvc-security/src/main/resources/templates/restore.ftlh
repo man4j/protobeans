@@ -26,7 +26,7 @@
         
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2">
-            <form action="<@f.url '/restore' />" method="POST">
+            <@f.form '/restore'>
               <div class="row control-group">
                 <div class="form-group col-xs-12 floating-label-form-group controls">
                   <label>Email Address</label>
@@ -39,7 +39,7 @@
                   <button type="submit" class="btn btn-success btn-lg" style="width:150%;">Submit</button>
                 </div>
               </div>
-            </form>
+            </@f.form>
           </div>
         </div>
       </div>

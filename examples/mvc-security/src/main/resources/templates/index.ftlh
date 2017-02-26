@@ -18,7 +18,9 @@
       <a href="<@f.url '/change_password' />">Сменить пароль</a>
     </li>
     <li>
-      <a href="<@f.url '/logout' />">Выйти</a>
+      <@f.form '/logout' 'logout'>
+        <a style="padding-top: 15px; padding-bottom: 15px; display:block;" href="#" onclick="document.getElementById('logout').submit();">Выйти</a>
+      </@f.form>
     </li>
   </#assign>
   

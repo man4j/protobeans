@@ -7,3 +7,7 @@
     color: #a94442!important;
     background-color: #f2dede!important;
 }
+
+.navbar-default .navbar-nav > li > form > a:hover {
+  text-decoration: none;
+}
