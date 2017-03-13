@@ -19,6 +19,7 @@ public class I18nConfig {
         messageSource.setBasenames("classpath:messages/messages");
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setCacheSeconds("true".equals(isCached) ? -1 : 0);
+        messageSource.setFallbackToSystemLocale(false);
 
         return messageSource;
     }

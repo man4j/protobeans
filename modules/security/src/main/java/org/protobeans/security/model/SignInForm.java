@@ -8,15 +8,15 @@ import org.protobeans.security.validation.SignIn;
 @SignIn
 public class SignInForm {
     @NotBlank(message = "{form.email.empty}")
-    private String email = "";
+    private String email;
 
     @NotBlank(message = "{form.password.empty}")
-    private String password = "";
+    private String password;
 
     private boolean rememberMe;
 
     public String getEmail() {
-        return email.toLowerCase(Locale.US);
+        return email == null ? null : email.toLowerCase(Locale.US);
     }
 
     public void setEmail(String email) {

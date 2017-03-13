@@ -35,6 +35,8 @@
  -->
 <#macro messageText code, text>${springMacroRequestContext.getMessage(code, text)}</#macro>
 
+<#macro i18n code, text>${springMacroRequestContext.getMessage(code, text)}</#macro>
+
 <#--
  * messageArgs
  *
@@ -394,7 +396,7 @@ ${stringStatusValue}</textarea>
       <ul>
         <#list status.errorMessages as error>
           <#if error != "">
-            <li>${error}</li>
+            <li>${error?no_esc}</li>
           </#if>
         </#list>
       </ul>

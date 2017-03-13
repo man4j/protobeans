@@ -17,7 +17,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableMvc(resourcesPath = "static", resourcesUrl = "static", basePackageClasses = MainController.class)
 @EnableSecurity(ignoreUrls = "static", loginUrl = "/signin")
 @ComponentScan(basePackageClasses={InMemoryProfileService.class})
-@EnableI18n(isCached = "true")
+@EnableI18n(isCached = "false")
 @EnableGMail(user = "s:gmailUser", password = "s:gmailPassword")
 @EnableAsync
 public class MainSimple {

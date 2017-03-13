@@ -13,7 +13,7 @@ import javax.validation.Payload;
 @Retention(RUNTIME)
 @Constraint(validatedBy = EmailNotExistsValidator.class)
 public @interface EmailNotExists {
-    String message() default "{emailExists}";
+    String message() default "{EmailNotExistsValidator.emailExists}";
 
     Class<?>[] groups() default {};
 

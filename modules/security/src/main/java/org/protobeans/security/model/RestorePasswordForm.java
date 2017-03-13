@@ -8,7 +8,7 @@ import org.protobeans.security.validation.EmailExists;
 public class RestorePasswordForm {
     @NotBlank(message = "{form.email.empty}")
     @EmailExists
-    private String email = "";
+    private String email;
 
     public String getEmail() {
         return email.toLowerCase(Locale.US);

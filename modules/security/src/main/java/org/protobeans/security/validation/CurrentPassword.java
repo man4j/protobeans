@@ -13,7 +13,7 @@ import javax.validation.Payload;
 @Retention(RUNTIME)
 @Constraint(validatedBy = CurrentPasswordValidator.class)
 public @interface CurrentPassword {
-    String message() default "{passwordNotEquals}";
+    String message() default "{CurrentPasswordValidator.passwordNotEquals}";
 
     Class<?>[] groups() default {};
 

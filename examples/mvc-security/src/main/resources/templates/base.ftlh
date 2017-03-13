@@ -32,27 +32,28 @@
 </head>
 
 <body id="page-top" class="index">    
-  <!-- Navigation -->
   <nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom" style="padding-top:0px;">
     <div class="container">
-      <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header page-scroll" style="padding-top:20px;">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
-        </button>
-
-        <a class="navbar-brand" href="/">Start Here</a>
+        <a class="navbar-brand" href="/"><@f.i18n 'page.mainTitle' 'Start Here'/></a>
       </div>
 
-      <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-top:20px;">
         <ul class="nav navbar-nav navbar-right">
           <@ui.insert navbar! />
+          <li>
+            <a style="padding-left:30px;" href="<@f.url '?locale=en'/>">
+              <img style="width:24px;" src="<@u.r 'img/en.png' />" />
+            </a>
+          </li>
+          <li>
+            <a style="padding-left:0px;padding-right:0px;" href="<@f.url '?locale=ru'/>">
+              <img style="width:24px;" src="<@u.r 'img/ru.png' />" />
+            </a>
+          </li>
         </ul>
       </div>
-      <!-- /.navbar-collapse -->
     </div>
-    <!-- /.container-fluid -->
   </nav>
 
   <@ui.insert content! />

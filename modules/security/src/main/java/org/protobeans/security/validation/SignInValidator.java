@@ -33,14 +33,14 @@ public class SignInValidator implements ConstraintValidator<SignIn, SignInForm> 
         AbstractProfile profile = profileService.getByEmail(form.getEmail());
 
         if (profile == null || !passwordEncoder.isPasswordValid(profile.getPassword(), form.getPassword(), form.getEmail())) {
-            context.buildConstraintViolationWithTemplate("{signin.incorrectEmailOrPassword}").addPropertyNode("email").addConstraintViolation();
+            context.buildConstraintViolationWithTemplate("{SignInValidator.incorrectEmailOrPassword}").addPropertyNode("email").addConstraintViolation();
             context.buildConstraintViolationWithTemplate("").addPropertyNode("password").addConstraintViolation();
             
             return false;
         }
         
         if (!profile.isConfirmed()) {
-            context.buildConstraintViolationWithTemplate("{signin.notConfirmed}").addConstraintViolation();
+            context.buildConstraintViolationWithTemplate("{SignInValidator.notConfirmed}").addConstraintViolation();
             
             return false;
         }

@@ -19,7 +19,7 @@ public @interface FieldEquality {
     
     String field2();
     
-    String message() default "{FieldEquality.fieldsNotEquals}";
+    String message() default "{FieldEqualityValidator.fieldsNotEquals}";
 
     Class<?>[] groups() default {};
 
