@@ -20,6 +20,12 @@ public class UnboundedCacheableComputation<K, V> implements Computation<K, V> {
         CompletableFuture<V> f = new CompletableFuture<>();
             
         return Optional.ofNullable(cache.putIfAbsent(k, f))
-                       .orElse(delegate.compute(k).whenComplete((v, e) -> f.complete(v)));
+                       .orElse(delegate.compute(k).whenComplete((v, e) ->  {
+                           if (e != null) {
+                               f.completeExceptionally(e);
+                           } else {
+                               f.complete(v);
+                           }
+                       }));
     }  
 }
