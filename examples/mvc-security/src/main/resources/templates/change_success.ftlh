@@ -1,6 +1,6 @@
 <@ui.composition '/base.ftlh'>  
   <#assign title in ui>
-    Change Success  
+    <@f.i18n 'page.changepw.title' 'Change Password' />
   </#assign>
   
   <@ui.addScript>
@@ -10,7 +10,7 @@
   
   <#assign navbar in ui>
     <li>
-      <a href="<@f.url '/' />">Главная</a>
+      <a href="<@f.url '/' />"><@f.i18n 'page.root.title' 'Main page'/></a>
     </li>
   </#assign>
   
@@ -21,7 +21,7 @@
           <div class="col-lg-12">
             <img style="width:200px;" class="img-responsive" style="width:200px;" src="<@u.r 'img/lock.png' />" alt="">
             <div class="intro-text">
-              <span class="skills">Password successfully changed</span>
+              <span class="skills"><@f.i18n 'page.changepw.success' 'Password successfully changed'/></span>
               <hr class="star-light">
             </div>
           </div>

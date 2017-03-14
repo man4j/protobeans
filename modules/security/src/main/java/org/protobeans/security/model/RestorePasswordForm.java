@@ -11,7 +11,7 @@ public class RestorePasswordForm {
     private String email;
 
     public String getEmail() {
-        return email.toLowerCase(Locale.US);
+        return email == null ? null : email.toLowerCase(Locale.US);
     }
 
     public void setEmail(String email) {

@@ -2,6 +2,7 @@ package org.protobeans.mvcsecurity.example.controller;
 
 import javax.validation.Valid;
 
+import org.protobeans.mvc.controller.advice.RequestContextHolder;
 import org.protobeans.mvcsecurity.example.model.MySignUpForm;
 import org.protobeans.mvcsecurity.example.model.UserProfile;
 import org.protobeans.mvcsecurity.example.service.EmailService;
@@ -29,6 +30,9 @@ public class SignUpController {
     @Autowired
     private MessageGenerator messageGenerator;
     
+    @Autowired
+    private RequestContextHolder requestContextHolder;
+    
     @GetMapping
     String prepareForm(@SuppressWarnings("unused") @ModelAttribute("form") MySignUpForm form) {
         return "/signup";
@@ -40,7 +44,7 @@ public class SignUpController {
         
         UserProfile p = profileService.create(form.getEmail(), form.getPassword(), form.getUserName());
         
-        emailService.sendMessage(form.getEmail(), messageGenerator.generateEmailSignInMessage(form.getPassword(), p.getConfirmUuid()));
+        emailService.sendMessage(form.getEmail(), messageGenerator.generateEmailSignInMessage(form.getPassword(), p.getConfirmUuid(), requestContextHolder.getRequestContext()));
 
         return "/check_email";
     }

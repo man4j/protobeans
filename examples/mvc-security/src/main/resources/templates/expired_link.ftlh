@@ -1,6 +1,6 @@
 <@ui.composition '/base.ftlh'>  
   <#assign title in ui>
-    Expired  
+    <@f.i18n 'page.expired.title' 'Expired link' />  
   </#assign>
   
   <@ui.addScript>
@@ -17,7 +17,7 @@
             <div class="intro-text">
               <span class="skills"></span>
               <hr class="star-light">
-              <span class="skills"><@f.messageText 'sigin.expiredLink' 'К сожалению данная ссылка уже была использована и больше не действительна.'/></span>
+              <span class="skills"><@f.i18n 'sigin.expiredLink' 'Link already used'/></span>
             </div>
           </div>
         </div>

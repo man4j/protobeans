@@ -1,6 +1,6 @@
 <@ui.composition '/base.ftlh'>  
   <#assign title in ui>
-    Restore  
+    <@f.i18n 'page.restore.title' 'Restore password' />  
   </#assign>
   
   <@ui.addScript>
@@ -13,7 +13,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
-            <h3>Restore Password</h3>
+            <h3><@f.i18n 'page.restore.title' 'Restore password' /></h3>
             <hr class="star-primary">
           </div>
         </div>
@@ -29,14 +29,14 @@
             <@f.form '/restore'>
               <div class="row control-group">
                 <div class="form-group col-xs-12 floating-label-form-group controls">
-                  <label>Email Address</label>
-                  <@f.formInput 'form.email' 'form-control' 'err form-control' 'placeholder="Email Address" maxlength="50" autocomplete="off"' />
+                  <label><@f.i18n 'page.email' 'Email' /></label>
+                  <@f.formInput 'form.email' 'form-control' 'err form-control' 'placeholder="Email" maxlength="50" autocomplete="off"' />
                 </div>
               </div>
               <br />
               <div class="row">
                 <div class="form-group col-xs-2">
-                  <button type="submit" class="btn btn-success btn-lg" style="width:150%;">Submit</button>
+                  <button type="submit" class="btn btn-success btn-lg" style="width:150%;"><@f.i18n 'page.restore.submit' 'Submit' /></button>
                 </div>
               </div>
             </@f.form>

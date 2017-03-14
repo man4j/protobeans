@@ -2,6 +2,7 @@ package org.protobeans.mvcsecurity.example.controller;
 
 import javax.validation.Valid;
 
+import org.protobeans.mvc.controller.advice.RequestContextHolder;
 import org.protobeans.mvcsecurity.example.service.EmailService;
 import org.protobeans.mvcsecurity.example.service.InMemoryProfileService;
 import org.protobeans.mvcsecurity.example.service.MessageGenerator;
@@ -31,6 +32,9 @@ public class RestorePasswordController {
     
     @Autowired
     private MessageGenerator messageGenerator;
+    
+    @Autowired
+    private RequestContextHolder requestContextHolder;
 
     @RequestMapping(method = RequestMethod.GET)
     String get(@SuppressWarnings("unused") @ModelAttribute("form") RestorePasswordForm form) {
@@ -47,7 +51,7 @@ public class RestorePasswordController {
 
         profileService.updatePassword(p, newDecryptedPassword);
 
-        emailService.sendMessage(form.getEmail(), messageGenerator.generateEmailSignInMessage(newDecryptedPassword, p.getConfirmUuid()));
+        emailService.sendMessage(form.getEmail(), messageGenerator.generateEmailSignInMessage(newDecryptedPassword, p.getConfirmUuid(), requestContextHolder.getRequestContext()));
 
         return "/check_email";
     }
