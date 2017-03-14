@@ -37,6 +37,10 @@
 
 <#macro i18n code, text>${springMacroRequestContext.getMessage(code, text)}</#macro>
 
+<#function fi18n code, text>
+  <#return springMacroRequestContext.getMessage(code, text)>
+</#function>
+
 <#--
  * messageArgs
  *

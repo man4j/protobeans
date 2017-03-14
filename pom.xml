@@ -32,6 +32,7 @@
     <module>modules/async</module>
     <module>modules/scheduler</module>
     <module>modules/security</module>
+    <module>modules/future</module>
   </modules>
   
   <dependencies>
