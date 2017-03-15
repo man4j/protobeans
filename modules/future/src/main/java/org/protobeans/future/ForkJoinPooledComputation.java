@@ -1,12 +1,11 @@
 package org.protobeans.future;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
-abstract public class ForkJoinPooledComputation<K, V> implements Computation<K, V> {
+public class ForkJoinPooledComputation<K, V> implements Computation<K, V> {
     @Override
-    public CompletableFuture<V> compute(K k) {
-        return CompletableFuture.supplyAsync(() -> computeInternal(k));
+    public CompletableFuture<V> compute(K k, Function<K, V> f) {
+        return CompletableFuture.supplyAsync(() -> f.apply(k));
     }
-    
-    public abstract V computeInternal(K k);
 }

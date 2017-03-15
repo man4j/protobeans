@@ -1,6 +1,7 @@
 package org.protobeans.future;
 
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,11 +24,11 @@ public class SimpleTest {
         
         String key = "1";
         
-        Mockito.when(computation.computeInternal(key)).thenReturn(key);
+        Function<String, String> computeFunction = k -> k + k;
         
-        cacheableComputation.compute(key).get();
-        cacheableComputation.compute(key).get();
+        cacheableComputation.compute(key, computeFunction).get();
+        cacheableComputation.compute(key, computeFunction).get();
         
-        Mockito.verify(computation, Mockito.times(1)).computeInternal(key);
+        Mockito.verify(computation, Mockito.times(1)).compute(key, computeFunction);
     }
 }
