@@ -2,12 +2,7 @@
   <#assign title in ui>
     <@f.i18n 'page.expired.title' 'Expired link' />  
   </#assign>
-  
-  <@ui.addScript>
-    <script defer="defer">
-    </script>
-  </@ui.addScript>
-    
+      
   <#assign content in ui>
     <header>
       <div class="container">

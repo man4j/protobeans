@@ -2,12 +2,7 @@
   <#assign title in ui>
     <@f.i18n 'page.changepw.title' 'Change Password' />
   </#assign>
-  
-  <@ui.addScript>
-    <script defer="defer">
-    </script>
-  </@ui.addScript>
-  
+    
   <#assign content in ui>
     <section id="contact">
       <div class="container">

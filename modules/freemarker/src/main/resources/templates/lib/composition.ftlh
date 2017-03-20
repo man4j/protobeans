@@ -13,28 +13,23 @@
   </#if>
 </#macro>
 
-<#macro ifndef libName>
-  <#if !libs??>
-    <#global libs = {} />    
+<#macro addScript scriptName>
+  <#if !names??>
+    <#global names = {} />    
   </#if>
-  
-  <#if !libs[libName]??>
-    <#global libs = libs + {libName : true} />
-    
-    <#nested />   
-  </#if>  
-</#macro>
-
-<#macro addScript>
-  <#assign script>
-    <#nested />
-  </#assign>
   
   <#if !scripts??>
     <#global scripts = [] />
   </#if>
-    
-  <#global scripts = scripts + [script] />
+  
+  <#if !names[scriptName]??>
+    <#assign script>
+      <#nested />
+    </#assign>
+
+    <#global scripts = scripts + [script] />    
+    <#global names = names + {scriptName : true} />
+  </#if>
 </#macro>
 
 <#macro insertScripts>

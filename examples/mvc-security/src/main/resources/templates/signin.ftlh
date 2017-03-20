@@ -1,12 +1,9 @@
+<#import "/lib/social.ftlh" as social />
+
 <@ui.composition '/base.ftlh'>  
   <#assign title in ui>
     <@f.i18n 'page.signin.title' 'SignIn page'/>    
   </#assign>
-  
-  <@ui.addScript>
-    <script defer="defer">
-    </script>
-  </@ui.addScript>
   
   <#assign content in ui>
     <section id="contact">
@@ -59,6 +56,10 @@
                 </div>
               </div>
             </@f.form>
+          </div>
+          <div class="col-lg-8 col-lg-offset-2">
+            <hr />
+            <@social.facebookConnect '/img/fb.png' '50px' />
           </div>
         </div>
       </div>

@@ -2,12 +2,7 @@
   <#assign title in ui>
     <@f.i18n 'page.changepw.title' 'Change Password' />
   </#assign>
-  
-  <@ui.addScript>
-    <script defer="defer">
-    </script>
-  </@ui.addScript>
-  
+    
   <#assign navbar in ui>
     <li>
       <a href="<@f.url '/' />"><@f.i18n 'page.root.title' 'Main page'/></a>

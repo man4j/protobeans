@@ -22,7 +22,19 @@
     
     <dependency>
       <groupId>org.protobeans</groupId>
+      <artifactId>protobeans-social</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.protobeans</groupId>
       <artifactId>protobeans-async</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.protobeans</groupId>
+      <artifactId>protobeans-mysql</artifactId>
       <version>${project.version}</version>
     </dependency>
     

@@ -2,12 +2,7 @@
   <#assign title in ui>
     <@f.i18n 'page.root.title' 'Main page'/>  
   </#assign>
-  
-  <@ui.addScript>
-    <script defer="defer">
-    </script>
-  </@ui.addScript>
-  
+    
   <#assign navbar in ui>
     <@s.hasRole 'ROLE_ADMIN'>
       <li>

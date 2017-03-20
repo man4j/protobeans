@@ -9,4 +9,9 @@ public class SecurityInitializer extends AbstractSecurityWebApplicationInitializ
     protected String getDispatcherWebApplicationContextSuffix() {
         return "dispatcher";//see javadoc
     }
+
+    @Override
+    protected boolean enableHttpSessionEventPublisher() {
+        return true;
+    }
 }

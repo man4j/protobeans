@@ -2,11 +2,13 @@ package org.protobeans.mvc.config;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 
 import org.protobeans.core.config.CoreConfig;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -34,6 +36,13 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
     @Override
     protected Filter[] getServletFilters() {
         return filters;
+    }
+    
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        servletContext.addListener(RequestContextListener.class);//Для того, чтобы запрос был доступен в фильтрах, например в SocialAuthenticationFilter
+        
+        super.onStartup(servletContext);
     }
 
     @SuppressWarnings("resource")

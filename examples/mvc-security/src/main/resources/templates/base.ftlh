@@ -124,7 +124,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
 
   <!-- Theme JavaScript -->
-  <script src="<@u.r 'js/freelancer.min.js' />"</script>
+  <script src="<@u.r 'js/freelancer.js' />"></script>
   
   <@ui.insertScripts />
 </body>

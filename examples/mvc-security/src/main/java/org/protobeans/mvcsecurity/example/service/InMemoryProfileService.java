@@ -59,13 +59,14 @@ public class InMemoryProfileService implements ProfileService {
         profile.setPassword(passwordEncoder.encodePassword(newPassword, profile.getEmail()));
     }
 
-    public UserProfile create(String email, String password, String userName) {
+    public UserProfile create(String email, String password, String userName, boolean isConfirmed) {
         UserProfile p = new UserProfile();
         
         p.setEmail(email);
         p.setPassword(passwordEncoder.encodePassword(password, email));
         p.setUserName(userName);
         p.setConfirmUuid(UUID.randomUUID().toString());
+        p.setConfirmed(isConfirmed);
         
         byEmail.put(p.getEmail(), p);
         

@@ -2,12 +2,7 @@
   <#assign title in ui>
     Admin  
   </#assign>
-  
-  <@ui.addScript>
-    <script defer="defer">
-    </script>
-  </@ui.addScript>
-  
+    
   <#assign navbar in ui>
     <li>
       <a href="<@f.url '/' />"><@f.i18n 'page.admin.title' 'Admin page'/></a>

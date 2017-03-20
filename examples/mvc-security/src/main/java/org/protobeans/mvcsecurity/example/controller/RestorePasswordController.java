@@ -51,7 +51,7 @@ public class RestorePasswordController {
 
         profileService.updatePassword(p, newDecryptedPassword);
 
-        emailService.sendMessage(form.getEmail(), messageGenerator.generateEmailSignInMessage(newDecryptedPassword, p.getConfirmUuid(), requestContextHolder.getRequestContext()));
+        emailService.sendMessage(form.getEmail(), messageGenerator.generateEmailSignInMessage(newDecryptedPassword, p.getConfirmUuid(), null, requestContextHolder.getRequestContext()));
 
         return "/check_email";
     }

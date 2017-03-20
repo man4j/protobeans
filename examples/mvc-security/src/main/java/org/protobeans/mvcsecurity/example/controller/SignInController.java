@@ -1,5 +1,6 @@
 package org.protobeans.mvcsecurity.example.controller;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.protobeans.security.annotation.Anonymous;
@@ -7,6 +8,7 @@ import org.protobeans.security.model.AbstractProfile;
 import org.protobeans.security.model.SignInForm;
 import org.protobeans.security.service.ProfileService;
 import org.protobeans.security.service.SecurityService;
+import org.protobeans.social.service.ProtobeansSocialUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -25,8 +27,15 @@ public class SignInController {
     @Autowired
     private SecurityService securityService;
     
+    @Autowired
+    private HttpSession session;
+    
     @GetMapping
     String prepareForm(@SuppressWarnings("unused") @ModelAttribute("form") SignInForm form) {
+        if (session.getAttribute(ProtobeansSocialUserDetailsService.NOT_EXISTING_USER_ID_ATTRIBUTE_NAME) != null) {
+            return "redirect:/socialSignUp";
+        }
+        
         return "/signin";
     }
     

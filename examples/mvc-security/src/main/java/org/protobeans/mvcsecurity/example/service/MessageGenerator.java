@@ -17,7 +17,7 @@ public class MessageGenerator {
     @Autowired
     private Configuration freemarker;
     
-    public String generateEmailSignInMessage(String password, String uuid, RequestContext rc) {
+    public String generateEmailSignInMessage(String password, String uuid, String socialUserId, RequestContext rc) {
         try {
             StringWriter writer = new StringWriter();
             
@@ -26,6 +26,7 @@ public class MessageGenerator {
             emailModel.put(AbstractTemplateView.SPRING_MACRO_REQUEST_CONTEXT_ATTRIBUTE, rc);
             emailModel.put("password", password);
             emailModel.put("uuid", uuid);
+            emailModel.put("socialUserId", socialUserId);
             emailModel.put("baseUrl", ServletUriComponentsBuilder.fromCurrentContextPath().build().toString());
             
             freemarker.getTemplate("email/email_signin.ftlh").process(emailModel, writer);

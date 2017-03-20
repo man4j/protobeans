@@ -1,6 +1,8 @@
 package org.protobeans.security.config;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,16 +14,19 @@ import org.protobeans.security.service.SecurityService;
 import org.protobeans.security.util.CurrentUrlAuthenticationSuccessHandler;
 import org.protobeans.security.util.SecurityUrlsBean;
 import org.protobeans.security.validation.SignIn;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 
@@ -38,6 +43,9 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SecurityUrlsBean securityUrlsBean;
     
+    @Autowired(required = false)
+    private List<SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>> configurers = new ArrayList<>();
+    
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(Arrays.stream(securityUrlsBean.getIgnoreUrls())
@@ -47,9 +55,9 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {        
-        String[] anonymousPatterns = ctx.getBeansWithAnnotation(Anonymous.class).values().stream().map(o -> o.getClass().getAnnotation(Anonymous.class).value()).toArray(String[]::new);
-        String[] permitAllPatterns = ctx.getBeansWithAnnotation(PermitAll.class).values().stream().map(o -> o.getClass().getAnnotation(PermitAll.class).value()).toArray(String[]::new);
-            
+        String[] anonymousPatterns = ctx.getBeansWithAnnotation(Anonymous.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(Anonymous.class).value()).toArray(String[]::new);
+        String[] permitAllPatterns = ctx.getBeansWithAnnotation(PermitAll.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(PermitAll.class).value()).toArray(String[]::new);
+        
         http.authorizeRequests().mvcMatchers(permitAllPatterns).permitAll()
                                 .mvcMatchers(anonymousPatterns).anonymous()
                                 .anyRequest().authenticated()
@@ -57,6 +65,10 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
             .rememberMe().rememberMeServices(rememberMeServices()).key("123").authenticationSuccessHandler(new CurrentUrlAuthenticationSuccessHandler())
             .and()
             .exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(securityUrlsBean.getLoginUrl())).accessDeniedHandler((req, res, e) -> {res.setStatus(HttpServletResponse.SC_FORBIDDEN);});
+        
+        for (SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> cfg : configurers) {
+            http.apply(cfg);
+        }
     }
     
     @Bean

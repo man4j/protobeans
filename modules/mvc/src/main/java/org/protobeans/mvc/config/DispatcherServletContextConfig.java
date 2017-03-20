@@ -122,7 +122,7 @@ public class DispatcherServletContextConfig extends WebMvcConfigurerAdapter {
             converters.addAll(messageConvertersBean.getConverters());
         }
     }
-    
+        
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LocaleChangeInterceptor());
