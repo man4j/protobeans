@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.protobeans.hibernate.mysql.example.Main;
+import org.protobeans.hibernate.mysql.example.model.User;
 import org.protobeans.testcontainers.mysql.annotation.EnableMySqlContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -31,4 +32,16 @@ public class UserServiceTest {
         
         Assert.assertEquals(10, userService.count());
     }
+    
+    @Test
+    public void shouldUpdateDetached() {
+        User u = new User("email", "pwd");
+        
+        userService.saveOrUpdate(u);
+        
+        u.setEmail("email1");
+        
+        userService.saveOrUpdate(u);
+    }
+    
 }

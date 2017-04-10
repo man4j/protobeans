@@ -20,6 +20,8 @@ public class MySqlConfig {
     
     private String password;
     
+    private int maxPoolSize;
+    
     @Bean(destroyMethod = "close")
     public DataSource dataSource() {
         HikariDataSource ds = new HikariDataSource();
@@ -27,7 +29,7 @@ public class MySqlConfig {
         ds.setJdbcUrl(dbUrl);
         ds.setDriverClassName("com.mysql.jdbc.Driver");
         ds.setUsername(user);
-        ds.setMaximumPoolSize(50);
+        ds.setMaximumPoolSize(maxPoolSize);
         ds.setPassword(password);
 
         ds.addDataSourceProperty("useSSL", "false");

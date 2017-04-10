@@ -34,25 +34,26 @@
     <module>modules/security</module>
     <module>modules/social</module>
     <module>modules/future</module>
+    <module>modules/monitoring</module>
   </modules>
   
   <dependencies>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.1.7</version>
+      <version>1.2.2</version>
     </dependency>
     
     <dependency>
       <groupId>org.codehaus.janino</groupId>
       <artifactId>janino</artifactId>
-      <version>3.0.0</version>
+      <version>3.0.7</version>
     </dependency>
     
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
-      <version>1.7.21</version>
+      <version>1.7.25</version>
     </dependency>
     
     <dependency>

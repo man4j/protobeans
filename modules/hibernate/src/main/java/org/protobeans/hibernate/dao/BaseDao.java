@@ -57,6 +57,12 @@ abstract public class BaseDao<T> {
         return detachedEntity;
     }
     
+    public T update(T detachedEntity) {
+        em.unwrap(Session.class).update(detachedEntity);
+        
+        return detachedEntity;
+    }
+    
     public void delete(T entity) {
         em.remove(entity);
     }

@@ -10,10 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 
 @Entity
 @Table(name = "users")
 @DynamicUpdate
+@OptimisticLocking(type = OptimisticLockType.DIRTY)
 public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)

@@ -22,7 +22,15 @@ public class Main {
         System.setProperty("url", "jdbc:mysql://localhost:3306/test1_db");
         
         try (AnnotationConfigApplicationContext ctx = EntryPoint.run(Main.class)) {
-            ctx.getBean(UserService.class).insertUsers(5);
+            UserService userService = ctx.getBean(UserService.class);
+            
+            User u = new User("email", "pwd");
+            
+            userService.saveOrUpdate(u);
+            
+            u.setEmail("email1");
+            
+            userService.update(u);
         }
     }
 }
