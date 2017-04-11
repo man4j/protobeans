@@ -39,6 +39,7 @@ public class JavaMonitoringConfig {
                 ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
                 
                 MDC.put("monitoringType", MonitoringType.JAVA.name());
+                
                 try {
                     MDC.put("java_hostname", InetAddress.getLocalHost().getHostName());
                 } catch (IllegalArgumentException | UnknownHostException e) {
