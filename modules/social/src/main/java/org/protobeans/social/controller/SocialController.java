@@ -6,5 +6,5 @@ import org.springframework.stereotype.Controller;
 @PermitAll("/auth/*") //for SocialAuthenticationFilter
 @Controller
 public class SocialController {
-
+    //empty
 }
