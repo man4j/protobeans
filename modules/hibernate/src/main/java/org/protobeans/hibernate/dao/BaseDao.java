@@ -6,9 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.hibernate.Session;
-
-import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
+import org.springframework.core.ResolvableType;
 
 abstract public class BaseDao<T> {
     @PersistenceContext
@@ -18,11 +16,7 @@ abstract public class BaseDao<T> {
     
     @SuppressWarnings("unchecked")
     public BaseDao() {
-        TypeResolver tr = new TypeResolver();
-        
-        ResolvedType rt = tr.resolve(this.getClass());
-        
-        entityClass = (Class<T>) rt.typeParametersFor(BaseDao.class).get(0).getErasedType();
+        entityClass = (Class<T>) ResolvableType.forClass(BaseDao.class, this.getClass()).resolveGeneric(0);
     }
     
     /**

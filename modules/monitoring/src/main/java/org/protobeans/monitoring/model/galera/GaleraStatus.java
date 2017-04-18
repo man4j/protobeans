@@ -25,6 +25,12 @@ public class GaleraStatus {
     
     private long wsrep_flow_control_paused_ns;
     
+    private long wsrep_local_bf_aborts;
+    
+    private long wsrep_local_cert_failures;
+    
+    private String wsrep_cluster_status;
+    
     public GaleraStatus(GaleraStatusKey galeraStatusKey) {
         this.galeraStatusKey = galeraStatusKey;
     }
@@ -119,5 +125,29 @@ public class GaleraStatus {
 
     public void setWsrep_flow_control_paused_ns(long wsrep_flow_control_paused_ns) {
         this.wsrep_flow_control_paused_ns = wsrep_flow_control_paused_ns;
+    }
+
+    public long getWsrep_local_bf_aborts() {
+        return wsrep_local_bf_aborts;
+    }
+
+    public void setWsrep_local_bf_aborts(long wsrep_local_bf_aborts) {
+        this.wsrep_local_bf_aborts = wsrep_local_bf_aborts;
+    }
+
+    public long getWsrep_local_cert_failures() {
+        return wsrep_local_cert_failures;
+    }
+
+    public void setWsrep_local_cert_failures(long wsrep_local_cert_failures) {
+        this.wsrep_local_cert_failures = wsrep_local_cert_failures;
+    }
+
+    public String getWsrep_cluster_status() {
+        return wsrep_cluster_status;
+    }
+
+    public void setWsrep_cluster_status(String wsrep_cluster_status) {
+        this.wsrep_cluster_status = wsrep_cluster_status;
     }
 }

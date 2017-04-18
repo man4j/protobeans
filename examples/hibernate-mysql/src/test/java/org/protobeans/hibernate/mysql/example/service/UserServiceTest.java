@@ -43,5 +43,4 @@ public class UserServiceTest {
         
         userService.saveOrUpdate(u);
     }
-    
 }

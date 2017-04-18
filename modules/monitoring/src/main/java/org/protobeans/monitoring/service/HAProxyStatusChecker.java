@@ -18,6 +18,9 @@ import org.springframework.stereotype.Service;
 
 import net.logstash.logback.marker.Markers;
 
+/**
+ * For more information about HAProxy see https://logz.io/blog/monitor-haproxy-elk-stack/ 
+ */
 @Service
 public class HAProxyStatusChecker implements StatusChecker {
     private static final Logger logger = LoggerFactory.getLogger(HAProxyStatusChecker.class);

@@ -66,6 +66,9 @@ public class GaleraStatusChecker extends MySQLStatusChecker {
         status.setWsrep_local_state(Long.parseLong(wsrepStatus.get("wsrep_local_state")));
         status.setWsrep_local_recv_queue(Long.parseLong(wsrepStatus.get("wsrep_local_recv_queue")));
         status.setWsrep_local_send_queue(Long.parseLong(wsrepStatus.get("wsrep_local_send_queue")));
+        status.setWsrep_local_bf_aborts(Long.parseLong(wsrepStatus.get("wsrep_local_bf_aborts")));
+        status.setWsrep_local_cert_failures(Long.parseLong(wsrepStatus.get("wsrep_local_cert_failures")));
+        status.setWsrep_cluster_status(wsrepStatus.get("wsrep_cluster_status"));
         
         return status;
     }
@@ -78,12 +81,15 @@ public class GaleraStatusChecker extends MySQLStatusChecker {
                     Markers.append("wsrep_local_commits", status.getWsrep_local_commits() - prevStatus.getWsrep_local_commits())).and(
                     Markers.append("wsrep_local_state_comment", status.getWsrep_local_state_comment())).and(
                     Markers.append("wsrep_local_state", status.getWsrep_local_state())).and(
+                    Markers.append("wsrep_cluster_status", status.getWsrep_cluster_status())).and(
                     Markers.append("wsrep_replicated_bytes", status.getWsrep_replicated_bytes() - prevStatus.getWsrep_replicated_bytes())).and(
                     Markers.append("wsrep_received_bytes", status.getWsrep_received_bytes() - prevStatus.getWsrep_received_bytes())).and(
                     Markers.append("wsrep_local_send_queue", status.getWsrep_local_send_queue())).and(
                     Markers.append("wsrep_local_recv_queue", status.getWsrep_local_recv_queue())).and(
                     Markers.append("wsrep_flow_control_sent", status.getWsrep_flow_control_sent() - prevStatus.getWsrep_flow_control_sent())).and(
                     Markers.append("wsrep_flow_control_recv", status.getWsrep_flow_control_recv() - prevStatus.getWsrep_flow_control_recv())).and(
+                    Markers.append("wsrep_local_bf_aborts", status.getWsrep_local_bf_aborts() - prevStatus.getWsrep_local_bf_aborts())).and(
+                    Markers.append("wsrep_local_cert_failures", status.getWsrep_local_cert_failures() - prevStatus.getWsrep_local_cert_failures())).and(
                     Markers.append("wsrep_flow_control_paused_ns", status.getWsrep_flow_control_paused_ns() - prevStatus.getWsrep_flow_control_paused_ns())), "");
     }
 
