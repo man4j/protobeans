@@ -8,10 +8,11 @@ public class LogProcessingChain {
     public LogProcessingChain add(LogProcessingStage next) {
         if (first == null) {
             first = next;
-            last = next;
         } else {
             last.setNext(next);
         }
+        
+        last = next;
         
         return this;
     }

@@ -57,7 +57,7 @@ public class LogsExtractorConfig {
                                     if (logMessage == null) {
                                         processedContainers.remove(containerInfo.getContainer().id());
                                     } else {
-                                        logProcessingChain.getFirst().processNext(logMessage);
+                                        logProcessingChain.getFirst().processLogMessage(logMessage);
                                     }
                                 });
                             }

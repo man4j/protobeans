@@ -44,7 +44,7 @@ public class ContainerLogExtractor {
             final PipedInputStream stdout = new PipedInputStream(65_536);
             final PipedInputStream stderr = new PipedInputStream(65_536);
             
-            attachToLogs(containerInfo.getContainer().id(), stdout, stderr, lineConsumer);
+            attachToLogs(containerInfo, stdout, stderr, lineConsumer);
             
             readFromStream(containerInfo, stdout, LogChannel.STDOUT, lineConsumer);
             readFromStream(containerInfo, stderr, LogChannel.STDERR, lineConsumer);
@@ -52,21 +52,21 @@ public class ContainerLogExtractor {
     }
     
     @SuppressWarnings("resource")
-    private void attachToLogs(String containerId, PipedInputStream stdout, PipedInputStream stderr, Consumer<ContainerLogMessage> lineConsumer) {
+    private void attachToLogs(ContainerInfo containerInfo, PipedInputStream stdout, PipedInputStream stderr, Consumer<ContainerLogMessage> lineConsumer) {
         executor.execute(() -> {
             MDC.put("monitoringType", MonitoringType.LOGSEXTRACTOR.name());
             
             try {
-                logger.info("Attach to: " + containerId);
+                logger.info("Attach to: " + containerInfo.getContainerName());
                 
-                docker.logs(containerId, LogsParam.stderr(), LogsParam.stdout(), LogsParam.follow(), LogsParam.tail(0))
+                docker.logs(containerInfo.getContainer().id(), LogsParam.stderr(), LogsParam.stdout(), LogsParam.follow(), LogsParam.tail(0))
                       .attach(new PipedOutputStream(stdout), new PipedOutputStream(stderr));
             } catch (Exception e) {
-                logger.error("", e);
+                logger.error("Exception while extracting logs from task: " + containerInfo.getContainerName(), e);
             } finally {
-                logger.info("Detach from: " + containerId);
+                logger.info("Detach from: " + containerInfo.getContainerName());
                 
-                attachedContainers.remove(containerId);
+                attachedContainers.remove(containerInfo.getContainer().id());
                 
                 lineConsumer.accept(null);
             }
@@ -97,10 +97,10 @@ public class ContainerLogExtractor {
                     
                     lineConsumer.accept(new ContainerLogMessage(containerInfo, line, logChannel));
                 }
-            } catch (IOException | InterruptedException e) {
-                logger.error(Markers.append("monitoringType", MonitoringType.LOGSEXTRACTOR), "", e);
+            } catch (Exception e) {
+                logger.error(Markers.append("monitoringType", MonitoringType.LOGSEXTRACTOR), "Exception while extracting logs from task: " + containerInfo.getContainerName(), e);
             } finally {
-                logger.info(Markers.append("monitoringType", MonitoringType.LOGSEXTRACTOR), "Close " + logChannel.name() + " log stream from: " + containerInfo.getContainer().id());
+                logger.info(Markers.append("monitoringType", MonitoringType.LOGSEXTRACTOR), "Close " + logChannel.name() + " log stream from: " + containerInfo.getContainerName());
                 
                 lineConsumer.accept(null);
             }

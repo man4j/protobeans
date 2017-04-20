@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Configuration;
 import com.spotify.docker.client.DefaultDockerClient;
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.exceptions.DockerException;
+import com.spotify.docker.client.messages.swarm.Node;
 import com.spotify.docker.client.messages.swarm.Service;
 import com.spotify.docker.client.messages.swarm.Task;
 
@@ -48,6 +49,7 @@ public class DockerMonitoringConfig {
                         List<Task> tasks = docker.listTasks().stream().filter(t -> t.desiredState().equals("running") && t.status().state().equals("running")).collect(Collectors.toList());
                         
                         Map<String, List<Task>> taskMap = tasks.stream().collect(Collectors.groupingBy(Task::serviceId));
+                        Map<String, Node> nodeMap = docker.listNodes().stream().collect(Collectors.toMap(Node::id, n -> n));
                         
                         for (Service service : services) {
                             int runningTasksCount = taskMap.getOrDefault(service.id(), Collections.emptyList()).size();
@@ -74,6 +76,7 @@ public class DockerMonitoringConfig {
                         for (Task task : tasks) {
                             logger.info(Markers.append("swarm_task_id", task.id()).and(
                                         Markers.append("swarm_service_name", serviceMap.get(task.serviceId()).spec().name())).and(
+                                        Markers.append("swarm_node_name", nodeMap.get(task.nodeId()).description().hostname())).and(
                                         Markers.append("swarm_node_id", task.nodeId())), "");
                         }
                         

@@ -13,14 +13,17 @@ public class MultilineProcessingStage extends LogProcessingStage {
     private ConcurrentHashMap<String, ContainerLogMessage> container2ErrMessage = new ConcurrentHashMap<>();
     
     private String[] prefixes;
+    private String[] suffixes;
     
-    public MultilineProcessingStage(String... prefixes) {
+    public MultilineProcessingStage(String[] prefixes, String[] suffixes) {
         this.prefixes = prefixes;
+        this.suffixes = suffixes;
     }
 
     @Override
     public void processLogMessage(ContainerLogMessage messagePart) {
         boolean newLine = !Arrays.stream(prefixes).anyMatch(messagePart.getLine()::startsWith);
+        boolean beginLine = Arrays.stream(suffixes).anyMatch(messagePart.getLine().replaceAll("\\R", "").trim()::endsWith);
         
         Map<String, ContainerLogMessage> map = messagePart.getLogChannel() == LogChannel.STDOUT ? container2StdMessage : container2ErrMessage;
         
@@ -32,12 +35,21 @@ public class MultilineProcessingStage extends LogProcessingStage {
             if (newLine) {
                 processNext(accumulatedMessage);
                 
-                map.put(containerId, messagePart);
+                if (!beginLine) {
+                    processNext(messagePart);
+                    map.remove(containerId);                    
+                } else {
+                    map.put(containerId, messagePart);
+                }
             } else {
-                accumulatedMessage.addToLine(messagePart.getLine());
+                accumulatedMessage.addToLine("\n" + messagePart.getLine());
             }
         } else {
-            map.put(containerId, messagePart);
+            if (newLine && !beginLine) {
+                processNext(messagePart);
+            } else {
+                map.put(containerId, messagePart);
+            }
         }
     }
 }

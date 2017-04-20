@@ -9,7 +9,7 @@ public abstract class LogProcessingStage {
         this.next = next;
     }
     
-    abstract void processLogMessage(ContainerLogMessage msg);
+    public abstract void processLogMessage(ContainerLogMessage msg);
     
     public void processNext(ContainerLogMessage msg) {
         if (next != null) {
