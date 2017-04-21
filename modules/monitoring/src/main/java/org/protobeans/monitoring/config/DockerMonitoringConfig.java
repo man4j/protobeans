@@ -63,9 +63,9 @@ public class DockerMonitoringConfig {
                                 long desiredReplicas = service.spec().mode().replicated().replicas();
                                 long availableReplicas = runningTasksCount;
                                 
-                                if (desiredReplicas > availableReplicas) {
-                                    markers.and(Markers.append("swarm_replica_difference", desiredReplicas - availableReplicas));
-                                }
+                                markers.and(Markers.append("swarm_replica_difference", desiredReplicas - availableReplicas));
+                            } else {
+                                markers.and(Markers.append("swarm_replica_difference", 0));
                             }
                             
                             logger.info(markers, "");
