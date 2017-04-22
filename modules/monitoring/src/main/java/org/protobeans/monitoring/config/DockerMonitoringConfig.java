@@ -3,6 +3,7 @@ package org.protobeans.monitoring.config;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -74,10 +75,20 @@ public class DockerMonitoringConfig {
                         Map<String, Service> serviceMap = services.stream().collect(Collectors.toMap(Service::id, s -> s));
                         
                         for (Task task : tasks) {
-                            logger.info(Markers.append("swarm_task_id", task.id()).and(
-                                        Markers.append("swarm_service_name", serviceMap.get(task.serviceId()).spec().name())).and(
-                                        Markers.append("swarm_node_name", nodeMap.get(task.nodeId()).description().hostname())).and(
-                                        Markers.append("swarm_node_id", task.nodeId())), "");
+                            Node taskNode = nodeMap.get(task.nodeId());
+                            
+                            LogstashMarker markers = Markers.append("swarm_task_id", task.id()).and(
+                                                     Markers.append("swarm_service_name", serviceMap.get(task.serviceId()).spec().name())).and(
+                                                     Markers.append("swarm_node_name", taskNode.description().hostname())).and(
+                                                     Markers.append("swarm_node_id", task.nodeId()));
+                            
+                            if (taskNode.spec().labels() != null) {
+                                for (Entry<String, String> e : taskNode.spec().labels().entrySet()) {
+                                    markers.and(Markers.append("swarm_node_labels_" + e.getKey(), e.getValue()));
+                                }
+                            }
+                            
+                            logger.info(markers, "");
                         }
                         
                         Thread.sleep(TimeUnit.SECONDS.toMillis(interval));
