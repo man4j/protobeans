@@ -8,13 +8,16 @@ import org.protobeans.monitoring.model.MonitoringProtocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.spotify.docker.client.messages.swarm.Node;
+import com.spotify.docker.client.messages.swarm.Task;
+
 import net.logstash.logback.marker.Markers;
 
 abstract public class MySQLStatusChecker implements StatusChecker {
     private static final Logger logger = LoggerFactory.getLogger(MySQLStatusChecker.class);
     
     @Override
-    public void checkStatus(String ip, int port) throws Exception {
+    public void checkStatus(String ip, int port, Task task, Node node) throws Exception {
         String rootPassword = System.getenv("MYSQL_ROOT_PASSWORD");
         
         String connectionUrl = "jdbc:mysql://" + ip + ":" + port + "/mysql?useSSL=false&user=root&password=" + rootPassword;
@@ -22,7 +25,7 @@ abstract public class MySQLStatusChecker implements StatusChecker {
         logger.info(Markers.append("monitoringType", getMonitoringType()), "Get status from url: " + connectionUrl);
         
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
-            checkStatus(conn);
+            checkStatus(conn, node);
         }
     }
 
@@ -31,5 +34,5 @@ abstract public class MySQLStatusChecker implements StatusChecker {
         return MonitoringProtocol.MYSQL;
     }
 
-    public abstract void checkStatus(Connection conn) throws SQLException;
+    public abstract void checkStatus(Connection conn, Node node) throws SQLException;
 }

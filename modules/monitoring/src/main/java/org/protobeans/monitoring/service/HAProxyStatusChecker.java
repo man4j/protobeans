@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.protobeans.monitoring.model.MonitoringProtocol;
@@ -14,7 +15,11 @@ import org.protobeans.monitoring.model.MonitoringType;
 import org.protobeans.monitoring.model.haproxy.HAProxyStat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
 import org.springframework.stereotype.Service;
+
+import com.spotify.docker.client.messages.swarm.Node;
+import com.spotify.docker.client.messages.swarm.Task;
 
 import net.logstash.logback.marker.Markers;
 
@@ -26,7 +31,7 @@ public class HAProxyStatusChecker implements StatusChecker {
     private static final Logger logger = LoggerFactory.getLogger(HAProxyStatusChecker.class);
     
     @Override
-    public void checkStatus(String ip, int port) throws Exception {
+    public void checkStatus(String ip, int port, Task task, Node node) throws Exception {
         String result = sendCommand(ip, port, "show info");
         
         Map<String, String> infoMap = Arrays.stream(result.split("\n")).collect(Collectors.toMap(l -> l.split(":")[0].trim(), l -> l.split(":")[1].trim()));
@@ -54,18 +59,26 @@ public class HAProxyStatusChecker implements StatusChecker {
             }
         }
 
-        logStats(components);
+        logStats(components, node);
     }
     
-    private void logStats(List<HAProxyStat> components) {
+    private void logStats(List<HAProxyStat> components, Node node) {
         for (HAProxyStat stat : components) {
-            logger.info(Markers.append("monitoringType", MonitoringType.HAPROXY.name()).and(
-                        Markers.append("haproxy_node", stat.getNode())).and(
-                        Markers.append("haproxy_pxname", stat.getPxname())).and(
-                        Markers.append("haproxy_svname", stat.getSvname())).and(
-                        Markers.append("haproxy_qcur", stat.getQcur())).and(
-                        Markers.append("haproxy_scur", stat.getScur())).and(
-                        Markers.append("haproxy_status", stat.getStatus())), "");
+            Marker marker = Markers.append("monitoringType", MonitoringType.HAPROXY.name()).and(
+                            Markers.append("haproxy_node", stat.getNode())).and(
+                            Markers.append("haproxy_pxname", stat.getPxname())).and(
+                            Markers.append("haproxy_svname", stat.getSvname())).and(
+                            Markers.append("haproxy_qcur", stat.getQcur())).and(
+                            Markers.append("haproxy_scur", stat.getScur())).and(
+                            Markers.append("haproxy_status", stat.getStatus()));
+            
+            if (node.spec().labels() != null) {
+                for (Entry<String, String> e : node.spec().labels().entrySet()) {
+                    marker.add(Markers.append("haproxy_node_labels_" + e.getKey(), e.getValue()));
+                }
+            }
+            
+            logger.info(marker, "");
         }
     }
     

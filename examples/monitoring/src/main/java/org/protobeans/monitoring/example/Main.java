@@ -19,6 +19,8 @@ import net.logstash.logback.marker.Markers;
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
     
+    private static final Logger simpleLogger = LoggerFactory.getLogger("simpleLogger");
+    
     @PostConstruct
     public void logGenerator() {
         new Thread() {
@@ -36,6 +38,7 @@ public class Main {
                     int randomInt = new Random().nextInt(100);
                     
                     logger.info(Markers.append("randomInt", randomInt), "randomInt: " + randomInt);
+                    simpleLogger.info("Hello!");
                     
                     if (randomInt % 2 == 0) {
                         logger.error("", new IllegalStateException("Bad number: " + randomInt));

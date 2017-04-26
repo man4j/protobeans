@@ -3,6 +3,7 @@ package org.protobeans.monitoring.service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.protobeans.monitoring.config.ServiceMonitoringConfig;
@@ -11,10 +12,12 @@ import org.protobeans.monitoring.model.galera.GaleraStatus;
 import org.protobeans.monitoring.model.galera.GaleraStatusKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
 import org.springframework.stereotype.Service;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.spotify.docker.client.messages.swarm.Node;
 
 import net.logstash.logback.marker.Markers;
 
@@ -31,7 +34,7 @@ public class GaleraStatusChecker extends MySQLStatusChecker {
     }
 
     @Override
-    public void checkStatus(Connection conn) throws SQLException {
+    public void checkStatus(Connection conn, Node node) throws SQLException {
         GaleraStatus currentStatus = fetchStatus(conn);
         
         if (currentStatus != null) {
@@ -40,7 +43,7 @@ public class GaleraStatusChecker extends MySQLStatusChecker {
             if (statusMap.containsKey(key)) {//если есть предыдущее значение         
                 GaleraStatus prevStatus = statusMap.get(key);
                 
-                write(currentStatus, prevStatus);
+                write(currentStatus, prevStatus, node);
             }
             
             statusMap.put(key, currentStatus);
@@ -73,24 +76,33 @@ public class GaleraStatusChecker extends MySQLStatusChecker {
         return status;
     }
     
-    private void write(GaleraStatus status, GaleraStatus prevStatus) {
-        logger.info(Markers.append("monitoringType", MonitoringType.GALERA.name()).and(
-                    Markers.append("wsrep_cluster_name", status.getGaleraStatusKey().getClusterName())).and(
-                    Markers.append("wsrep_node_address", status.getGaleraStatusKey().getNodeAddress())).and(
-                    Markers.append("wsrep_cluster_size", status.getClusterSize())).and(
-                    Markers.append("wsrep_local_commits", status.getWsrep_local_commits() - prevStatus.getWsrep_local_commits())).and(
-                    Markers.append("wsrep_local_state_comment", status.getWsrep_local_state_comment())).and(
-                    Markers.append("wsrep_local_state", status.getWsrep_local_state())).and(
-                    Markers.append("wsrep_cluster_status", status.getWsrep_cluster_status())).and(
-                    Markers.append("wsrep_replicated_bytes", status.getWsrep_replicated_bytes() - prevStatus.getWsrep_replicated_bytes())).and(
-                    Markers.append("wsrep_received_bytes", status.getWsrep_received_bytes() - prevStatus.getWsrep_received_bytes())).and(
-                    Markers.append("wsrep_local_send_queue", status.getWsrep_local_send_queue())).and(
-                    Markers.append("wsrep_local_recv_queue", status.getWsrep_local_recv_queue())).and(
-                    Markers.append("wsrep_flow_control_sent", status.getWsrep_flow_control_sent() - prevStatus.getWsrep_flow_control_sent())).and(
-                    Markers.append("wsrep_flow_control_recv", status.getWsrep_flow_control_recv() - prevStatus.getWsrep_flow_control_recv())).and(
-                    Markers.append("wsrep_local_bf_aborts", status.getWsrep_local_bf_aborts() - prevStatus.getWsrep_local_bf_aborts())).and(
-                    Markers.append("wsrep_local_cert_failures", status.getWsrep_local_cert_failures() - prevStatus.getWsrep_local_cert_failures())).and(
-                    Markers.append("wsrep_flow_control_paused_ns", status.getWsrep_flow_control_paused_ns() - prevStatus.getWsrep_flow_control_paused_ns())), "");
+    private void write(GaleraStatus status, GaleraStatus prevStatus, Node node) {
+        Marker marker = Markers.append("monitoringType", MonitoringType.GALERA.name()).and(
+                        Markers.append("wsrep_node_name", node.description().hostname())).and(
+                        Markers.append("wsrep_cluster_name", status.getGaleraStatusKey().getClusterName())).and(
+                        Markers.append("wsrep_node_address", status.getGaleraStatusKey().getNodeAddress())).and(
+                        Markers.append("wsrep_cluster_size", status.getClusterSize())).and(
+                        Markers.append("wsrep_local_commits", status.getWsrep_local_commits() - prevStatus.getWsrep_local_commits())).and(
+                        Markers.append("wsrep_local_state_comment", status.getWsrep_local_state_comment())).and(
+                        Markers.append("wsrep_local_state", status.getWsrep_local_state())).and(
+                        Markers.append("wsrep_cluster_status", status.getWsrep_cluster_status())).and(
+                        Markers.append("wsrep_replicated_bytes", status.getWsrep_replicated_bytes() - prevStatus.getWsrep_replicated_bytes())).and(
+                        Markers.append("wsrep_received_bytes", status.getWsrep_received_bytes() - prevStatus.getWsrep_received_bytes())).and(
+                        Markers.append("wsrep_local_send_queue", status.getWsrep_local_send_queue())).and(
+                        Markers.append("wsrep_local_recv_queue", status.getWsrep_local_recv_queue())).and(
+                        Markers.append("wsrep_flow_control_sent", status.getWsrep_flow_control_sent() - prevStatus.getWsrep_flow_control_sent())).and(
+                        Markers.append("wsrep_flow_control_recv", status.getWsrep_flow_control_recv() - prevStatus.getWsrep_flow_control_recv())).and(
+                        Markers.append("wsrep_local_bf_aborts", status.getWsrep_local_bf_aborts() - prevStatus.getWsrep_local_bf_aborts())).and(
+                        Markers.append("wsrep_local_cert_failures", status.getWsrep_local_cert_failures() - prevStatus.getWsrep_local_cert_failures())).and(
+                        Markers.append("wsrep_flow_control_paused_ns", status.getWsrep_flow_control_paused_ns() - prevStatus.getWsrep_flow_control_paused_ns()));
+        
+        if (node.spec().labels() != null) {
+            for (Entry<String, String> e : node.spec().labels().entrySet()) {
+                marker.add(Markers.append("wsrep_node_labels_" + e.getKey(), e.getValue()));
+            }
+        }
+        
+        logger.info(marker, "");
     }
 
     @Override
