@@ -93,7 +93,7 @@ public class DockerMonitoringConfig {
                         
                         Thread.sleep(TimeUnit.SECONDS.toMillis(interval));
                     } catch (InterruptedException | DockerException e) {
-                        logger.error("", e);
+                        logger.error(Markers.append("monitoringType", MonitoringType.JAVA_AGENT.name()), "", e);
                         
                         Thread.currentThread().interrupt();
                     }

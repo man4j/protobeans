@@ -78,7 +78,7 @@ public class ServiceMonitoringConfig {
                         
                             InetAddress[] resolvedIps = InetAddress.getAllByName("tasks." + host);
                             
-                            logger.info(Markers.append("monitoringType", MonitoringType.COMMON.name()), "Resolved IP addresses for " + host + " :" + Arrays.stream(resolvedIps).map(InetAddress::getHostAddress).collect(Collectors.toList()));
+                            logger.info(Markers.append("monitoringType", MonitoringType.JAVA_AGENT.name()), "Resolved IP addresses for " + host + " :" + Arrays.stream(resolvedIps).map(InetAddress::getHostAddress).collect(Collectors.toList()));
                             
                             for (InetAddress resolvedIp : resolvedIps) {
                                 for (StatusChecker checker : checkers) {
@@ -90,19 +90,19 @@ public class ServiceMonitoringConfig {
                                             checker.checkStatus(resolvedIp.getHostAddress(), port, t, n);
                                         }
                                     } catch (Exception e) {
-                                        logger.error(Markers.append("monitoringType", checker.getMonitoringType().name()), "", e);
+                                        logger.error(Markers.append("monitoringType", MonitoringType.JAVA_AGENT.name()), "", e);
                                     }
                                 }
                             }
                         } catch (Exception e) {
-                            logger.error(Markers.append("monitoringType", MonitoringType.COMMON.name()), "", e);
+                            logger.error(Markers.append("monitoringType", MonitoringType.JAVA_AGENT.name()), "", e);
                         }
                     }
                     
                     try {
                         Thread.sleep(TimeUnit.SECONDS.toMillis(CHECK_INTERVAL));
                     } catch (InterruptedException e) {
-                        logger.error(Markers.append("monitoringType", MonitoringType.COMMON.name()), "", e);
+                        logger.error(Markers.append("monitoringType", MonitoringType.JAVA_AGENT.name()), "", e);
                         
                         Thread.currentThread().interrupt();
                     }

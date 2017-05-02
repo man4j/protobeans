@@ -1,5 +1,5 @@
 package org.protobeans.monitoring.model;
 
 public enum MonitoringType {
-    COMMON, JAVA, GALERA, PERCONA_SLAVE, HAPROXY, SWARM, LOGS, LOGSEXTRACTOR
+    JAVA_AGENT, JAVA, GALERA, PERCONA_SLAVE, HAPROXY, SWARM, LOGS, LOGSEXTRACTOR
 }
