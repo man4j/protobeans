@@ -10,6 +10,10 @@
 
   <artifactId>protobeans-testcontainers-selenium</artifactId>
   <packaging>jar</packaging>
+
+  <properties>
+    <maven.repo.dir>../../maven</maven.repo.dir>
+  </properties>
   
   <dependencies>
     <dependency>
@@ -39,13 +43,13 @@
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>selenium</artifactId>
-      <version>1.1.7</version>
+      <version>1.2.1</version>
     </dependency>
 
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
-      <version>2.53.1</version>
+      <version>3.4.0</version>
     </dependency>
     
     <dependency>

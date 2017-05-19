@@ -1,7 +1,5 @@
 package org.protobeans.mvc.config;
 
-import javax.servlet.Filter;
-
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.core.config.CoreConfig;
 import org.protobeans.mvc.annotation.EnableMvc;
@@ -29,9 +27,6 @@ public class MvcConfig {
     @Autowired
     private ApplicationContext ctx;
     
-    @Autowired(required = false)
-    private Filter[] filters = new Filter[] {};
-    
     @Bean
     public ProtoBeansDefinitionScanner protoBeansDefinitionScanner() {
         return new ProtoBeansDefinitionScanner(basePackageClasses);
@@ -40,7 +35,6 @@ public class MvcConfig {
     @Bean
     public Class<? extends WebApplicationInitializer> mvcInitializer() {
         MvcInitializer.rootApplicationContext = ctx;
-        MvcInitializer.filters = this.filters;
         
         return MvcInitializer.class; 
     }

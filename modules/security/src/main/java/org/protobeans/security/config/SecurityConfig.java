@@ -1,9 +1,12 @@
 package org.protobeans.security.config;
 
+import javax.servlet.Filter;
+
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.core.config.CoreConfig;
 import org.protobeans.security.annotation.EnableSecurity;
 import org.protobeans.security.util.SecurityUrlsBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
@@ -21,6 +24,9 @@ public class SecurityConfig {
     
     private String loginUrl;
     
+    @Autowired(required = false)
+    private Filter[] filters = new Filter[] {};
+    
     @Bean
     public SecurityUrlsBean securityUrlsBean() {
         return new SecurityUrlsBean(ignoreUrls, loginUrl);
@@ -28,6 +34,10 @@ public class SecurityConfig {
     
     @Bean
     public Class<? extends WebApplicationInitializer> securityInitializer() {
+        for (Filter filter : filters) {
+            SecurityWebConfig.addFilter(filter);
+        }
+        
         return SecurityInitializer.class; 
     }
     

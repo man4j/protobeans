@@ -22,7 +22,7 @@ public class SeleniumContainerListener extends AbstractTestExecutionListener {
     private Session session;
     
     @Override
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "resource" })
     public void beforeTestClass(TestContext testContext) throws Exception {
         EnableSeleniumContainer annotation = testContext.getTestClass().getAnnotation(EnableSeleniumContainer.class);
         

@@ -10,7 +10,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
-            <h3><@f.i18n 'page.signin.loginForm' 'Login Form'/></h3>
+            <h3 id="loginFormTitle"><@f.i18n 'page.signin.loginForm' 'Login Form'/></h3>
             <hr class="star-primary">
           </div>
         </div>

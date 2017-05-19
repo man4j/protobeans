@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.Filter;
 import javax.servlet.http.HttpServletResponse;
 
 import org.protobeans.mvc.util.PathUtils;
@@ -27,6 +28,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.DefaultSecurityFilterChain;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 
@@ -42,6 +44,12 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
     
     @Autowired
     private SecurityUrlsBean securityUrlsBean;
+    
+    private static List<Filter> filters = new ArrayList<>();
+    
+    public static void addFilter(Filter filter) {
+        filters.add(filter);
+    }
     
     @Autowired(required = false)
     private List<SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>> configurers = new ArrayList<>();
@@ -68,6 +76,10 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
         
         for (SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> cfg : configurers) {
             http.apply(cfg);
+        }
+        
+        for (Filter filter : filters) {
+            http.addFilterBefore(filter, ChannelProcessingFilter.class);
         }
     }
     

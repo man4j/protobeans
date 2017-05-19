@@ -10,6 +10,10 @@
 
   <artifactId>protobeans-security</artifactId>
   <packaging>jar</packaging>
+
+  <properties>
+    <maven.repo.dir>../../maven</maven.repo.dir>
+  </properties>
   
   <dependencies>
     <dependency>

@@ -5,7 +5,6 @@ import java.util.stream.Stream;
 
 import javax.sql.DataSource;
 
-import org.hibernate.dialect.Dialect;
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.hibernate.annotation.EnableHibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Configuration
 @InjectFrom(EnableHibernate.class)
 public class HibernateConfig {
-    private Class<? extends Dialect> dialect;
-    
     private String showSql;
     
     private String enableStatistics;
@@ -40,7 +37,6 @@ public class HibernateConfig {
        jpaVendorAdapter.setShowSql("true".equals(showSql));
        
        em.setJpaPropertyMap(new HashMap<String, Object>() {{put("hibernate.id.new_generator_mappings", true);
-                                                            put("hibernate.dialect", dialect.getName());
                                                             put("hibernate.format_sql", true);
                                                             put("hibernate.jdbc.fetch_size", 100);
                                                             put("hibernate.jdbc.batch_size", 1000);

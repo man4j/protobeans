@@ -42,12 +42,12 @@
         <ul class="nav navbar-nav navbar-right">
           <@ui.insert navbar! />
           <li>
-            <a style="padding-left:30px;" href="<@f.url '?locale=en'/>">
+            <a id="localeLinkEn" style="padding-left:30px;" href="<@f.url '?locale=en'/>">
               <img style="width:24px;" src="<@u.r 'img/en.png' />" />
             </a>
           </li>
           <li>
-            <a style="padding-left:0px;padding-right:0px;" href="<@f.url '?locale=ru'/>">
+            <a id="localeLinkRu" style="padding-left:0px;padding-right:0px;" href="<@f.url '?locale=ru'/>">
               <img style="width:24px;" src="<@u.r 'img/ru.png' />" />
             </a>
           </li>

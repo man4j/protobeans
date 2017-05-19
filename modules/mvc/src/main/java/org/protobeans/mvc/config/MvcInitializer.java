@@ -1,6 +1,5 @@
 package org.protobeans.mvc.config;
 
-import javax.servlet.Filter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
@@ -16,8 +15,6 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     public static ApplicationContext rootApplicationContext;
     
-    public static Filter[] filters;
-    
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return null;
@@ -32,12 +29,6 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
     protected String[] getServletMappings() {
         return new String[] {"/"};
     }
-    
-    @Override
-    protected Filter[] getServletFilters() {
-        return filters;
-    }
-    
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         servletContext.addListener(RequestContextListener.class);//Для того, чтобы запрос был доступен в фильтрах, например в SocialAuthenticationFilter

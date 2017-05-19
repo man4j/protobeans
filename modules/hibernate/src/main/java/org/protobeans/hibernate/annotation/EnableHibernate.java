@@ -5,10 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.hibernate.dialect.Dialect;
+import org.protobeans.hibernate.config.HibernateConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.protobeans.hibernate.config.HibernateConfig;
 
 /**
  * My hibernate documentation:
@@ -210,6 +209,4 @@ public @interface EnableHibernate {
     String enableStatistics() default "false";
     
     Class<?>[] basePackageClasses();
-    
-    Class<? extends Dialect> dialect();
 }
