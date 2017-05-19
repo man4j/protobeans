@@ -6,6 +6,7 @@ import javax.servlet.Filter;
 
 import org.protobeans.async.annotation.EnableAsync;
 import org.protobeans.core.EntryPoint;
+import org.protobeans.flyway.annotation.EnableFlyway;
 import org.protobeans.freemarker.annotation.EnableFreeMarker;
 import org.protobeans.gmail.annotation.EnableGMail;
 import org.protobeans.i18n.annotation.EnableI18n;
@@ -23,9 +24,9 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @EnableUndertow
@@ -36,7 +37,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @EnableI18n(isCached = "false")
 @EnableGMail(user = "s:gmailUser", password = "s:gmailPassword")
 @EnableAsync
-@EnableMySql(dbUrl = "jdbc:mysql://localhost:3306/dev_db", user = "root", password = "s:dbPassword")
+@EnableMySql(dbUrl = "s:dbUrl", schema = "s:dbSchema", user = "s:dbUser", password = "s:dbPassword")
+@EnableFlyway(dbUrl = "s:dbUrl", schema = "s:dbSchema", user = "s:dbUser", password = "s:dbPassword", waitDb = true)
 @EnableFacebook(appId = "1116746028470918", appSecret = "s:facebookSecret")
 public class Main {
     @Bean

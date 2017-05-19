@@ -2,11 +2,11 @@ package org.protobeans.mysql.config;
 
 import javax.sql.DataSource;
 
+import org.protobeans.core.annotation.InjectFrom;
+import org.protobeans.mysql.annotation.EnableMySql;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.protobeans.core.annotation.InjectFrom;
-import org.protobeans.mysql.annotation.EnableMySql;
 
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -15,6 +15,8 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableTransactionManagement(proxyTargetClass = true)
 public class MySqlConfig {
     private String dbUrl;
+    
+    private String schema;
     
     private String user;
     
@@ -26,7 +28,7 @@ public class MySqlConfig {
     public DataSource dataSource() {
         HikariDataSource ds = new HikariDataSource();
         
-        ds.setJdbcUrl(dbUrl);
+        ds.setJdbcUrl(dbUrl + "/" + schema);
         ds.setDriverClassName("com.mysql.jdbc.Driver");
         ds.setUsername(user);
         ds.setMaximumPoolSize(maxPoolSize);

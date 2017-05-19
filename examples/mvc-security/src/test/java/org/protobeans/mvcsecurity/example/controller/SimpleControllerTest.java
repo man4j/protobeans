@@ -8,9 +8,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.protobeans.mvc.config.DispatcherServletContextConfig;
 import org.protobeans.mvcsecurity.example.Main;
+import org.protobeans.testcontainers.mysql.annotation.EnableMySqlContainer;
+import org.protobeans.testcontainers.mysql.listener.MySqlContainerListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.TestExecutionListeners.MergeMode;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -21,6 +25,8 @@ import com.ning.http.client.AsyncHttpClient;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes=Main.class) 
+@EnableMySqlContainer(user = "test", password = "test", exposeUrlAs = "dbUrl", exposeSchemaAs = "dbSchema", exposeUserAs = "dbUser", exposePasswordAs = "dbPassword")
+@TestExecutionListeners(value = MySqlContainerListener.class, mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
 public class SimpleControllerTest {
     private MockMvc mockMvc;
     

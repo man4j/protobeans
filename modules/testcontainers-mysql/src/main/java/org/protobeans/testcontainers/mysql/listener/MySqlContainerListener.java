@@ -8,6 +8,10 @@ import org.testcontainers.containers.MySQLContainer;
 public class MySqlContainerListener extends AbstractTestExecutionListener {
     private MySQLContainer<?> mysql;
     
+    private final String DB_SCHEMA = "test_db";
+    
+    private String dbUrl;
+    
     @Override
     @SuppressWarnings("rawtypes")
     public void beforeTestClass(TestContext testContext) throws Exception {
@@ -16,7 +20,9 @@ public class MySqlContainerListener extends AbstractTestExecutionListener {
         mysql = new MySQLContainer() {
             @Override
             public String getJdbcUrl() {
-                return "jdbc:mysql://" + getContainerIpAddress() + ":" + getMappedPort(3306) + "/test_db";
+                dbUrl = "jdbc:mysql://" + getContainerIpAddress() + ":" + getMappedPort(3306);
+                
+                return dbUrl + "/" + DB_SCHEMA;
             }
             
             @Override
@@ -44,7 +50,8 @@ public class MySqlContainerListener extends AbstractTestExecutionListener {
     private void exposeSystemVars(EnableMySqlContainer annotation) {
         System.setProperty(annotation.exposeUserAs(), annotation.user());  
         System.setProperty(annotation.exposePasswordAs(), annotation.password());  
-        System.setProperty(annotation.exposeUrlAs(), mysql.getJdbcUrl());
+        System.setProperty(annotation.exposeUrlAs(), dbUrl);
+        System.setProperty(annotation.exposeSchemaAs(), DB_SCHEMA);
     }
     
     @Override

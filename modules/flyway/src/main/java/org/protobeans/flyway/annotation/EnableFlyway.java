@@ -16,6 +16,8 @@ import org.protobeans.flyway.config.FlywayConfig;
 public @interface EnableFlyway {
     String dbUrl();
     
+    String schema();
+    
     String user();
     
     String password();

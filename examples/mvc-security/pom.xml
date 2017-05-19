@@ -61,6 +61,12 @@
       <artifactId>protobeans-freemarker</artifactId>
       <version>${project.version}</version>
     </dependency>
+    
+    <dependency>
+      <groupId>org.protobeans</groupId>
+      <artifactId>protobeans-flyway</artifactId>
+      <version>${project.version}</version>
+    </dependency>
                 
     <!-- Test -->
     <dependency>
@@ -100,6 +106,13 @@
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-testcontainers-selenium</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.protobeans</groupId>
+      <artifactId>protobeans-testcontainers-mysql</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -228,7 +241,7 @@
         <version>0.4.13</version>
         <configuration>
           <serverId>docker-hub</serverId>
-          <imageName>man4j/cloudapp:v10</imageName>
+          <imageName>man4j/protobeans-mvc-security-example</imageName>
           <baseImage>openjdk:8</baseImage>
           <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
           <resources>
@@ -254,4 +267,11 @@
       </plugin>
     </plugins>
   </build>
+  
+  <repositories>
+    <repository>
+      <id>protobeans</id>
+      <url>https://raw.githubusercontent.com/man4j/protobeans/master/maven</url>
+    </repository>
+  </repositories>
 </project>

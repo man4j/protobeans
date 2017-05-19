@@ -16,6 +16,8 @@ public class FlywayConfig {
     
     private String dbUrl;
     
+    private String schema;
+    
     private String user;
     
     private String password;
@@ -25,6 +27,8 @@ public class FlywayConfig {
     @PostConstruct
     public void migrate() throws InterruptedException {
         Flyway fw = new Flyway();
+        
+        fw.setSchemas(schema);
         fw.setDataSource(dbUrl, user, password);
         fw.setLocations("classpath:migrations");
         

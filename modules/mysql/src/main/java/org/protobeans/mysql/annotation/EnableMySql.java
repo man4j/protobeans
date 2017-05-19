@@ -16,6 +16,8 @@ import org.protobeans.mysql.config.MySqlConfig;
 public @interface EnableMySql {
     String dbUrl();
     
+    String schema();
+    
     String user();
     
     String password();

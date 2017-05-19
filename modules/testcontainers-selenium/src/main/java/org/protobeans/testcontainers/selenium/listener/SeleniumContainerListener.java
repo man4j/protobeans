@@ -4,11 +4,10 @@ import java.util.Random;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.protobeans.testcontainers.selenium.annotation.EnableSeleniumContainer;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.protobeans.testcontainers.selenium.annotation.WebDriver;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
+import org.springframework.util.ReflectionUtils;
 import org.testcontainers.containers.BrowserWebDriverContainer;
 import org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode;
 
@@ -68,14 +67,18 @@ public class SeleniumContainerListener extends AbstractTestExecutionListener {
         browser.start();
         
         System.out.println("VNC URL: " + browser.getVncAddress());
-        
-        ApplicationContext ctx = testContext.getApplicationContext();
-        
-        ConfigurableListableBeanFactory beanFactory = ((ConfigurableApplicationContext) ctx).getBeanFactory();
-        
-        beanFactory.registerSingleton("webDriver", browser.getWebDriver());
     }
     
+    @Override
+    public void prepareTestInstance(TestContext testContext) throws Exception {
+        ReflectionUtils.doWithFields(testContext.getTestClass(), f -> {
+          if (f.getAnnotation(WebDriver.class) != null) {
+              f.setAccessible(true);
+              f.set(testContext.getTestInstance(), browser.getWebDriver());
+          }
+      });
+    }
+
     @Override
     public void afterTestClass(TestContext testContext) throws Exception {
         browser.getWebDriver().quit();
