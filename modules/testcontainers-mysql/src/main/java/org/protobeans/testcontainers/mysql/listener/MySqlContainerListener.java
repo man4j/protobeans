@@ -27,7 +27,7 @@ public class MySqlContainerListener extends AbstractTestExecutionListener {
             
             @Override
             protected void configure() {
-                optionallyMapResourceParameterAsVolume("TC_MY_CNF", "/etc/mysql/conf.d", "mysql-default-conf");
+//                optionallyMapResourceParameterAsVolume("TC_MY_CNF", "/etc/mysql/conf.d", "mysql-default-conf"); Exception in Jenkins run
 
                 addExposedPort(3306);
                 
