@@ -272,6 +272,11 @@
     <repository>
       <id>protobeans</id>
       <url>https://raw.githubusercontent.com/man4j/protobeans/master/maven</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
     </repository>
   </repositories>
 </project>
