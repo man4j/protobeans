@@ -14,7 +14,7 @@ import org.protobeans.undertow.config.UndertowConfig;
 @Import(UndertowConfig.class)
 @Configuration
 public @interface EnableUndertow {
-    String host() default "127.0.0.1";
+    String host() default "0.0.0.0";
     
     String port() default "8080";
     
