@@ -80,8 +80,10 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
         
         http.addFilterBefore(new CharacterEncodingFilter(StandardCharsets.UTF_8.displayName(), true, true), ChannelProcessingFilter.class);
         
-        for (Filter filter : filterChainBean.getFilters()) {
-            http.addFilterBefore(filter, ChannelProcessingFilter.class);
+        if (filterChainBean != null) {
+            for (Filter filter : filterChainBean.getFilters()) {
+                http.addFilterBefore(filter, ChannelProcessingFilter.class);
+            }
         }
     }
     
