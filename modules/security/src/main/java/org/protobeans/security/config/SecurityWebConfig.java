@@ -48,7 +48,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SecurityUrlsBean securityUrlsBean;
     
-    @Autowired
+    @Autowired(required = false)
     private FilterChainBean filterChainBean;
     
     @Autowired(required = false)
