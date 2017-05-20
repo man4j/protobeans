@@ -25,7 +25,7 @@ public class SeleniumContainerListener extends AbstractTestExecutionListener {
     public void beforeTestClass(TestContext testContext) throws Exception {
         EnableSeleniumContainer annotation = testContext.getTestClass().getAnnotation(EnableSeleniumContainer.class);
         
-        String webUrl = "http://localhost:" + annotation.webPort();
+        String webUrl = "http://" + annotation.dockerHostIp() + ":" + annotation.webPort();
         
         if (System.getenv("DOCKER_HOST") != null) {
             String fullDockerHostPath = System.getenv("DOCKER_HOST");

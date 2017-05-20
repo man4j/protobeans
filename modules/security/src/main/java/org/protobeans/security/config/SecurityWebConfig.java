@@ -1,5 +1,6 @@
 package org.protobeans.security.config;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.protobeans.security.annotation.Anonymous;
 import org.protobeans.security.annotation.PermitAll;
 import org.protobeans.security.service.SecurityService;
 import org.protobeans.security.util.CurrentUrlAuthenticationSuccessHandler;
+import org.protobeans.security.util.FilterChainBean;
 import org.protobeans.security.util.SecurityUrlsBean;
 import org.protobeans.security.validation.SignIn;
 import org.springframework.aop.support.AopUtils;
@@ -31,6 +33,7 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -45,11 +48,8 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SecurityUrlsBean securityUrlsBean;
     
-    private static List<Filter> filters = new ArrayList<>();
-    
-    public static void addFilter(Filter filter) {
-        filters.add(filter);
-    }
+    @Autowired
+    private FilterChainBean filterChainBean;
     
     @Autowired(required = false)
     private List<SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>> configurers = new ArrayList<>();
@@ -78,7 +78,9 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
             http.apply(cfg);
         }
         
-        for (Filter filter : filters) {
+        http.addFilterBefore(new CharacterEncodingFilter(StandardCharsets.UTF_8.displayName(), true, true), ChannelProcessingFilter.class);
+        
+        for (Filter filter : filterChainBean.getFilters()) {
             http.addFilterBefore(filter, ChannelProcessingFilter.class);
         }
     }

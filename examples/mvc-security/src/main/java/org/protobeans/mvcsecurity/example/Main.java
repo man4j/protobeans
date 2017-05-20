@@ -2,8 +2,6 @@ package org.protobeans.mvcsecurity.example;
 
 import java.nio.charset.StandardCharsets;
 
-import javax.servlet.Filter;
-
 import org.protobeans.async.annotation.EnableAsync;
 import org.protobeans.core.EntryPoint;
 import org.protobeans.flyway.annotation.EnableFlyway;
@@ -22,7 +20,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -55,11 +52,6 @@ public class Main {
     MessageConvertersBean messageConvertersBean() {
         return new MessageConvertersBean(new MappingJackson2HttpMessageConverter(mapper()))
             .addConverter(new StringHttpMessageConverter(StandardCharsets.UTF_8));
-    }
-    
-    @Bean
-    Filter characterEncodingFilter() {
-        return new CharacterEncodingFilter(StandardCharsets.UTF_8.displayName(), true, true);
     }
     
     public static void main(String[] args) {
