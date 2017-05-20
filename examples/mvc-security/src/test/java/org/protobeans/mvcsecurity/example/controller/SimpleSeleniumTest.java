@@ -15,6 +15,7 @@ import org.protobeans.testcontainers.selenium.annotation.EnableSeleniumContainer
 import org.protobeans.testcontainers.selenium.annotation.WebDriver;
 import org.protobeans.testcontainers.selenium.listener.SeleniumContainerListener;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.TestExecutionListeners.MergeMode;
@@ -25,6 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @EnableSeleniumContainer(dockerHostSshKeyPath = "~/docker_host.ppk")
 @EnableMySqlContainer(user = "test", password = "test", exposeUrlAs = "dbUrl", exposeSchemaAs = "dbSchema", exposeUserAs = "dbUser", exposePasswordAs = "dbPassword")
 @TestExecutionListeners(value = {SeleniumContainerListener.class, MySqlContainerListener.class}, mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
+@DirtiesContext
 public class SimpleSeleniumTest {
     @Value("${webUrl}")
     private String webUrl;
