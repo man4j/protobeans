@@ -17,7 +17,7 @@
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-gmail</artifactId>
-      <version>${project.version}</version>
+      <version>0.0.1</version>
     </dependency>
   </dependencies>
 </project>

@@ -17,19 +17,19 @@
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-hibernate</artifactId>
-      <version>${project.version}</version>
+      <version>0.0.1</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-mysql</artifactId>
-      <version>${project.version}</version>
+      <version>0.0.1</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-flyway</artifactId>
-      <version>${project.version}</version>
+      <version>0.0.1</version>
     </dependency>
     
     <!-- Test -->
@@ -49,7 +49,7 @@
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-testcontainers-mysql</artifactId>
-      <version>${project.version}</version>
+      <version>0.0.1</version>
       <scope>test</scope>
     </dependency>
     

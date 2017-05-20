@@ -11,31 +11,32 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <version.protobeans>0.0.1</version.protobeans>
   </properties>
   
   <dependencies>
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-mvc</artifactId>
-      <version>${project.version}</version>
+      <version>${version.protobeans}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-webservices</artifactId>
-      <version>${project.version}</version>
+      <version>${version.protobeans}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-undertow</artifactId>
-      <version>${project.version}</version>
+      <version>${version.protobeans}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-i18n</artifactId>
-      <version>${project.version}</version>
+      <version>${version.protobeans}</version>
     </dependency>
     
     <!-- Test -->
@@ -62,7 +63,7 @@
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-testcontainers-selenium</artifactId>
-      <version>${project.version}</version>
+      <version>${version.protobeans}</version>
       <scope>test</scope>
     </dependency>
     

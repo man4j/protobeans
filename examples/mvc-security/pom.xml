@@ -11,61 +11,63 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    
+    <version.protobeans>0.0.1</version.protobeans>
   </properties>
   
   <dependencies>
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-security</artifactId>
-      <version>${project.version}</version>
+      <version>${version.protobeans}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-social</artifactId>
-      <version>${project.version}</version>
+      <version>${version.protobeans}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-async</artifactId>
-      <version>${project.version}</version>
+      <version>${version.protobeans}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-mysql</artifactId>
-      <version>${project.version}</version>
+      <version>${version.protobeans}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-gmail</artifactId>
-      <version>${project.version}</version>
+      <version>${version.protobeans}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-i18n</artifactId>
-      <version>${project.version}</version>
+      <version>${version.protobeans}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-undertow</artifactId>
-      <version>${project.version}</version>
+      <version>${version.protobeans}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-freemarker</artifactId>
-      <version>${project.version}</version>
+      <version>${version.protobeans}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-flyway</artifactId>
-      <version>${project.version}</version>
+      <version>${version.protobeans}</version>
     </dependency>
                 
     <!-- Test -->
@@ -106,14 +108,14 @@
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-testcontainers-selenium</artifactId>
-      <version>${project.version}</version>
+      <version>${version.protobeans}</version>
       <scope>test</scope>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-testcontainers-mysql</artifactId>
-      <version>${project.version}</version>
+      <version>${version.protobeans}</version>
       <scope>test</scope>
     </dependency>
     

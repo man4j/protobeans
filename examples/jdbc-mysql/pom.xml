@@ -17,13 +17,13 @@
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-jdbc</artifactId>
-      <version>${project.version}</version>
+      <version>0.0.1</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-mysql</artifactId>
-      <version>${project.version}</version>
+      <version>0.0.1</version>
     </dependency>
   </dependencies>
 </project>
