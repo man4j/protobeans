@@ -13,7 +13,7 @@ public class PerconaContainerListener extends AbstractTestExecutionListener {
     public void beforeTestClass(TestContext testContext) throws Exception {
         EnablePerconaContainer annotation = testContext.getTestClass().getAnnotation(EnablePerconaContainer.class);
         
-        percona = new PerconaContainer(annotation.schema(), annotation.rootPassword(), annotation.skipInit());
+        percona = new PerconaContainer(annotation.schema(), annotation.rootPassword(), annotation.skipInit(), annotation.imageTag());
         percona.start();
         
         System.setProperty(annotation.exposePasswordAs(), annotation.rootPassword());

@@ -8,8 +8,8 @@ public class PerconaContainer<SELF extends PerconaContainer<SELF>> extends JdbcD
     
     private final String rootPassword;
     
-    public PerconaContainer(String schema, String rootPassword, boolean skipInit) {
-        super("imagenarium/percona-master:latest");
+    public PerconaContainer(String schema, String rootPassword, boolean skipInit, String imageTag) {
+        super("imagenarium/percona-master:" + imageTag);
 
         this.rootPassword = rootPassword;
         

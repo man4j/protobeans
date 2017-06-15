@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface EnablePerconaContainer {
+    String imageTag() default "latest";
+    
     String schema();
 
     String rootPassword();
