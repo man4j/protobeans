@@ -12,17 +12,7 @@
       </throwableConverter>
     </encoder>
   </appender>
-  
-  <appender name="SIMPLE_STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder>
-      <pattern>%msg%n</pattern>
-    </encoder>
-  </appender>
-  
-  <logger name="simpleLogger" level="info" additivity="false">
-    <appender-ref ref="SIMPLE_STDOUT" />
-  </logger>
-  
+    
   <root level="info">
     <appender-ref ref="STDOUT" />
   </root>

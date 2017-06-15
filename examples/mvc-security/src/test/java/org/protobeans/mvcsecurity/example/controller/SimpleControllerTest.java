@@ -8,8 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.protobeans.mvc.config.DispatcherServletContextConfig;
 import org.protobeans.mvcsecurity.example.Main;
-import org.protobeans.testcontainers.mysql.annotation.EnableMySqlContainer;
-import org.protobeans.testcontainers.mysql.listener.MySqlContainerListener;
+import org.protobeans.testcontainers.mysql.annotation.EnablePerconaContainer;
+import org.protobeans.testcontainers.mysql.listener.PerconaContainerListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.annotation.DirtiesContext;
@@ -26,8 +26,8 @@ import com.ning.http.client.AsyncHttpClient;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes=Main.class) 
-@EnableMySqlContainer(user = "test", password = "test", exposeUrlAs = "dbUrl", exposeSchemaAs = "dbSchema", exposeUserAs = "dbUser", exposePasswordAs = "dbPassword")
-@TestExecutionListeners(value = MySqlContainerListener.class, mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
+@EnablePerconaContainer(schema = "test_db", rootPassword = "testpass", skipInit = true, exposeSchemaAs = "schema", exposeUrlAs = "url", exposePasswordAs = "password")
+@TestExecutionListeners(value = PerconaContainerListener.class, mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
 @DirtiesContext
 public class SimpleControllerTest {
     private MockMvc mockMvc;

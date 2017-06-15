@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.protobeans</groupId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>12</version>
   <artifactId>protobeans-monitoring-example</artifactId>
   <packaging>jar</packaging>
   
@@ -11,13 +11,14 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <protobeans.version>0.0.6</protobeans.version>
   </properties>
   
   <dependencies>
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-monitoring</artifactId>
-      <version>0.0.1</version>
+      <version>${protobeans.version}</version>
     </dependency>
   </dependencies>
 
@@ -97,11 +98,11 @@
       <plugin>
         <groupId>com.spotify</groupId>
         <artifactId>docker-maven-plugin</artifactId>
-        <version>0.4.13</version>
+        <version>0.4.14</version>
         <configuration>
           <serverId>docker-hub</serverId>
-          <imageName>man4j/my_java_service:v11</imageName>
-          <baseImage>openjdk:8</baseImage>
+          <imageName>man4j/my_java_service:${project.version}</imageName>
+          <baseImage>openjdk:8-jre-alpine</baseImage>
           <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
           <resources>
              <resource>

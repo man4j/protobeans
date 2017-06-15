@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.protobeans</groupId>
     <artifactId>protobeans-parent</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
@@ -21,8 +21,8 @@
       <artifactId>protobeans-core</artifactId>
       <version>${project.version}</version>
     </dependency>
-    
-   <dependency>
+
+    <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>5.1.39</version>

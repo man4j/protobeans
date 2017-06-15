@@ -22,6 +22,17 @@ public class InjectFromAnnotationBeanPostProcessor implements BeanPostProcessor 
     @Autowired
     private ApplicationContext ctx;
     
+    public InjectFromAnnotationBeanPostProcessor() {
+        System.out.println();
+        System.out.println("                      __        __");                         
+        System.out.println("    ____  _________  / /_____  / /_  ___  ____ _____  _____");
+        System.out.println("   / __ \\/ ___/ __ \\/ __/ __ \\/ __ \\/ _ \\/ __ `/ __ \\/ ___/");
+        System.out.println("  / /_/ / /  / /_/ / /_/ /_/ / /_/ /  __/ /_/ / / / (__  )");
+        System.out.println(" / .___/_/   \\____/\\__/\\____/_.___/\\___/\\__,_/_/ /_/____/");
+        System.out.println("/_/");
+        System.out.println();
+    }
+    
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         InjectFrom injectFrom = null;

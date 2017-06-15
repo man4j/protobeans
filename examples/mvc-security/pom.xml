@@ -12,62 +12,62 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     
-    <version.protobeans>0.0.5</version.protobeans>
+    <protobeans.version>0.0.6</protobeans.version>
   </properties>
   
   <dependencies>
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-security</artifactId>
-      <version>${version.protobeans}</version>
+      <version>${protobeans.version}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-social</artifactId>
-      <version>${version.protobeans}</version>
+      <version>${protobeans.version}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-async</artifactId>
-      <version>${version.protobeans}</version>
+      <version>${protobeans.version}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-mysql</artifactId>
-      <version>${version.protobeans}</version>
+      <version>${protobeans.version}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-gmail</artifactId>
-      <version>${version.protobeans}</version>
+      <version>${protobeans.version}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-i18n</artifactId>
-      <version>${version.protobeans}</version>
+      <version>${protobeans.version}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-undertow</artifactId>
-      <version>${version.protobeans}</version>
+      <version>${protobeans.version}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-freemarker</artifactId>
-      <version>${version.protobeans}</version>
+      <version>${protobeans.version}</version>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-flyway</artifactId>
-      <version>${version.protobeans}</version>
+      <version>${protobeans.version}</version>
     </dependency>
                 
     <!-- Test -->
@@ -108,14 +108,14 @@
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-testcontainers-selenium</artifactId>
-      <version>${version.protobeans}</version>
+      <version>${protobeans.version}</version>
       <scope>test</scope>
     </dependency>
     
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-testcontainers-mysql</artifactId>
-      <version>${version.protobeans}</version>
+      <version>${protobeans.version}</version>
       <scope>test</scope>
     </dependency>
     
@@ -240,11 +240,11 @@
       <plugin>
         <groupId>com.spotify</groupId>
         <artifactId>docker-maven-plugin</artifactId>
-        <version>0.4.13</version>
+        <version>0.4.14</version>
         <configuration>
           <serverId>docker-hub</serverId>
-          <imageName>man4j/protobeans-mvc-security-example</imageName>
-          <baseImage>openjdk:8</baseImage>
+          <imageName>man4j/protobeans-mvc-security-example:${project.version}</imageName>
+          <baseImage>openjdk:8-jre-alpine</baseImage>
           <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
           <resources>
              <resource>
