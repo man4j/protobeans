@@ -34,8 +34,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @EnableI18n(isCached = "false")
 @EnableGMail(user = "s:gmailUser", password = "s:gmailPassword")
 @EnableAsync
-@EnableMySql(dbUrl = "s:dbUrl", schema = "s:dbSchema", user = "s:dbUser", password = "s:dbPassword")
-@EnableFlyway(dbUrl = "s:dbUrl", schema = "s:dbSchema", user = "s:dbUser", password = "s:dbPassword", waitDb = true)
+@EnableMySql(dbUrl = "s:dbUrl", schema = "s:dbSchema", user = "root", password = "s:dbPassword")
+@EnableFlyway(dbUrl = "s:dbUrl", schema = "s:dbSchema", user = "root", password = "s:dbPassword", waitDb = true)
 @EnableFacebook(appId = "1116746028470918", appSecret = "s:facebookSecret")
 public class Main {
     @Bean
