@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.protobeans</groupId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
   <artifactId>protobeans-mvc-security-example</artifactId>
   <packaging>jar</packaging>
   
@@ -12,7 +12,7 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     
-    <protobeans.version>0.0.8</protobeans.version>
+    <protobeans.version>0.0.7</protobeans.version>
   </properties>
   
   <dependencies>
