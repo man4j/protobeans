@@ -43,6 +43,7 @@ public class HibernateConfig {
                                                             put("hibernate.order_inserts", true);
                                                             put("hibernate.order_updates", true);
                                                             put("hibernate.auto_quote_keyword", true);
+                                                            put("hibernate.connection.provider_disables_autocommit", true);
                                                             
                                                             if ("true".equals(enableStatistics)) {
                                                                 put("hibernate.generate_statistics", true);

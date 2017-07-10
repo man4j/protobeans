@@ -33,6 +33,7 @@ public class MySqlConfig {
         ds.setUsername(user);
         ds.setMaximumPoolSize(maxPoolSize);
         ds.setPassword(password);
+        ds.setAutoCommit(false);
 
         ds.addDataSourceProperty("useSSL", "false");
         ds.addDataSourceProperty("characterEncoding", "UTF-8");
