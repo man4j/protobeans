@@ -1,20 +1,9 @@
 pipeline {
-  agent {
-    docker {
-      image 'maven'
-      args '-v /var/run/docker.sock:/var/run/docker.sock -w /usr/src/mymaven/examples/mvc-security'
-    }
-    
-  }
+  agent any
   stages {
     stage('build image') {
       steps {
-        sh 'mvn -f examples/mvc-security/pom.xml package -DskipTests=true'
-      }
-    }
-    stage('') {
-      steps {
-        cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenSuccess: true, cleanWhenUnstable: true, cleanupMatrixParent: true, deleteDirs: true)
+        sh 'docker run --rm -v ${PWD}/.m2:/root/.m2 -v ${PWD}:/usr/src/mymaven -w /usr/src/mymaven/examples/mvc-security maven mvn clean docker:build'
       }
     }
   }
