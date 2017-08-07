@@ -2,14 +2,14 @@ pipeline {
   agent {
     docker {
       image 'maven'
-      args '-v /var/run/docker.sock:/var/run/docker.sock -w /usr/src/mymaven/examples/mvc-security -w examples/mvc-security'
+      args '-v /var/run/docker.sock:/var/run/docker.sock -w /usr/src/mymaven/examples/mvc-security'
     }
     
   }
   stages {
     stage('build image') {
       steps {
-        sh 'mvn clean package -DskipTests=true'
+        sh 'mvn -f examples/mvc-security/pom.xml clean package -DskipTests=true'
       }
     }
   }
