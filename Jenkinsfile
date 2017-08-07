@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('build image') {
       steps {
-        sh 'mvn -f examples/mvc-security/pom.xml clean package -DskipTests=true'
+        sh 'mvn -f examples/mvc-security/pom.xml package -DskipTests=true'
       }
     }
   }
