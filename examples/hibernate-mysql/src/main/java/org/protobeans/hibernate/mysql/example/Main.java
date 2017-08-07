@@ -19,13 +19,13 @@ public class Main {
         try (AnnotationConfigApplicationContext ctx = EntryPoint.run(Main.class)) {
             UserService userService = ctx.getBean(UserService.class);
             
-            User u = new User("email", "pwd");
-            
-            userService.saveOrUpdate(u);
-            
-            u.setEmail("email1");
-            
-            userService.update(u);
+//            User u = new User("email", "pwd");
+//            
+//            userService.saveOrUpdate(u);
+//            
+//            u.setEmail("email1");
+//            
+//            userService.update(u);
         }
     }
 }

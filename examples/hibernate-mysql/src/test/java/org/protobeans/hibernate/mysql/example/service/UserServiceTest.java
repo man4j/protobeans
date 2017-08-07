@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.protobeans.hibernate.mysql.example.Main;
+import org.protobeans.hibernate.mysql.example.model.User;
 import org.protobeans.testcontainers.mysql.annotation.EnablePerconaContainer;
 import org.protobeans.testcontainers.mysql.listener.PerconaContainerListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +22,21 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes={Main.class})
-@EnablePerconaContainer(imageTag = "5.7.16.17", schema = "test_db", rootPassword = "testpass", skipInit = true, exposeSchemaAs = "schema", exposeUrlAs = "url", exposePasswordAs = "password")
+@EnablePerconaContainer(imageTag = "5.7.16.28", schema = "test_db", rootPassword = "testpass", exposeSchemaAs = "schema", exposeUrlAs = "url", exposePasswordAs = "password")
 @TestExecutionListeners(value = PerconaContainerListener.class, mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
 public class UserServiceTest {
     @Autowired
     private UserService userService;
     
     @Test
-    public void shouldInsertUsers() {
+    public void updateVsMerge() {
         Assert.assertEquals(0, userService.count());
         
         userService.insertUsers(10);
+        
+        userService.update(new User(0, "user" + 0 + "@mail.com", "pw" + 0, "1"));
+        
+        userService.checkAndUpdate(new User(0, "user" + 0 + "@mail.com", "pw" + 0, "1"));
         
         Assert.assertEquals(10, userService.count());
     }

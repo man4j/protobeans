@@ -4,8 +4,6 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -19,7 +17,6 @@ import org.hibernate.annotations.OptimisticLocking;
 @OptimisticLocking(type = OptimisticLockType.DIRTY)
 public class User {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
     
     private String email;
@@ -31,10 +28,18 @@ public class User {
 
     private boolean confirmed;
 
-    public User(String email, String password) {
+    public User(int id, String email, String password) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.confirmUuid = UUID.randomUUID().toString();
+    }
+    
+    public User(int id, String email, String password, String confirmUuid) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.confirmUuid = confirmUuid;
     }
     
     public User() {

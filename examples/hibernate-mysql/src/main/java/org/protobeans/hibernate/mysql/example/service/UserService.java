@@ -12,8 +12,8 @@ public class UserService {
     private UserDao userDao;
     
     @WithTransaction
-    public void saveOrUpdate(User u) {
-        userDao.saveOrUpdate(u);
+    public void insert(User u) {
+        userDao.insert(u);
     }
     
     @WithTransaction
@@ -22,14 +22,14 @@ public class UserService {
     }
     
     @WithTransaction
-    public User merge(User u) {
+    public User checkAndUpdate(User u) {
         return userDao.checkAndUpdate(u);
     }
     
     @WithTransaction
     public void insertUsers(int count) {
         for (int i = 0; i < count; i++) {
-            userDao.saveOrUpdate(new User("user" + i + "@mail.com", "pw" + i));
+            userDao.insert(new User(i, "user" + i + "@mail.com", "pw" + i, "1"));
         }
     }
     

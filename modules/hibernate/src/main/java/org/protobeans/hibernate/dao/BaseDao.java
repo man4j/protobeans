@@ -44,13 +44,10 @@ abstract public class BaseDao<T> {
     public T checkAndUpdate(T detachedEntity) {
         return em.merge(detachedEntity);
     }
-    
-    public T saveOrUpdate(T detachedEntity) {
-        em.unwrap(Session.class).saveOrUpdate(detachedEntity);
         
-        return detachedEntity;
-    }
-    
+    /**
+     * This method always generate SQL UPDATE statement.
+     */
     public T update(T detachedEntity) {
         em.unwrap(Session.class).update(detachedEntity);
         
