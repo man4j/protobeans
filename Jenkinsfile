@@ -1,14 +1,11 @@
 pipeline {
   agent any
   stages {
-    stage('Clean') {
+    stage('clean compile') {
       steps {
-        sh 'mvn -f examples/mvc-security/pom.xml clean'
-      }
-    }
-    stage('Compile') {
-      steps {
-        sh 'mvn -f examples/mvc-security/pom.xml compile'
+        sh '''docker run --rm maven \
+-v .:/mnt \
+mvn -f /mnt/examples/mvc-security/pom.xml clean compile'''
       }
     }
   }
