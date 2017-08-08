@@ -17,6 +17,11 @@ pipeline {
         sh 'mvn -f examples/mvc-security/pom.xml compile -DskipTests=true'
       }
     }
+    stage('Jar') {
+      steps {
+        sh 'mvn -f examples/mvc-security/pom.xml jar:jar'
+      }
+    }
     stage('Shade') {
       steps {
         sh 'mvn -f examples/mvc-security/pom.xml shade:shade'
