@@ -12,7 +12,7 @@ pipeline {
         SETTINGS_XML = credentials('settings.xml')
       }
       steps {
-        sh 'mvn -s $SETTINGS_XML -f examples/mvc-security/pom.xml clean package -DskipTests=true'
+        sh 'mvn -s $SETTINGS_XML -f examples/mvc-security/pom.xml clean deploy -DskipTests=true'
       }
     }
   }
