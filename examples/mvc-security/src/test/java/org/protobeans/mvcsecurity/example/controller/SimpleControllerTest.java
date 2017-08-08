@@ -26,7 +26,7 @@ import com.ning.http.client.AsyncHttpClient;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes=Main.class) 
-@EnablePerconaContainer(imageTag = "5.7.16.17", schema = "test_db", rootPassword = "testpass", skipInit = true, exposeSchemaAs = "dbSchema", exposeUrlAs = "dbUrl", exposePasswordAs = "dbPassword")
+@EnablePerconaContainer(imageTag = "5.7.16.28", schema = "test_db", rootPassword = "testpass", exposeSchemaAs = "dbSchema", exposeUrlAs = "dbUrl", exposePasswordAs = "dbPassword")
 @TestExecutionListeners(value = PerconaContainerListener.class, mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
 @DirtiesContext
 public class SimpleControllerTest {
