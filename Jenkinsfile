@@ -1,9 +1,18 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'maven'
+      args '-v /var/run/docker.sock:/var/run/docker.sock -v ${PWD}/.m2:/root/.m2'
+    }
+    
+  }
   stages {
-    stage('clean compile') {
+    stage('Maven Build') {
+      environment {
+        SETTINGS_XML = credentials('settings.xml')
+      }
       steps {
-        sh 'docker run --rm -v ${PWD}/.m2:/root/.m2 -v ${PWD}:/usr/src/mymaven -w /usr/src/mymaven/examples/mvc-security maven mvn clean compile'
+        sh 'mvn -s $SETTINGS_XML -f examples/mvc-security/pom.xml clean deploy -DskipTests=true'
       }
     }
   }
