@@ -1,6 +1,7 @@
 package org.protobeans.mvcsecurity.example.controller;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -27,6 +28,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @EnablePerconaContainer(imageTag = "5.7.16.28", schema = "test_db", rootPassword = "testpass", exposeSchemaAs = "dbSchema", exposeUrlAs = "dbUrl", exposePasswordAs = "dbPassword")
 @TestExecutionListeners(value = {SeleniumContainerListener.class, PerconaContainerListener.class}, mergeMode = MergeMode.MERGE_WITH_DEFAULTS)
 @DirtiesContext
+@Ignore
 public class SimpleSeleniumTest {
     @Value("${webUrl}")
     private String webUrl;
@@ -36,7 +38,7 @@ public class SimpleSeleniumTest {
     
     private final static String LOGIN_FORM_TITLE_ID = "loginFormTitle";
     
-//    @Test
+    @Test
     public void shouldWork() {
         webDriver.get(webUrl + "/signin");
 
