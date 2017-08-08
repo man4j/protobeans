@@ -8,8 +8,11 @@ pipeline {
   }
   stages {
     stage('Maven Build') {
+      environment {
+        SETTINGS_XML = credentials('settings.xml')
+      }
       steps {
-        sh 'mvn -f examples/mvc-security/pom.xml clean package -DskipTests=true'
+        sh 'mvn -s $SETTINGS_XML -f examples/mvc-security/pom.xml clean package -DskipTests=true'
       }
     }
   }
