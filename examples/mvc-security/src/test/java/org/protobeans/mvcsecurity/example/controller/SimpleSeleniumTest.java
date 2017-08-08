@@ -40,6 +40,7 @@ public class SimpleSeleniumTest {
     
     @Test
     public void shouldWork() {
+        int a = 5;
         webDriver.get(webUrl + "/signin");
 
         WebElement loginFormTitle = webDriver.findElement(By.id(LOGIN_FORM_TITLE_ID));
