@@ -3,19 +3,14 @@ pipeline {
     docker {
       image 'maven'
       args '-v /var/run/docker.sock:/var/run/docker.sock -v ${PWD}/.m2:/root/.m2'
-    }   
+    }
+    
   }
-  
-  environment {
-    gmailUser = credentials('gmailUser')
-    gmailPassword = credentials('gmailPassword')
-    facebookSecret = credentials('facebookSecret')
-  }
-
   stages {
-    stage('Compile') {      
+    stage('Compile') {
       steps {
-        sh 'mvn -f examples/mvc-security/pom.xml clean compile'
+        sh '''printenv
+mvn -f examples/mvc-security/pom.xml clean compile'''
       }
     }
     stage('Test') {
@@ -37,10 +32,16 @@ pipeline {
       }
     }
   }
-  
+  environment {
+    gmailUser = credentials('gmailUser')
+    gmailPassword = credentials('gmailPassword')
+    facebookSecret = credentials('facebookSecret')
+  }
   post {
     always {
       junit 'examples/mvc-security/target/surefire-reports/*.xml'
+      
     }
+    
   }
 }
