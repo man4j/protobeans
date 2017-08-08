@@ -7,12 +7,27 @@ pipeline {
     
   }
   stages {
-    stage('Maven Build') {
+    stage('Compile') {
       environment {
         SETTINGS_XML = credentials('settings.xml')
       }
       steps {
-        sh 'mvn -s $SETTINGS_XML -f examples/mvc-security/pom.xml clean deploy -DskipTests=true'
+        sh 'mvn -s $SETTINGS_XML -f examples/mvc-security/pom.xml clean compile'
+      }
+    }
+    stage('Test') {
+      steps {
+        sh 'mvn -s $SETTINGS_XML -f examples/mvc-security/pom.xml test'
+      }
+    }
+    stage('Package') {
+      steps {
+        sh 'mvn -s $SETTINGS_XML -f examples/mvc-security/pom.xml package'
+      }
+    }
+    stage('Deploy') {
+      steps {
+        sh 'mvn -s $SETTINGS_XML -f examples/mvc-security/pom.xml deploy'
       }
     }
   }
