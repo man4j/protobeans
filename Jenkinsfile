@@ -7,9 +7,19 @@ pipeline {
     
   }
   stages {
-    stage('build image') {
+    stage('Clean') {
       steps {
-        sh 'mvn -f examples/mvc-security/pom.xml clean package -DskipTests=true'
+        sh 'mvn -f examples/mvc-security/pom.xml clean'
+      }
+    }
+    stage('Compile') {
+      steps {
+        sh 'mvn -f examples/mvc-security/pom.xml compile -DskipTests=true'
+      }
+    }
+    stage('Shade') {
+      steps {
+        sh 'mvn -f examples/mvc-security/pom.xml shade:shade'
       }
     }
   }
