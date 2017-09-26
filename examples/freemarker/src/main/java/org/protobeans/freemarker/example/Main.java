@@ -24,7 +24,9 @@ public class Main {
     void start() throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, TemplateException, IOException {
         StringWriter writer = new StringWriter();
         
-        freemarker.getTemplate("my_template.ftlh").process(Collections.singletonMap("userName", "Mark"), writer);
+//        freemarker.getTemplate("my_template.ftlh").process(Collections.singletonMap("userName", "Mark"), writer);
+        
+        freemarker.getTemplate("service_description.ftlh").process(Collections.singletonMap("userName", "Mark"), writer);
         
         System.out.println(writer.toString());
     }

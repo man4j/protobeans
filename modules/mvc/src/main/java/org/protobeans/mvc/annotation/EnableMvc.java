@@ -14,9 +14,9 @@ import org.protobeans.mvc.config.MvcConfig;
 @Import(MvcConfig.class)
 @Configuration
 public @interface EnableMvc {
-    String resourcesPath();
+    String resourcesPath() default "";
     
-    String resourcesUrl();
+    String resourcesUrl() default "";
     
     Class<?>[] basePackageClasses() default {};
 }

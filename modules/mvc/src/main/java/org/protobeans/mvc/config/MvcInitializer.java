@@ -1,5 +1,6 @@
 package org.protobeans.mvc.config;
 
+import javax.servlet.Filter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
@@ -14,6 +15,8 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 @Order(5)//для того, чтобы фильтры SpringSecurity инициализировались позже фильтров WebMVC
 public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     public static ApplicationContext rootApplicationContext;
+    
+    public static Filter[] filters;
     
     @Override
     protected Class<?>[] getRootConfigClasses() {
@@ -34,6 +37,11 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
         servletContext.addListener(RequestContextListener.class);//Для того, чтобы запрос был доступен в фильтрах, например в SocialAuthenticationFilter
         
         super.onStartup(servletContext);
+    }
+    
+    @Override
+    protected Filter[] getServletFilters() {
+        return filters;
     }
 
     @SuppressWarnings("resource")

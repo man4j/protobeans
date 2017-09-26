@@ -14,7 +14,7 @@ import org.protobeans.security.annotation.Anonymous;
 import org.protobeans.security.annotation.PermitAll;
 import org.protobeans.security.service.SecurityService;
 import org.protobeans.security.util.CurrentUrlAuthenticationSuccessHandler;
-import org.protobeans.security.util.FilterChainBean;
+import org.protobeans.security.util.SecurityFilterChainBean;
 import org.protobeans.security.util.SecurityUrlsBean;
 import org.protobeans.security.validation.SignIn;
 import org.springframework.aop.support.AopUtils;
@@ -49,7 +49,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
     private SecurityUrlsBean securityUrlsBean;
     
     @Autowired(required = false)
-    private FilterChainBean filterChainBean;
+    private SecurityFilterChainBean securityFilterChainBean;
     
     @Autowired(required = false)
     private List<SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>> configurers = new ArrayList<>();
@@ -80,8 +80,8 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
         
         http.addFilterBefore(new CharacterEncodingFilter(StandardCharsets.UTF_8.displayName(), true, true), ChannelProcessingFilter.class);
         
-        if (filterChainBean != null) {
-            for (Filter filter : filterChainBean.getFilters()) {
+        if (securityFilterChainBean != null) {
+            for (Filter filter : securityFilterChainBean.getFilters()) {
                 http.addFilterBefore(filter, ChannelProcessingFilter.class);
             }
         }

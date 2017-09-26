@@ -8,9 +8,11 @@ public class ResourcesVersionBean {
     private long lastModified;
 
     public ResourcesVersionBean(String resourcesPath, String resourcesUrl) {
-        this.resourcesPath = PathUtils.dashedPath(resourcesPath);
-        this.resourcesUrl = PathUtils.dashedPath(resourcesUrl);
-        this.lastModified = FileUtils.getLastModified(this.resourcesPath);
+        if (!resourcesPath.isEmpty() && !resourcesUrl.isEmpty()) {
+            this.resourcesPath = PathUtils.dashedPath(resourcesPath);
+            this.resourcesUrl = PathUtils.dashedPath(resourcesUrl);
+            this.lastModified = FileUtils.getLastModified(this.resourcesPath);
+        }
     }
     
     public String getResourcesPath() {

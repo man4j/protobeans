@@ -5,10 +5,10 @@ import java.util.List;
 
 import javax.servlet.Filter;
 
-public class FilterChainBean {
+public class SecurityFilterChainBean {
     private List<Filter> filters = new ArrayList<>();
     
-    public FilterChainBean addFilter(Filter filter) {
+    public SecurityFilterChainBean addFilter(Filter filter) {
         filters.add(filter);
         
         return this;

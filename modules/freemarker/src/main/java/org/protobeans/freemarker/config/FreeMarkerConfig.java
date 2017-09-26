@@ -1,10 +1,13 @@
 package org.protobeans.freemarker.config;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.core.config.CoreConfig;
 import org.protobeans.freemarker.annotation.EnableFreeMarker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -24,13 +27,18 @@ public class FreeMarkerConfig {
     
     private String devMode;
     
+    @Autowired(required = false)
+    private List<TemplateLoader> templateLoaders = new ArrayList<>();
+    
     @Bean
     public freemarker.template.Configuration freeMarkerConfiguration() {
-        freemarker.template.Configuration config = new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_24);
+        freemarker.template.Configuration config = new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_26);
         
         DefaultObjectWrapper wrapper = (DefaultObjectWrapper) freemarker.template.Configuration.getDefaultObjectWrapper(freemarker.template.Configuration.VERSION_2_3_24);
         
-        MultiTemplateLoader tl = new MultiTemplateLoader(new TemplateLoader[] {new SpringTemplateLoader(new DefaultResourceLoader(), "classpath:/templates")}); 
+        templateLoaders.add(new SpringTemplateLoader(new DefaultResourceLoader(), "classpath:/templates"));
+        
+        MultiTemplateLoader tl = new MultiTemplateLoader(templateLoaders.toArray(new TemplateLoader[] {})); 
         
         config.setAutoFlush(false);
         config.setLogTemplateExceptions(false);
