@@ -11,24 +11,34 @@ pipeline {
   }
 
   stages {
+    stage('Clean') {
+      steps {
+        sh 'mvn -f examples/mvc-security/pom.xml clean:clean'
+      }
+    }
+    stage('Resources') {
+      steps {
+        sh 'mvn -f examples/mvc-security/pom.xml resources:resources resources:testResources'
+      }
+    }
     stage('Compile') {
       steps {
-        sh 'mvn -f examples/mvc-security/pom.xml clean compile'
+        sh 'mvn -f examples/mvc-security/pom.xml compiler:compile compiler:testCompile'
       }
     }
     stage('Test') {
       steps {
-        sh 'mvn -s $SETTINGS_XML -f examples/mvc-security/pom.xml test'
+        sh 'mvn -s $SETTINGS_XML -f examples/mvc-security/pom.xml surefire:test'
       }
     }
     stage('Package') {
       steps {
-        sh 'mvn -f examples/mvc-security/pom.xml package'
+        sh 'mvn -f examples/mvc-security/pom.xml jar:jar shade:shade'
       }
     }
     stage('Deploy') {
       steps {
-        sh 'mvn -s $SETTINGS_XML -f examples/mvc-security/pom.xml deploy'
+        sh 'mvn -s $SETTINGS_XML -f examples/mvc-security/pom.xml docker:build -DpushImage'
       }
     }
   }

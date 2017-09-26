@@ -144,7 +144,7 @@
   
   <build>
     <plugins>
-      <!-- preserve original last modified for static resources -->
+      <!-- preserve original last modified for static resources
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
         <version>1.8</version>
@@ -163,7 +163,7 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
+      </plugin>-->
       
       <!-- current version not preserve last modified for static resources (patch allready on github -->
       <plugin>
