@@ -29,7 +29,7 @@ public class FlywayConfig {
         Flyway fw = new Flyway();
         
         fw.setSchemas(schema);
-        fw.setDataSource(dbUrl + "/" + schema, user, password);
+        fw.setDataSource(dbUrl, user, password);
         fw.setLocations("classpath:migrations");
         
         while (true) {

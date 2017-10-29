@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -35,6 +36,7 @@ public class HibernateConfig {
        em.setDataSource(dataSource);
        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
        jpaVendorAdapter.setShowSql("true".equals(showSql));
+       jpaVendorAdapter.setDatabase(Database.MYSQL);
        
        em.setJpaPropertyMap(new HashMap<String, Object>() {{put("hibernate.id.new_generator_mappings", true);
                                                             put("hibernate.format_sql", true);
@@ -43,13 +45,19 @@ public class HibernateConfig {
                                                             put("hibernate.order_inserts", true);
                                                             put("hibernate.order_updates", true);
                                                             put("hibernate.auto_quote_keyword", true);
+                                                            
+                                                            //if connection pool already disables autocommit
                                                             put("hibernate.connection.provider_disables_autocommit", true);
+                                                            
+                                                            //this option prevent connecting to database before flyway
+                                                            put("hibernate.temp.use_jdbc_metadata_defaults", false);
                                                             
                                                             if ("true".equals(enableStatistics)) {
                                                                 put("hibernate.generate_statistics", true);
                                                             }
                                                           }});
-       em.setJpaVendorAdapter(jpaVendorAdapter);
+       
+       em.setJpaVendorAdapter(jpaVendorAdapter);       
        em.setPackagesToScan(Stream.of(basePackageClasses).map(c -> c.getPackage().getName()).toArray(String[]::new));
        
        return em;

@@ -17,6 +17,4 @@ public @interface EnableMvc {
     String resourcesPath() default "";
     
     String resourcesUrl() default "";
-    
-    Class<?>[] basePackageClasses() default {};
 }

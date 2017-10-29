@@ -11,7 +11,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @EnableJdbc
-@EnableMySql(dbUrl = "jdbc:mysql://localhost:3306", schema="dev_db", user = "root", password = "s:password")
+@EnableMySql(dbUrl = "jdbc:mysql://localhost:3306", schema="db11", user = "root", password = "root")
 public class Main {
     @Autowired
     private UserService userService;
@@ -37,7 +37,7 @@ class UserService {
     
     @WithTransaction
     public void insertUsers() {
-        jdbcTemplate.execute("INSERT INTO USERS(email, password, confirm_uuid, confirmed) VALUES('email1', 'password1', 'uuid1', 1)");
-        jdbcTemplate.execute("INSERT INTO USERS(email, password, confirm_uuid, confirmed) VALUES('email2', 'password2', 'uuid2', 1)");
+        jdbcTemplate.execute("INSERT INTO USERS(id, email, password, confirm_uuid, confirmed) VALUES(33, 'email1', 'password1', 'uuid1', 1)");
+        jdbcTemplate.execute("INSERT INTO USERS(id, email, password, confirm_uuid, confirmed) VALUES(44, 'email2', 'password2', 'uuid2', 1)");
     }
 }

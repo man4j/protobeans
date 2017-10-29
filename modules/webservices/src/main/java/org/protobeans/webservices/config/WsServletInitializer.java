@@ -2,17 +2,12 @@ package org.protobeans.webservices.config;
 
 import javax.servlet.ServletContext;
 
-import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.ws.transport.http.support.AbstractAnnotationConfigMessageDispatcherServletInitializer;
 
 public class WsServletInitializer extends AbstractAnnotationConfigMessageDispatcherServletInitializer {
-    public static ApplicationContext rootApplicationContext;
-    
-    public static String[] mappings;
-    
-    public static Class<?>[] configClasses;
+    public static ConfigurableWebApplicationContext rootApplicationContext;
     
     @Override
     protected Class<?>[] getRootConfigClasses() {
@@ -21,7 +16,7 @@ public class WsServletInitializer extends AbstractAnnotationConfigMessageDispatc
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return configClasses;
+        return null;
     }
 
     @Override
@@ -31,20 +26,15 @@ public class WsServletInitializer extends AbstractAnnotationConfigMessageDispatc
     
     @Override
     protected String[] getServletMappings() {
-        return mappings;
+        return new String[] {"/ws/*"};
     }
     
-    @SuppressWarnings("resource")
     @Override
     protected void registerContextLoaderListener(ServletContext servletContext) {
         if (servletContext.getAttribute("rootAppCtx") == null) {
-            AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
+            servletContext.addListener(new ContextLoaderListener(rootApplicationContext));
             
-            ctx.setParent(rootApplicationContext);
-    
-            servletContext.addListener(new ContextLoaderListener(ctx));
-            
-            servletContext.setAttribute("rootAppCtx", ctx);
+            servletContext.setAttribute("rootAppCtx", rootApplicationContext);
         }
     }
 }

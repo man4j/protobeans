@@ -1,22 +1,16 @@
 package org.protobeans.mvc.config;
 
-import javax.servlet.Filter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-import org.protobeans.core.config.CoreConfig;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.annotation.Order;
+import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.request.RequestContextListener;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-@Order(5)//для того, чтобы фильтры SpringSecurity инициализировались позже фильтров WebMVC
 public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-    public static ApplicationContext rootApplicationContext;
-    
-    public static Filter[] filters;
+    public static ConfigurableWebApplicationContext rootApplicationContext;
     
     @Override
     protected Class<?>[] getRootConfigClasses() {
@@ -25,13 +19,14 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return CoreConfig.getWebAppContextConfigClasses().toArray(new Class<?>[] {});
+        return null;
     }
 
     @Override
     protected String[] getServletMappings() {
         return new String[] {"/"};
     }
+    
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         servletContext.addListener(RequestContextListener.class);//Для того, чтобы запрос был доступен в фильтрах, например в SocialAuthenticationFilter
@@ -40,21 +35,15 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
     }
     
     @Override
-    protected Filter[] getServletFilters() {
-        return filters;
-    }
-
-    @SuppressWarnings("resource")
-    @Override
     protected void registerContextLoaderListener(ServletContext servletContext) {
         if (servletContext.getAttribute("rootAppCtx") == null) {
-            AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
+            DelegatingWebMvcConfiguration webMvcConfiguration = rootApplicationContext.getBean(DelegatingWebMvcConfiguration.class);
             
-            ctx.setParent(rootApplicationContext);
-    
-            servletContext.addListener(new ContextLoaderListener(ctx));
+            webMvcConfiguration.setServletContext(servletContext);
             
-            servletContext.setAttribute("rootAppCtx", ctx);
+            servletContext.addListener(new ContextLoaderListener(rootApplicationContext));
+            
+            servletContext.setAttribute("rootAppCtx", rootApplicationContext);
         }
     }
 }

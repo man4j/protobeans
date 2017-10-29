@@ -14,7 +14,5 @@ import org.springframework.context.annotation.Import;
 @Import(WebServicesConfig.class)
 @Configuration
 public @interface EnableWebServices {
-    String[] mappings();
-    
-    Class<?>[] configClasses();
+    //empty
 }

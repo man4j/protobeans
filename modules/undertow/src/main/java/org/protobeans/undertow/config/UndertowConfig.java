@@ -10,13 +10,13 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.ServletException;
 
+import org.protobeans.core.annotation.InjectFrom;
+import org.protobeans.undertow.annotation.EnableUndertow;
+import org.protobeans.undertow.annotation.Initializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.SpringServletContainerInitializer;
 import org.springframework.web.WebApplicationInitializer;
-import org.protobeans.core.annotation.InjectFrom;
-import org.protobeans.undertow.annotation.EnableUndertow;
-import org.protobeans.undertow.annotation.Initializer;
 
 import io.undertow.Undertow;
 import io.undertow.Undertow.Builder;

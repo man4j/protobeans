@@ -34,7 +34,7 @@ public class AsyncConfig implements AsyncConfigurer {
         executor.setQueueCapacity(0);
         executor.setWaitForTasksToCompleteOnShutdown(!interruptOnClose);
         executor.setAwaitTerminationSeconds(Integer.MAX_VALUE);
-        executor.setThreadNamePrefix("ProtoBeansAsyncExecutor-");
+        executor.setThreadNamePrefix("ProtobeansAsyncExecutor-");
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.initialize();
         

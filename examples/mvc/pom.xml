@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.protobeans</groupId>
+  <groupId>org.protobeans</groupId> 
   <version>0.0.1-SNAPSHOT</version>
   <artifactId>protobeans-mvc-example</artifactId>
   <packaging>jar</packaging>
@@ -9,9 +9,9 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <protobeans.version>0.0.8</protobeans.version>
+    <maven.compiler.source>9</maven.compiler.source>
+    <maven.compiler.target>9</maven.compiler.target>
+    <protobeans.version>0.1.0</protobeans.version>
   </properties>
   
   <dependencies>
@@ -20,57 +20,32 @@
       <artifactId>protobeans-mvc</artifactId>
       <version>${protobeans.version}</version>
     </dependency>
-    
-    <dependency>
-      <groupId>org.protobeans</groupId>
-      <artifactId>protobeans-webservices</artifactId>
-      <version>${protobeans.version}</version>
-    </dependency>
-    
+        
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-undertow</artifactId>
       <version>${protobeans.version}</version>
     </dependency>
-    
-    <dependency>
-      <groupId>org.protobeans</groupId>
-      <artifactId>protobeans-i18n</artifactId>
-      <version>${protobeans.version}</version>
-    </dependency>
-    
+        
     <!-- Test -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
-      <version>4.3.4.RELEASE</version>
+      <version>5.0.1.RELEASE</version>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     
     <dependency>
       <groupId>com.ning</groupId>
       <artifactId>async-http-client</artifactId>
-      <version>1.9.38</version>
+      <version>1.9.40</version>      
       <scope>test</scope>
     </dependency>
-    
-    <dependency>
-      <groupId>org.protobeans</groupId>
-      <artifactId>protobeans-testcontainers-selenium</artifactId>
-      <version>${protobeans.version}</version>
-      <scope>test</scope>
-    </dependency>
-    
+        
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <version>4.12</version>      
       <scope>test</scope>
     </dependency>
     
@@ -78,7 +53,7 @@
     <dependency>
       <groupId>org.skyscreamer</groupId>
       <artifactId>jsonassert</artifactId>
-      <version>1.4.0</version>
+      <version>1.5.0</version>    
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -109,7 +84,7 @@
       <!-- current version not preserve last modified for static resources (patch allready on github -->
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>2.4.3</version>
+        <version>3.1.0</version>
         <executions>
           <execution>
             <phase>package</phase>

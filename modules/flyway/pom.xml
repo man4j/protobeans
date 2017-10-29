@@ -4,28 +4,22 @@
   <parent>
     <groupId>org.protobeans</groupId>
     <artifactId>protobeans-parent</artifactId>
-    <version>0.0.8</version>
+    <version>0.1.0</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>protobeans-flyway</artifactId>
   <packaging>jar</packaging>
-
-  <properties>
-    <maven.repo.dir>../../maven</maven.repo.dir>
-  </properties>
   
   <dependencies>
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-core</artifactId>
-      <version>${project.version}</version>
     </dependency>
     
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-core</artifactId>
-      <version>4.2.0</version>
     </dependency>
   </dependencies>
 </project>

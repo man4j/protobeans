@@ -5,13 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.protobeans.core.annotation.InjectFrom;
-import org.protobeans.core.config.CoreConfig;
 import org.protobeans.freemarker.annotation.EnableFreeMarker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.ui.freemarker.SpringTemplateLoader;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;
@@ -21,10 +24,6 @@ import freemarker.template.TemplateExceptionHandler;
 @Configuration
 @InjectFrom(EnableFreeMarker.class)
 public class FreeMarkerConfig {
-    static {
-        CoreConfig.addWebAppContextConfigClass(FreeMarkerWebConfig.class);
-    }
-    
     private String devMode;
     
     @Autowired(required = false)
@@ -59,5 +58,32 @@ public class FreeMarkerConfig {
         config.addAutoImport("s", "/lib/security.ftlh");
         
         return config;
+    }
+    
+    /**
+     * Needs for FreeMarkerView
+     */
+    @Bean
+    public FreeMarkerConfigurer freeMarkerConfigurer(freemarker.template.Configuration cfg) {
+        FreeMarkerConfigurer fmc = new FreeMarkerConfigurer();
+        
+        fmc.setConfiguration(cfg);
+        
+        return fmc;
+    }
+    
+    @Bean
+    @Lazy
+    public ViewResolver viewResolver() {
+        FreeMarkerViewResolver viewResolver = new FreeMarkerViewResolver();
+        
+        viewResolver.setSuffix(".ftlh");
+        viewResolver.setContentType("text/html;charset=UTF-8");
+        viewResolver.setRequestContextAttribute("rc");
+        viewResolver.setExposeContextBeansAsAttributes(true);
+        viewResolver.setExposeRequestAttributes(true);
+        viewResolver.setExposeSessionAttributes(true);
+        
+        return viewResolver;
     }
 }

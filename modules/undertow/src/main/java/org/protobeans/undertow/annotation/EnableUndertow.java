@@ -20,7 +20,7 @@ public @interface EnableUndertow {
     
     Initializer[] initializers() default {};
     
-    String resourcesPath() default "notexistent_resource_path";
+    String resourcesPath() default "undefined";
     
     String welcomePage() default "index.html";
     

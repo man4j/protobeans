@@ -4,71 +4,42 @@
   <parent>
     <groupId>org.protobeans</groupId>
     <artifactId>protobeans-parent</artifactId>
-    <version>0.0.8</version>
+    <version>0.1.0</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>protobeans-mvc</artifactId>
   <packaging>jar</packaging>
-
-  <properties>
-    <maven.repo.dir>../../maven</maven.repo.dir>
-  </properties>
   
   <dependencies>
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-core</artifactId>
-      <version>${project.version}</version>
     </dependency>
     
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
-      <version>${version.spring}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
-    <dependency>
-      <groupId>org.jboss.spec.javax.servlet</groupId>
-      <artifactId>jboss-servlet-api_3.1_spec</artifactId>
-      <version>1.0.0.Final</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-validator</artifactId>
-      <version>5.3.4.Final</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.glassfish.web</groupId>
-      <artifactId>javax.el</artifactId>
-      <version>2.2.6</version>
-    </dependency>
-
-    <!-- Jackson -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${version.jackson}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
-      <version>${version.jackson}</version>
     </dependency>
     
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
-      <version>${version.jackson}</version>
+    </dependency>    
+    
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+    </dependency>
+        
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
     </dependency>
   </dependencies>
 </project>

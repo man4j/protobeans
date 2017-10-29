@@ -63,11 +63,9 @@ public class InjectFromAnnotationBeanPostProcessor implements BeanPostProcessor 
                                 if (injectedString.startsWith("s:")) {
                                     String propName = injectedString.split(":")[1];
                                     
-                                    Optional<String> value = Stream.of(System.getProperty(propName),
-                                                                       System.getProperty(propName.toLowerCase()), 
-                                                                       System.getProperty(propName.toUpperCase()), 
-                                                                       System.getenv(propName.toLowerCase()), 
-                                                                       System.getenv(propName.toUpperCase())).filter(v -> v != null).findFirst();
+                                    Optional<String> value = Stream.of(ctx.getEnvironment().getProperty(propName),
+                                                                       ctx.getEnvironment().getProperty(propName.toLowerCase()), 
+                                                                       ctx.getEnvironment().getProperty(propName.toUpperCase())).filter(v -> v != null).findFirst();
                                     
                                     if (!value.isPresent()) {
                                         throw new IllegalStateException("Can not find system property or env variable: " + propName);
