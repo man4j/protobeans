@@ -1,11 +1,15 @@
 package org.protobeans.mvc.config;
 
+import java.nio.charset.StandardCharsets;
+
+import javax.servlet.Filter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.request.RequestContextListener;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -27,6 +31,11 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
         return new String[] {"/"};
     }
     
+    @Override
+    protected Filter[] getServletFilters() {
+        return new Filter[] {new CharacterEncodingFilter(StandardCharsets.UTF_8.name(), true, true)};
+    }
+
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         servletContext.addListener(RequestContextListener.class);//Для того, чтобы запрос был доступен в фильтрах, например в SocialAuthenticationFilter
