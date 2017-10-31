@@ -49,19 +49,21 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
     
     @Override
     protected void registerContextLoaderListener(ServletContext servletContext) {
-        if (servletContext.getAttribute("rootAppCtx") == null) {
-            rootApplicationContext.setServletContext(servletContext);
-            
-            ConfigurableListableBeanFactory bf = (ConfigurableListableBeanFactory) rootApplicationContext.getAutowireCapableBeanFactory();
-            
-            //see AbstractRefreshableWebApplicationContext::postProcessBeanFactory
-            ServletContextScope appScope = new ServletContextScope(servletContext);
-            bf.registerScope(WebApplicationContext.SCOPE_APPLICATION, appScope);
-            servletContext.setAttribute(ServletContextScope.class.getName(), appScope);
-            
-            WebApplicationContextUtils.registerEnvironmentBeans(bf, servletContext, null);
-            
-            bf.getBeansOfType(ServletContextAware.class).values().forEach(b -> b.setServletContext(servletContext));            
+        if (servletContext.getAttribute("rootAppCtx") == null) {            
+            if (rootApplicationContext.getServletContext() == null) {//in case then spring-test already inject MockServletContext
+                rootApplicationContext.setServletContext(servletContext);
+                
+                ConfigurableListableBeanFactory bf = (ConfigurableListableBeanFactory) rootApplicationContext.getAutowireCapableBeanFactory();
+                
+                //see AbstractRefreshableWebApplicationContext::postProcessBeanFactory
+                ServletContextScope appScope = new ServletContextScope(servletContext);
+                bf.registerScope(WebApplicationContext.SCOPE_APPLICATION, appScope);
+                servletContext.setAttribute(ServletContextScope.class.getName(), appScope);
+                
+                WebApplicationContextUtils.registerEnvironmentBeans(bf, servletContext, null);
+                
+                bf.getBeansOfType(ServletContextAware.class).values().forEach(b -> b.setServletContext(servletContext));
+            }
             
             servletContext.addListener(new ContextLoaderListener(rootApplicationContext));            
             servletContext.setAttribute("rootAppCtx", rootApplicationContext);
