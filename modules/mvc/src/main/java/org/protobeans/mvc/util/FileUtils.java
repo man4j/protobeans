@@ -13,6 +13,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,27 +21,31 @@ import org.slf4j.LoggerFactory;
 public class FileUtils {
     private final static Logger logger = LoggerFactory.getLogger(FileUtils.class);
     
+    private static ConcurrentHashMap<String, Long> cache = new ConcurrentHashMap<>();
+    
     public static long getLastModified(String resource) {
-        URL url = FileUtils.class.getResource(resource);
-        
-        try {
-            if (url.getProtocol().equals("file")) {
-                Path path = Paths.get(url.toURI());
-                
-                return findLastModified(path);
-            }
+        return cache.computeIfAbsent(resource, r -> {
+            URL url = FileUtils.class.getResource(resource);
             
-            final Map<String, String> env = new HashMap<>();
-            final String[] array = url.toURI().toString().split("!");
-            
-            try (FileSystem fs = FileSystems.newFileSystem(URI.create(array[0]), env)) {
-                final Path path = fs.getPath(array[1]);
+            try {
+                if (url.getProtocol().equals("file")) {
+                    Path path = Paths.get(url.toURI());
+                    
+                    return findLastModified(path);
+                }
                 
-                return findLastModified(path);
-            }            
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+                final Map<String, String> env = new HashMap<>();
+                final String[] array = url.toURI().toString().split("!");
+                
+                try (FileSystem fs = FileSystems.newFileSystem(URI.create(array[0]), env)) {
+                    final Path path = fs.getPath(array[1]);
+                    
+                    return findLastModified(path);
+                }            
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }           
+        });
     }
 
     private static long findLastModified(Path path) throws IOException {

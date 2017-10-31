@@ -6,11 +6,15 @@ import javax.servlet.Filter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.ServletContextAware;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextListener;
+import org.springframework.web.context.support.ServletContextScope;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -46,12 +50,20 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
     @Override
     protected void registerContextLoaderListener(ServletContext servletContext) {
         if (servletContext.getAttribute("rootAppCtx") == null) {
-            DelegatingWebMvcConfiguration webMvcConfiguration = rootApplicationContext.getBean(DelegatingWebMvcConfiguration.class);
+            rootApplicationContext.setServletContext(servletContext);
             
-            webMvcConfiguration.setServletContext(servletContext);
+            ConfigurableListableBeanFactory bf = (ConfigurableListableBeanFactory) rootApplicationContext.getAutowireCapableBeanFactory();
             
-            servletContext.addListener(new ContextLoaderListener(rootApplicationContext));
+            //see AbstractRefreshableWebApplicationContext::postProcessBeanFactory
+            ServletContextScope appScope = new ServletContextScope(servletContext);
+            bf.registerScope(WebApplicationContext.SCOPE_APPLICATION, appScope);
+            servletContext.setAttribute(ServletContextScope.class.getName(), appScope);
             
+            WebApplicationContextUtils.registerEnvironmentBeans(bf, servletContext, null);
+            
+            bf.getBeansOfType(ServletContextAware.class).values().forEach(b -> b.setServletContext(servletContext));            
+            
+            servletContext.addListener(new ContextLoaderListener(rootApplicationContext));            
             servletContext.setAttribute("rootAppCtx", rootApplicationContext);
         }
     }

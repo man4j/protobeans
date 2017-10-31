@@ -9,7 +9,7 @@
 </#macro>
 
 <#macro r path>
-  <@f.url '${getBean("freeMarkerVariables").getVariable("resourcesPrefix")}/${path}' />
+  <@f.url '${resourcesPrefix}/${path}' />
 </#macro>
 
 <#function getBean name>

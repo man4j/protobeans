@@ -10,6 +10,7 @@ import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.mvc.annotation.EnableMvc;
 import org.protobeans.mvc.controller.advice.InitBinderControllerAdvice;
 import org.protobeans.mvc.util.FileUtils;
+import org.protobeans.mvc.util.GlobalModelAttribute;
 import org.protobeans.mvc.util.PathUtils;
 import org.protobeans.mvc.util.ProtobeansMessageInterpolator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,6 +121,21 @@ public class MvcConfig implements WebMvcConfigurer {
         validatorFactoryBean.setMessageInterpolator(new ProtobeansMessageInterpolator(new MessageSourceResourceBundleLocator(messageSource), cached));
         
         return validatorFactoryBean;
+    }
+    
+    @Bean
+    public GlobalModelAttribute globalModelAttribute() {
+        String value = null;
+        
+        if (!resourcesPath.isEmpty() && !resourcesUrl.isEmpty()) {
+            String dashedResourcesPath = PathUtils.dashedPath(resourcesPath);
+            String dashedResourcesUrl = PathUtils.dashedPath(resourcesUrl);
+            long lastModified = FileUtils.getLastModified(dashedResourcesPath);
+            
+            value = dashedResourcesUrl + lastModified;
+        }
+        
+        return new GlobalModelAttribute("resourcesPrefix", value);
     }
     
     @Override
