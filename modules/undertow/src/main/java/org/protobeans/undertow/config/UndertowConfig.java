@@ -20,7 +20,11 @@ import org.springframework.web.WebApplicationInitializer;
 
 import io.undertow.Undertow;
 import io.undertow.Undertow.Builder;
+import io.undertow.predicate.Predicates;
 import io.undertow.server.HttpHandler;
+import io.undertow.server.handlers.encoding.ContentEncodingRepository;
+import io.undertow.server.handlers.encoding.EncodingHandler;
+import io.undertow.server.handlers.encoding.GzipEncodingProvider;
 import io.undertow.server.handlers.resource.ClassPathResourceManager;
 import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.DeploymentInfo;
@@ -75,10 +79,13 @@ public class UndertowConfig {
             deploymentInfo.addServletContainerInitalizer(new ServletContainerInitializerInfo(SpringServletContainerInitializer.class, springInitializersSet));
         }
         
-        return Undertow.builder().addHttpListener(Integer.parseInt(port), host).setHandler(createHandler());
+        final EncodingHandler handler = new EncodingHandler(new ContentEncodingRepository().addEncodingHandler("gzip", new GzipEncodingProvider(), 5, Predicates.parse("max-content-size[50000]"))).setNext(createServletDeploymentHandler());
+        
+        return Undertow.builder().addHttpListener(Integer.parseInt(port), host)
+                                 .setHandler(handler);
     }
     
-    private HttpHandler createHandler() throws ServletException {
+    private HttpHandler createServletDeploymentHandler() throws ServletException {
         DeploymentManager manager = Servlets.defaultContainer().addDeployment(deploymentInfo);
         
         manager.deploy();

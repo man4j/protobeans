@@ -15,6 +15,7 @@ import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.context.support.ServletContextScope;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -37,7 +38,7 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
     
     @Override
     protected Filter[] getServletFilters() {
-        return new Filter[] {new CharacterEncodingFilter(StandardCharsets.UTF_8.name(), true, true)};
+        return new Filter[] {new CharacterEncodingFilter(StandardCharsets.UTF_8.name(), true, true), new ShallowEtagHeaderFilter()};
     }
 
     @Override
