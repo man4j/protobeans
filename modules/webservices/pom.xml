@@ -24,11 +24,7 @@
         <exclusion>
           <groupId>org.springframework</groupId>
           <artifactId>*</artifactId>
-        </exclusion> 
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>      
+        </exclusion>     
       </exclusions>
     </dependency>
     

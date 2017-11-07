@@ -14,7 +14,7 @@
     <version.spring>5.0.1.RELEASE</version.spring>
     <version.jackson>2.9.2</version.jackson>
 
-    <maven.repo.dir>../../maven</maven.repo.dir>
+    <maven.repo.dir>${user.dir}/maven</maven.repo.dir>
   </properties>
 
   <modules>
@@ -236,7 +236,7 @@
       <dependency>
         <groupId>org.springframework.ws</groupId>
         <artifactId>spring-ws-core</artifactId>
-        <version>3.0.0.RC1</version>
+        <version>3.0.0.RELEASE</version>
       </dependency>  
     </dependencies>
   </dependencyManagement>
