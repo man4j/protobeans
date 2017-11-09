@@ -4,18 +4,10 @@
   <parent>
     <groupId>org.protobeans</groupId>
     <artifactId>protobeans-parent</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>protobeans-future</artifactId>
-  <packaging>jar</packaging>  
-  
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+  <packaging>jar</packaging>    
 </project>

@@ -1,0 +1,146 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.protobeans</groupId>
+  <artifactId>examples-parent</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>    
+    <protobeans.version>0.1.1</protobeans.version>
+    <version.spring>5.0.1.RELEASE</version.spring>
+  </properties>
+
+  <modules>
+    <module>jdbc-mysql</module>
+    <module>hibernate-mysql</module>
+    <module>freemarker</module>
+    <module>i18n</module>
+    <module>undertow</module>
+    <module>mvc</module>
+    <module>webservices</module>
+    <module>gmail</module>
+    <module>scheduler</module>
+    <module>monitoring</module>
+  </modules>
+  
+  <dependencies>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.2.3</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.codehaus.janino</groupId>
+      <artifactId>janino</artifactId>
+      <version>3.0.7</version>
+    </dependency>
+        
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>2.11.0</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-freemarker</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-gmail</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-hibernate</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-jdbc</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-monitoring</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-mysql</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-flyway</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-i18n</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-scheduler</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-webservices</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-mvc</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>      
+
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-undertow</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>      
+      
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-test</artifactId>
+        <version>${version.spring}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>  
+  
+  <repositories>
+    <repository>
+      <id>Spring Milestone</id>
+      <url>http://repo.spring.io/libs-milestone/</url>
+    </repository>
+  </repositories>
+</project>

@@ -14,7 +14,9 @@ import org.springframework.context.annotation.Import;
 @Import(MySqlConfig.class)
 @Configuration
 public @interface EnableMySql {
-    String dbUrl();
+    String dbHost();
+    
+    String dbPort() default "3306";
     
     String schema();
     

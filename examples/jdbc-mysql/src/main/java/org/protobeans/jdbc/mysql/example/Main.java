@@ -11,7 +11,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @EnableJdbc
-@EnableMySql(dbUrl = "jdbc:mysql://localhost:3306", schema="db11", user = "root", password = "root")
+@EnableMySql(dbHost = "localhost", schema="db11", user = "root", password = "root")
 public class Main {
     @Autowired
     private UserService userService;

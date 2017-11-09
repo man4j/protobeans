@@ -10,8 +10,8 @@ import org.protobeans.mysql.annotation.EnableMySql;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-@EnableMySql(dbUrl = "s:url", schema = "s:schema", user = "root", password = "s:password")
-@EnableFlyway(dbUrl = "s:url", schema = "s:schema", user = "root", password = "s:password")
+@EnableMySql(dbHost = "s:host", schema = "s:schema", user = "root", password = "s:password")
+@EnableFlyway(dbHost = "s:host", schema = "s:schema", user = "root", password = "s:password")
 @EnableHibernate(showSql = "true", basePackageClasses = User.class)
 @ComponentScan(basePackageClasses = {UserDao.class, UserService.class})
 public class Main {

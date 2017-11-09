@@ -14,7 +14,9 @@ import com.zaxxer.hikari.HikariDataSource;
 @InjectFrom(EnableMySql.class)
 @EnableTransactionManagement(proxyTargetClass = true)
 public class MySqlConfig {
-    private String dbUrl;
+    private String dbHost;
+    
+    private String dbPort;
     
     private String schema;
     
@@ -28,7 +30,7 @@ public class MySqlConfig {
     public DataSource dataSource() {
         HikariDataSource ds = new HikariDataSource();
         
-        ds.setJdbcUrl(dbUrl + "/" + schema);
+        ds.setJdbcUrl("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + schema);
         ds.setDriverClassName("com.mysql.jdbc.Driver");
         ds.setUsername(user);
         ds.setMaximumPoolSize(maxPoolSize);

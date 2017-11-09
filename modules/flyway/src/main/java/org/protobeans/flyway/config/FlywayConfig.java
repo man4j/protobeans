@@ -14,7 +14,11 @@ import org.springframework.context.annotation.Configuration;
 public class FlywayConfig {
     private static final Logger logger = LoggerFactory.getLogger(FlywayConfig.class);
     
-    private String dbUrl;
+    private String dbProtocol;
+    
+    private String dbHost;
+    
+    private String dbPort;
     
     private String schema;
     
@@ -29,7 +33,7 @@ public class FlywayConfig {
         Flyway fw = new Flyway();
         
         fw.setSchemas(schema);
-        fw.setDataSource(dbUrl, user, password);
+        fw.setDataSource(dbProtocol + dbHost + ":" + dbPort, user, password);
         fw.setLocations("classpath:migrations");
         
         while (true) {
