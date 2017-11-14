@@ -12,6 +12,7 @@ import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.kafka.annotation.EnableKafkaMessaging;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
@@ -22,6 +23,7 @@ import org.springframework.kafka.core.ProducerFactory;
 
 @Configuration
 @InjectFrom(EnableKafkaMessaging.class)
+@EnableKafka
 public class KafkaMessagingConfig {
     private String brokerList;
     
