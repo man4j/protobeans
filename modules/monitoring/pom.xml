@@ -16,7 +16,7 @@
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-core</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>

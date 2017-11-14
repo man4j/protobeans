@@ -9,5 +9,12 @@
   </parent>
 
   <artifactId>protobeans-future</artifactId>
-  <packaging>jar</packaging>    
+  <packaging>jar</packaging>  
+
+  <dependencies>
+    <dependency>
+      <groupId>org.protobeans</groupId>
+      <artifactId>protobeans-core</artifactId>
+    </dependency>
+  </dependencies>  
 </project>

@@ -15,8 +15,8 @@
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-core</artifactId>
-    </dependency>  
-    
+    </dependency>
+
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
