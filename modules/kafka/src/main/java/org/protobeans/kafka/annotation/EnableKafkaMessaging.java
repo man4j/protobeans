@@ -17,4 +17,6 @@ public @interface EnableKafkaMessaging {
     String brokerList();
     
     int concurrency() default -1;
+    
+    String autoOffsetReset() default "latest";
 }
