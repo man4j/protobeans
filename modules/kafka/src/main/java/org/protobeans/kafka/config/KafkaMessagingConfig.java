@@ -86,11 +86,18 @@ public class KafkaMessagingConfig {
     }
     
     @Bean
-    public KafkaAdmin admin() {
+    public KafkaAdmin admin() throws InterruptedException {
         Map<String, Object> configs = new HashMap<>();
         
         configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
                 
-        return new KafkaAdmin(configs);
+        KafkaAdmin admin = new KafkaAdmin(configs);
+
+        while (!admin.initialize()) {
+            System.out.println("Wait kafka broker...");
+            Thread.sleep(3_000);
+        }
+
+        return admin;
     }
 }
