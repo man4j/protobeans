@@ -10,6 +10,8 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.kafka.annotation.EnableKafkaMessaging;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -30,6 +32,9 @@ public class KafkaMessagingConfig {
     private int concurrency;
     
     private String autoOffsetReset;
+    
+    @Autowired
+    private ApplicationContext ctx;
     
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
@@ -92,6 +97,8 @@ public class KafkaMessagingConfig {
         configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
                 
         KafkaAdmin admin = new KafkaAdmin(configs);
+        
+        admin.setApplicationContext(ctx);
 
         while (!admin.initialize()) {
             System.out.println("Wait kafka broker...");
