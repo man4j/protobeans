@@ -22,6 +22,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.listener.AbstractMessageListenerContainer.AckMode;
 
 @Configuration
 @InjectFrom(EnableKafkaMessaging.class)
@@ -42,6 +43,7 @@ public class KafkaMessagingConfig {
         
         factory.setConsumerFactory(consumerFactory());
         factory.setConcurrency(concurrency == -1 ? Runtime.getRuntime().availableProcessors() : concurrency);
+        factory.getContainerProperties().setAckMode(AckMode.MANUAL);
         
         return factory;
     }
