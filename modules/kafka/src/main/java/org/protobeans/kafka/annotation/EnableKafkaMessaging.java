@@ -19,8 +19,4 @@ public @interface EnableKafkaMessaging {
     int concurrency() default -1;
     
     String autoOffsetReset() default "latest";
-    
-    int ackCount() default 20;
-    
-    int ackTime() default 1000;
 }
