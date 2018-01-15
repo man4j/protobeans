@@ -22,7 +22,6 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.listener.AbstractMessageListenerContainer.AckMode;
 
 @Configuration
 @InjectFrom(EnableKafkaMessaging.class)
@@ -34,6 +33,8 @@ public class KafkaMessagingConfig {
     
     private String autoOffsetReset;
     
+    private String maxPollRecords;
+    
     @Autowired
     private ApplicationContext ctx;
     
@@ -43,7 +44,6 @@ public class KafkaMessagingConfig {
         
         factory.setConsumerFactory(consumerFactory());
         factory.setConcurrency(concurrency == -1 ? Runtime.getRuntime().availableProcessors() : concurrency);
-        factory.getContainerProperties().setAckMode(AckMode.MANUAL);
         
         return factory;
     }
@@ -59,7 +59,8 @@ public class KafkaMessagingConfig {
         
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "DEFAULT.GROUP");
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);//контейнер будет сам автокомитить в соответствии с политикой factory.getContainerProperties().setAckMode
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, maxPollRecords);//автокомит происходит в конце обработки батча, поэтому если сообщения важные и обрабатываются долго их надо извлекать небольшими порциями
         props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "100");
         props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);

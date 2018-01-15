@@ -19,4 +19,6 @@ public @interface EnableKafkaMessaging {
     int concurrency() default -1;
     
     String autoOffsetReset() default "latest";
+    
+    String maxPollRecords() default "500";
 }
