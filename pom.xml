@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-parent</artifactId>
-  <version>0.1.8</version>
+  <version>0.1.9</version>
   <packaging>pom</packaging>
   
   <properties>
@@ -31,8 +31,8 @@
     <module>modules/gmail</module>
     <module>modules/async</module>
     <module>modules/scheduler</module>
-<!--    <module>modules/security</module>
-    <module>modules/social</module>-->
+<!--    <module>modules/security</module>-->
+<!--    <module>modules/social</module>-->
     <module>modules/future</module>
     <module>modules/monitoring</module>
     <module>modules/kafka</module>
@@ -160,7 +160,7 @@
       <dependency>
         <groupId>io.undertow</groupId>
         <artifactId>undertow-servlet</artifactId>
-        <version>1.4.20.Final</version>
+        <version>1.4.22.Final</version>
       </dependency>
 
       <!-- Async Http Client -->      
@@ -258,6 +258,18 @@
         <artifactId>spring-ws-core</artifactId>
         <version>3.0.0.RELEASE</version>
       </dependency>  
+      
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-web</artifactId>
+        <version>${version.spring}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-config</artifactId>
+        <version>${version.spring}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   

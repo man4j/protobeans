@@ -15,7 +15,6 @@ import org.protobeans.security.annotation.PermitAll;
 import org.protobeans.security.service.SecurityService;
 import org.protobeans.security.util.CurrentUrlAuthenticationSuccessHandler;
 import org.protobeans.security.util.SecurityFilterChainBean;
-import org.protobeans.security.util.SecurityUrlsBean;
 import org.protobeans.security.validation.SignIn;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,20 +32,22 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 @Configuration
 @EnableWebSecurity
 @ComponentScan(basePackageClasses={SecurityService.class, SecurityControllerAdvice.class, SignIn.class})
-public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private String[] ignoreUrls;
+    
+    private String loginUrl;
+    
     @Autowired
     private UserDetailsService userDetailsService;
     
     @Autowired
     private ApplicationContext ctx;
-    
-    @Autowired
-    private SecurityUrlsBean securityUrlsBean;
     
     @Autowired(required = false)
     private SecurityFilterChainBean securityFilterChainBean;
@@ -56,7 +57,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
     
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(Arrays.stream(securityUrlsBean.getIgnoreUrls())
+        web.ignoring().antMatchers(Arrays.stream(ignoreUrls)
                                          .map(u -> PathUtils.dashedPath(u) + "**")
                                          .toArray(String[]::new));
     }
@@ -66,13 +67,9 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
         String[] anonymousPatterns = ctx.getBeansWithAnnotation(Anonymous.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(Anonymous.class).value()).toArray(String[]::new);
         String[] permitAllPatterns = ctx.getBeansWithAnnotation(PermitAll.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(PermitAll.class).value()).toArray(String[]::new);
         
-        http.authorizeRequests().mvcMatchers(permitAllPatterns).permitAll()
-                                .mvcMatchers(anonymousPatterns).anonymous()
-                                .anyRequest().authenticated()
-            .and()
-            .rememberMe().rememberMeServices(rememberMeServices()).key("123").authenticationSuccessHandler(new CurrentUrlAuthenticationSuccessHandler())
-            .and()
-            .exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(securityUrlsBean.getLoginUrl())).accessDeniedHandler((req, res, e) -> {res.setStatus(HttpServletResponse.SC_FORBIDDEN);});
+        http.authorizeRequests().mvcMatchers(permitAllPatterns).permitAll().mvcMatchers(anonymousPatterns).anonymous().anyRequest().authenticated()
+            .and().rememberMe().rememberMeServices(rememberMeServices()).key("123").authenticationSuccessHandler(new CurrentUrlAuthenticationSuccessHandler()).and()
+            .exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(loginUrl)).accessDeniedHandler((req, res, e) -> {res.setStatus(HttpServletResponse.SC_FORBIDDEN);});
         
         for (SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> cfg : configurers) {
             http.apply(cfg);
@@ -85,6 +82,11 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                 http.addFilterBefore(filter, ChannelProcessingFilter.class);
             }
         }
+    }
+    
+    @Bean
+    public Class<? extends WebApplicationInitializer> mvcInitializer() {
+        return SecurityInitializer.class;
     }
     
     @Bean

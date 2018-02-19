@@ -6,11 +6,6 @@ import org.springframework.security.web.context.AbstractSecurityWebApplicationIn
 @Order(10)//для того, чтобы фильтры SpringSecurity инициализировались позже фильтров WebMVC
 public class SecurityInitializer extends AbstractSecurityWebApplicationInitializer {
     @Override
-    protected String getDispatcherWebApplicationContextSuffix() {
-        return "dispatcher";//see javadoc
-    }
-
-    @Override
     protected boolean enableHttpSessionEventPublisher() {
         return true;
     }

@@ -25,4 +25,6 @@ public @interface EnableUndertow {
     String welcomePage() default "index.html";
     
     String errorPage() default "";
+    
+    int sessionTimeout() default 30;
 }

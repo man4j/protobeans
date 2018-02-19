@@ -50,6 +50,8 @@ public class UndertowConfig {
     
     private String errorPage;
     
+    private int sessionTimeout;
+    
     @Autowired(required = false)
     private List<Class<? extends WebApplicationInitializer>> springInitializers = new ArrayList<>();
     
@@ -58,6 +60,7 @@ public class UndertowConfig {
         deploymentInfo.setContextPath("/")
                       .setDeploymentName("app.war")
                       .setClassLoader(this.getClass().getClassLoader())
+                      .setDefaultSessionTimeout(sessionTimeout)
                       .addWelcomePage(welcomePage)
                       .setResourceManager(new ClassPathResourceManager(this.getClass().getClassLoader(), resourcesPath));
         
