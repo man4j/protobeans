@@ -10,15 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.protobeans.mvc.util.PathUtils;
 import org.protobeans.security.advice.SecurityControllerAdvice;
-import org.protobeans.security.annotation.Anonymous;
-import org.protobeans.security.annotation.PermitAll;
 import org.protobeans.security.service.SecurityService;
 import org.protobeans.security.util.CurrentUrlAuthenticationSuccessHandler;
 import org.protobeans.security.util.SecurityFilterChainBean;
 import org.protobeans.security.validation.SignIn;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -46,9 +42,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
     
-    @Autowired
-    private ApplicationContext ctx;
-    
     @Autowired(required = false)
     private SecurityFilterChainBean securityFilterChainBean;
     
@@ -64,12 +57,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {        
-        String[] anonymousPatterns = ctx.getBeansWithAnnotation(Anonymous.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(Anonymous.class).value()).toArray(String[]::new);
-        String[] permitAllPatterns = ctx.getBeansWithAnnotation(PermitAll.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(PermitAll.class).value()).toArray(String[]::new);
-        
-        http.authorizeRequests().mvcMatchers(permitAllPatterns).permitAll().mvcMatchers(anonymousPatterns).anonymous().anyRequest().authenticated()
-            .and().rememberMe().rememberMeServices(rememberMeServices()).key("123").authenticationSuccessHandler(new CurrentUrlAuthenticationSuccessHandler()).and()
-            .exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(loginUrl)).accessDeniedHandler((req, res, e) -> {res.setStatus(HttpServletResponse.SC_FORBIDDEN);});
+        http.authorizeRequests().anyRequest().authenticated()
+            .and().rememberMe().rememberMeServices(rememberMeServices()).key("123").authenticationSuccessHandler(new CurrentUrlAuthenticationSuccessHandler())
+            .and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(loginUrl)).accessDeniedHandler((req, res, e) -> {res.setStatus(HttpServletResponse.SC_FORBIDDEN);});
         
         for (SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> cfg : configurers) {
             http.apply(cfg);

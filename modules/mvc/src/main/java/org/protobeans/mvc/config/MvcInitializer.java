@@ -1,10 +1,12 @@
 package org.protobeans.mvc.config;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.SessionTrackingMode;
 
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
@@ -46,6 +48,8 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
         servletContext.addListener(RequestContextListener.class);//Для того, чтобы запрос был доступен в фильтрах, например в SocialAuthenticationFilter
         
         super.onStartup(servletContext);
+        
+        servletContext.setSessionTrackingModes(Collections.singleton(SessionTrackingMode.COOKIE));
     }
     
     @Override
