@@ -4,7 +4,7 @@ import javax.validation.Valid;
 
 import org.protobeans.mvc.controller.advice.RequestContextHolder;
 import org.protobeans.mvcsecurity.example.service.EmailService;
-import org.protobeans.mvcsecurity.example.service.InMemoryProfileService;
+import org.protobeans.mvcsecurity.example.service.UserProfileService;
 import org.protobeans.mvcsecurity.example.service.MessageGenerator;
 import org.protobeans.security.annotation.Anonymous;
 import org.protobeans.security.model.AbstractProfile;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Anonymous("/restore")
 public class RestorePasswordController {
     @Autowired
-    private InMemoryProfileService profileService;
+    private UserProfileService profileService;
 
     @Autowired
     private EmailService emailService;
@@ -49,9 +49,9 @@ public class RestorePasswordController {
         
         String newDecryptedPassword = securityService.generatePassword();
 
-        profileService.updatePassword(p, newDecryptedPassword);
+        profileService.updatePassword(p.getEmail(), newDecryptedPassword);
 
-        emailService.sendMessage(form.getEmail(), messageGenerator.generateEmailSignInMessage(newDecryptedPassword, p.getConfirmUuid(), null, requestContextHolder.getRequestContext()));
+        emailService.sendMessage(form.getEmail(), messageGenerator.generateEmailSignInMessage(newDecryptedPassword, p.getConfirmUuid(), p.getEmail(), requestContextHolder.getRequestContext()));
 
         return "/check_email";
     }

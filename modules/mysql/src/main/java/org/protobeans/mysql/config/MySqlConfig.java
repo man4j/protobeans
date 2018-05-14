@@ -40,6 +40,7 @@ public class MySqlConfig {
         ds.addDataSourceProperty("useSSL", "false");
         ds.addDataSourceProperty("characterEncoding", "UTF-8");
         ds.addDataSourceProperty("cachePrepStmts", "true");
+        ds.addDataSourceProperty("useServerPrepStmts ", "true");
         ds.addDataSourceProperty("prepStmtCacheSize", "250");
         ds.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
         

@@ -1,18 +1,17 @@
-CREATE TABLE `userconnection` (
-  `userId` VARCHAR(255) NOT NULL,
-  `providerId` VARCHAR(255) NOT NULL,
-  `providerUserId` VARCHAR(255) NOT NULL,
-  `rank` INT(11) NOT NULL,
-  `displayName` VARCHAR(255) NULL DEFAULT NULL,
-  `profileUrl` VARCHAR(512) NULL DEFAULT NULL,
-  `imageUrl` VARCHAR(512) NULL DEFAULT NULL,
-  `accessToken` VARCHAR(512) NOT NULL,
-  `secret` VARCHAR(512) NULL DEFAULT NULL,
-  `refreshToken` VARCHAR(512) NULL DEFAULT NULL,
-  `expireTime` BIGINT(20) NULL DEFAULT NULL,
-  PRIMARY KEY (`userId`, `providerId`, `providerUserId`),
-  INDEX `UserConnectionRank` (`userId`, `providerId`, `rank`),
-  INDEX `ProviderIdProviderUserId` (`providerId`, `providerUserId`)
-)
-COLLATE='utf8_general_ci'
-ENGINE=InnoDB;
+CREATE TABLE users (id UUID PRIMARY KEY NOT NULL, 
+                    roles STRING(512),
+                    email STRING(256) UNIQUE NOT NULL,
+                    password STRING(128) NOT NULL,
+                    confirm_uuid STRING(64) NOT NULL,
+                    confirmed BOOL NOT NULL,
+                    userName STRING(128) NOT NULL,
+                    FAMILY "primary" (id, roles, email, password, confirm_uuid, confirmed, userName)
+);
+
+INSERT INTO users VALUES ('d5915e4f-cd31-420b-a90c-4530e2122fbe', 
+                          'ROLE_ADMIN', 
+                          'mylonglongname@gmail.com', 
+                          '{bcrypt}$2a$10$o1bo4x4ELUJOVVbOkVMjWO9kX0LbACwT36NO0ICSRfM.LfStv9.X6', 
+                          'd5915e4f-cd31-420b-a90c-4530e2122fbe', 
+                          TRUE, 
+                          'admin')

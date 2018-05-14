@@ -10,8 +10,8 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>    
-    <protobeans.version>0.1.2</protobeans.version>
-    <version.spring>5.0.1.RELEASE</version.spring>
+    <protobeans.version>0.1.12</protobeans.version>
+    <version.spring>5.0.5.RELEASE</version.spring>
   </properties>
 
   <modules>
@@ -21,6 +21,7 @@
     <module>i18n</module>
     <module>undertow</module>
     <module>mvc</module>
+    <module>mvc-security</module>
     <module>webservices</module>
     <module>gmail</module>
     <module>scheduler</module>
@@ -92,6 +93,12 @@
         <artifactId>protobeans-mysql</artifactId>
         <version>${protobeans.version}</version>
       </dependency>
+      
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-postgresql</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>org.protobeans</groupId>
@@ -121,6 +128,18 @@
         <groupId>org.protobeans</groupId>
         <artifactId>protobeans-mvc</artifactId>
         <version>${protobeans.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-async</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-security</artifactId>
+        <version>${protobeans.version}</version>
       </dependency>      
 
       <dependency>
@@ -134,8 +153,119 @@
         <artifactId>spring-test</artifactId>
         <version>${version.spring}</version>
       </dependency>
+      
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-test</artifactId>
+        <version>${version.spring}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.asynchttpclient</groupId>
+        <artifactId>async-http-client</artifactId>
+        <version>2.4.7</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.skyscreamer</groupId>
+        <artifactId>jsonassert</artifactId>
+        <version>1.5.0</version>    
+      </dependency>
     </dependencies>
   </dependencyManagement>  
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.1.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>            
+            <configuration>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>${project.groupId}.${project.artifactId}.Main</mainClass>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/spring.handlers</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/spring.schemas</resource>
+                </transformer>
+              </transformers> 
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>  
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.8.2</version>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.0.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <plugin>
+        <groupId>com.spotify</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>1.0.0</version>
+        <configuration>
+          <serverId>docker-hub</serverId>
+          <imageName>imagenarium/${project.artifactId}:${project.version}</imageName>
+          <baseImage>imagenarium/jre-docker:8</baseImage>
+          <entryPoint>["java", "-Xmx256m", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
+          <resources>
+             <resource>
+               <targetPath>/</targetPath>
+               <directory>${project.build.directory}</directory>
+               <include>${project.build.finalName}.jar</include>
+             </resource>
+          </resources>
+        </configuration>
+        <executions>
+          <execution>
+            <id>build-image</id>
+            <phase>package</phase>
+            <goals><goal>build</goal></goals>
+          </execution>
+          <execution>
+            <id>push-image</id>
+            <phase>deploy</phase>
+            <goals><goal>push</goal></goals>
+          </execution>   
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
   
   <repositories>
     <repository>

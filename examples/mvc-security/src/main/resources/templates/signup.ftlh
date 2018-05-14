@@ -25,7 +25,7 @@
               <div class="row control-group">
                 <div class="form-group col-xs-12 floating-label-form-group controls">
                   <label><@f.i18n 'page.email' 'Email' /></label>
-                  <@f.formInput 'form.email' 'form-control' 'err form-control' 'placeholder="Email" maxlength="50" autocomplete="off"' />
+                  <@f.formInput 'form.email' 'form-control' 'err form-control' 'placeholder="${f.fi18n("page.email", "Email")}" maxlength="50" autocomplete="off"' />
                 </div>
               </div>
               <div class="row control-group">

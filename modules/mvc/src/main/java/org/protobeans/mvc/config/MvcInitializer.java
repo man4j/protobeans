@@ -10,12 +10,9 @@ import javax.servlet.SessionTrackingMode;
 
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
-import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextListener;
-import org.springframework.web.context.support.ServletContextScope;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -43,34 +40,22 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
     }
 
     @Override
+    protected WebApplicationContext createServletApplicationContext() {
+        return rootApplicationContext;
+    }
+
+    @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
+        rootApplicationContext.setServletContext(servletContext);
+        
         servletContext.addListener(RequestContextListener.class);//Для того, чтобы запрос был доступен в фильтрах, например в SocialAuthenticationFilter
+        servletContext.setSessionTrackingModes(Collections.singleton(SessionTrackingMode.COOKIE));
+        
+        //Некоторые классы вроде WebMvcConfigurationSupport зависят от servletContext, но получается, что пост-процессор
+        //почему-то срабатывает позже, чем это нужно поэтому распихиваем servletContext вручную
+        ConfigurableListableBeanFactory bf = (ConfigurableListableBeanFactory) rootApplicationContext.getAutowireCapableBeanFactory();
+        bf.getBeansOfType(ServletContextAware.class).values().forEach(b -> b.setServletContext(servletContext));
         
         super.onStartup(servletContext);
-        
-        servletContext.setSessionTrackingModes(Collections.singleton(SessionTrackingMode.COOKIE));
-    }
-    
-    @Override
-    protected void registerContextLoaderListener(ServletContext servletContext) {
-        if (servletContext.getAttribute("rootAppCtx") == null) {            
-            if (rootApplicationContext.getServletContext() == null) {//in case then spring-test already inject MockServletContext
-                rootApplicationContext.setServletContext(servletContext);
-                
-                ConfigurableListableBeanFactory bf = (ConfigurableListableBeanFactory) rootApplicationContext.getAutowireCapableBeanFactory();
-                
-                //see AbstractRefreshableWebApplicationContext::postProcessBeanFactory
-                ServletContextScope appScope = new ServletContextScope(servletContext);
-                bf.registerScope(WebApplicationContext.SCOPE_APPLICATION, appScope);
-                servletContext.setAttribute(ServletContextScope.class.getName(), appScope);
-                
-                WebApplicationContextUtils.registerEnvironmentBeans(bf, servletContext, null);
-                
-                bf.getBeansOfType(ServletContextAware.class).values().forEach(b -> b.setServletContext(servletContext));
-            }
-            
-            servletContext.addListener(new ContextLoaderListener(rootApplicationContext));            
-            servletContext.setAttribute("rootAppCtx", rootApplicationContext);
-        }
     }
 }

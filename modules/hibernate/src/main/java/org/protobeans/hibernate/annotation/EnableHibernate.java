@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 import org.protobeans.hibernate.config.HibernateConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.orm.jpa.vendor.Database;
 
 /**
  * My hibernate documentation:
@@ -202,6 +203,8 @@ org.hibernate.AnnotationException: Use of FetchMode.SUBSELECT not allowed on ToO
 @Configuration
 public @interface EnableHibernate {
     String showSql() default "false";
+    
+    Database dialect();
     
     /**
      * Also do not forget set log level for org.hibernate.stat to DEBUG

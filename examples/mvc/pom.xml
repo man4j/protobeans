@@ -27,12 +27,17 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     
     <dependency>
-      <groupId>com.ning</groupId>
+      <groupId>org.asynchttpclient</groupId>
       <artifactId>async-http-client</artifactId>
-      <version>1.9.40</version>      
       <scope>test</scope>
     </dependency>
             
@@ -40,7 +45,6 @@
     <dependency>
       <groupId>org.skyscreamer</groupId>
       <artifactId>jsonassert</artifactId>
-      <version>1.5.0</version>    
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -66,45 +70,7 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      
-      <!-- current version not preserve last modified for static resources (patch allready on github -->
-      <plugin>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.1.0</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>            
-            <configuration>
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>${project.groupId}.mvc.example.Main</mainClass>
-                </transformer>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/spring.handlers</resource>
-                </transformer>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/spring.schemas</resource>
-                </transformer>
-              </transformers> 
-              <filters>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <excludes>
-                    <exclude>META-INF/*.SF</exclude>
-                    <exclude>META-INF/*.DSA</exclude>
-                    <exclude>META-INF/*.RSA</exclude>
-                  </excludes>
-                </filter>
-              </filters>  
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+      </plugin>      
     </plugins>
   </build>
 </project>

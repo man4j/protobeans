@@ -22,6 +22,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class HibernateConfig {
     private String showSql;
     
+    private Database dialect;
+    
     private String enableStatistics;
     
     private Class<?>[] basePackageClasses;
@@ -36,7 +38,7 @@ public class HibernateConfig {
        em.setDataSource(dataSource);
        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
        jpaVendorAdapter.setShowSql("true".equals(showSql));
-       jpaVendorAdapter.setDatabase(Database.MYSQL);
+       jpaVendorAdapter.setDatabase(dialect);
        
        em.setJpaPropertyMap(new HashMap<String, Object>() {{put("hibernate.id.new_generator_mappings", true);
                                                             put("hibernate.format_sql", true);

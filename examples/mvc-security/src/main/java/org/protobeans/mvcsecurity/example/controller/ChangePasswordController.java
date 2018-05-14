@@ -2,7 +2,7 @@ package org.protobeans.mvcsecurity.example.controller;
 
 import javax.validation.Valid;
 
-import org.protobeans.mvcsecurity.example.service.InMemoryProfileService;
+import org.protobeans.mvcsecurity.example.service.UserProfileService;
 import org.protobeans.security.model.ChangePasswordForm;
 import org.protobeans.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class ChangePasswordController {
     private SecurityService securityService;
     
     @Autowired
-    private InMemoryProfileService profileService;
+    private UserProfileService profileService;
         
     @GetMapping
     String prepareForm(@SuppressWarnings("unused") @ModelAttribute("form") ChangePasswordForm form) {
@@ -31,7 +31,7 @@ public class ChangePasswordController {
     String processForm(@ModelAttribute("form") @Valid ChangePasswordForm form, BindingResult result) {
         if (result.hasErrors()) return "/change_password";
         
-        profileService.updatePassword(securityService.getCurrentUser(), form.getPassword());
+        profileService.updatePassword(securityService.getCurrentUser().getUsername(), form.getPassword());
         
         return "/change_success";
     }

@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-parent</artifactId>
-  <version>0.1.12</version>
+  <version>0.1.13</version>
   <packaging>pom</packaging>
   
   <properties>
@@ -11,7 +11,7 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     
-    <version.spring>5.0.1.RELEASE</version.spring>
+    <version.spring>5.0.5.RELEASE</version.spring>
     <version.jackson>2.9.2</version.jackson>
 
     <maven.repo.dir>${user.dir}/maven</maven.repo.dir>
@@ -21,6 +21,7 @@
     <module>modules/core</module>
     <module>modules/jdbc</module>
     <module>modules/mysql</module>
+    <module>modules/postgresql</module>
     <module>modules/hibernate</module>
     <module>modules/flyway</module>
     <module>modules/freemarker</module>
@@ -31,7 +32,7 @@
     <module>modules/gmail</module>
     <module>modules/async</module>
     <module>modules/scheduler</module>
-<!--    <module>modules/security</module>-->
+    <module>modules/security</module>
 <!--    <module>modules/social</module>-->
     <module>modules/future</module>
     <module>modules/monitoring</module>
@@ -132,7 +133,7 @@
       <dependency>
         <groupId>com.zaxxer</groupId>
         <artifactId>HikariCP</artifactId>
-        <version>2.7.2</version>
+        <version>3.1.0</version>
       </dependency>
       
       <!-- MySQL -->
@@ -142,11 +143,18 @@
         <version>5.1.44</version>
       </dependency>
 
+      <!-- PostgreSQL -->
+      <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>42.2.2</version>
+      </dependency>
+
       <!-- Flyway -->      
       <dependency>
         <groupId>org.flywaydb</groupId>
         <artifactId>flyway-core</artifactId>
-        <version>4.2.0</version>
+        <version>5.1-CRDB</version>
       </dependency>
 
       <!-- Servlet API -->
@@ -187,8 +195,8 @@
       <!-- Hibernate -->
       <dependency>
         <groupId>org.hibernate</groupId>
-        <artifactId>hibernate-entitymanager</artifactId>
-        <version>5.2.12.Final</version>
+        <artifactId>hibernate-core</artifactId>
+        <version>5.3.0.CR2</version>
       </dependency>
 
       <!-- Kafka -->

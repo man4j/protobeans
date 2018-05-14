@@ -52,7 +52,7 @@ public class UndertowConfig {
     
     private int sessionTimeout;
     
-    @Autowired(required = false)
+    @Autowired
     private List<Class<? extends WebApplicationInitializer>> springInitializers = new ArrayList<>();
     
     @SuppressWarnings("resource")

@@ -32,8 +32,12 @@ public class FlywayConfig {
     public void migrate() throws InterruptedException {
         Flyway fw = new Flyway();
         
-        fw.setSchemas(schema);
-        fw.setDataSource(dbProtocol + dbHost + ":" + dbPort, user, password);
+        if (dbProtocol.contains("postgresql")) {        
+            fw.setDataSource(dbProtocol + dbHost + ":" + dbPort + "/" + schema, user, password);
+        } else {
+            fw.setDataSource(dbProtocol + dbHost + ":" + dbPort, user, password);
+        }
+        
         fw.setLocations("classpath:migrations");
         
         while (true) {
@@ -41,8 +45,8 @@ public class FlywayConfig {
                 fw.migrate();
                 break;
             } catch (Exception e) {
-                if (e.getMessage().contains("Unable to obtain Jdbc connection") && waitDb) {
-                    logger.warn(e.getMessage());
+                if (e.getMessage() != null && e.getMessage().contains("Unable to obtain Jdbc connection") && waitDb) {
+                    logger.warn(e.getMessage(), e);
                     logger.warn("Waiting for database...");
                     
                     Thread.sleep(1000);

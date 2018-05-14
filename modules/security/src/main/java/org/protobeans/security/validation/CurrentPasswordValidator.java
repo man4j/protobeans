@@ -3,10 +3,10 @@ package org.protobeans.security.validation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import org.protobeans.security.model.AbstractProfile;
 import org.protobeans.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,7 +15,7 @@ public class CurrentPasswordValidator implements ConstraintValidator<CurrentPass
     private SecurityService securityService;
     
     @Autowired
-    private ShaPasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
     
     @Override
     public void initialize(CurrentPassword constraintAnnotation) {
@@ -26,8 +26,8 @@ public class CurrentPasswordValidator implements ConstraintValidator<CurrentPass
     public boolean isValid(String password, ConstraintValidatorContext context) {
         if (password == null || password.trim().isEmpty()) return true;
         
-        AbstractProfile currentUser = securityService.getCurrentUser();
+        User currentUser = securityService.getCurrentUser();
         
-        return passwordEncoder.isPasswordValid(currentUser.getPassword(), password, currentUser.getEmail());
+        return passwordEncoder.matches(password, currentUser.getPassword());
     }
 }

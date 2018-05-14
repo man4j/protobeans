@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>org.flywaydb</groupId>
+  <artifactId>flyway-core</artifactId>
+  <versioning>
+    <release>5.1-CRDB</release>
+    <versions>
+      <version>5.1-CRDB</version>
+    </versions>
+    <lastUpdated>20180513163206</lastUpdated>
+  </versioning>
+</metadata>

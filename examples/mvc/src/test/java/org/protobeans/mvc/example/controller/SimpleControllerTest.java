@@ -3,6 +3,8 @@ package org.protobeans.mvc.example.controller;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +22,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ning.http.client.AsyncHttpClient;
 
 import io.undertow.util.Headers;
 
@@ -60,7 +61,7 @@ public class SimpleControllerTest {
         String expectedStringResult = "Hello, Masha!";
         String expectedJsonResult = objectMapper.writeValueAsString(expectedStringResult);
         
-        try (AsyncHttpClient client = new AsyncHttpClient()) {
+        try (AsyncHttpClient client = new DefaultAsyncHttpClient()) {
             String response = client.prepareGet("http://localhost:8080/echo?param=Masha").addHeader(Headers.ACCEPT_STRING, MediaType.APPLICATION_JSON_VALUE)
                                                                                         .execute().get().getResponseBody();
             

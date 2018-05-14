@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>org.flywaydb</groupId>
+  <artifactId>flyway-parent</artifactId>
+  <versioning>
+    <versions>
+      <version>0-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20180513163109</lastUpdated>
+  </versioning>
+</metadata>

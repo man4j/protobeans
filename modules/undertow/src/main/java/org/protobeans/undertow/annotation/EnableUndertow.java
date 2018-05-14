@@ -26,5 +26,5 @@ public @interface EnableUndertow {
     
     String errorPage() default "";
     
-    int sessionTimeout() default 30;
+    int sessionTimeout() default 30000;
 }

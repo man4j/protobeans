@@ -40,7 +40,7 @@ public class InjectFromAnnotationBeanPostProcessor implements BeanPostProcessor 
         try {
             injectFrom = ctx.findAnnotationOnBean(beanName, InjectFrom.class);
         } catch (NoSuchBeanDefinitionException e) {
-            logger.warn(e.getMessage());
+            logger.debug(e.getMessage());
         }
         
         if (injectFrom != null) {
@@ -60,7 +60,7 @@ public class InjectFromAnnotationBeanPostProcessor implements BeanPostProcessor 
                             if (injectedValue instanceof String) {
                                 String injectedString = (String) injectedValue;
                                 
-                                if (injectedString.startsWith("s:")) {
+                                if (injectedString.startsWith("s:") || injectedString.startsWith("e:") || injectedString.startsWith("p:")) {
                                     String propName = injectedString.split(":")[1];
                                     
                                     Optional<String> value = Stream.of(ctx.getEnvironment().getProperty(propName),

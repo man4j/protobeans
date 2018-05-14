@@ -6,8 +6,8 @@ import org.protobeans.mvc.controller.advice.RequestContextHolder;
 import org.protobeans.mvcsecurity.example.model.MySignUpForm;
 import org.protobeans.mvcsecurity.example.model.UserProfile;
 import org.protobeans.mvcsecurity.example.service.EmailService;
-import org.protobeans.mvcsecurity.example.service.InMemoryProfileService;
 import org.protobeans.mvcsecurity.example.service.MessageGenerator;
+import org.protobeans.mvcsecurity.example.service.UserProfileService;
 import org.protobeans.security.annotation.Anonymous;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Anonymous("/signup")
 public class SignUpController {
     @Autowired
-    private InMemoryProfileService profileService;
+    private UserProfileService profileService;
     
     @Autowired
     private EmailService emailService;
@@ -42,9 +42,9 @@ public class SignUpController {
     String processForm(@ModelAttribute("form") @Valid MySignUpForm form, BindingResult result) {
         if (result.hasErrors()) return "/signup";
         
-        UserProfile p = profileService.create(form.getEmail(), form.getPassword(), form.getUserName(), false);
+        UserProfile p = profileService.createAndSave(form.getEmail(), form.getPassword(), form.getUserName(), false);
         
-        emailService.sendMessage(form.getEmail(), messageGenerator.generateEmailSignInMessage(form.getPassword(), p.getConfirmUuid(), null, requestContextHolder.getRequestContext()));
+        emailService.sendMessage(form.getEmail(), messageGenerator.generateEmailSignInMessage(form.getPassword(), p.getConfirmUuid(), p.getEmail(), requestContextHolder.getRequestContext()));
 
         return "/check_email";
     }
