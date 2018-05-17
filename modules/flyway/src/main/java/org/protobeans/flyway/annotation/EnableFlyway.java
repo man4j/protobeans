@@ -14,17 +14,5 @@ import org.springframework.context.annotation.Import;
 @Import(FlywayConfig.class)
 @Configuration
 public @interface EnableFlyway {
-    String dbProtocol() default "jdbc:mysql://";
-    
-    String dbHost();
-    
-    String dbPort() default "3306";
-    
-    String schema();
-    
-    String user();
-    
-    String password();
-    
-    boolean waitDb() default false;
+    //empty
 }

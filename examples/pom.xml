@@ -10,7 +10,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>    
-    <protobeans.version>0.1.12</protobeans.version>
+    <protobeans.version>0.1.14</protobeans.version>
     <version.spring>5.0.5.RELEASE</version.spring>
   </properties>
 
@@ -235,12 +235,27 @@
       </plugin>
       
       <plugin>
+        <groupId>pl.project13.maven</groupId>
+        <artifactId>git-commit-id-plugin</artifactId>
+        <version>2.2.4</version>
+        <executions>
+          <execution>
+            <id>get-the-git-infos</id>
+            <goals>
+              <goal>revision</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
+      </plugin>    
+      
+      <plugin>
         <groupId>com.spotify</groupId>
         <artifactId>docker-maven-plugin</artifactId>
         <version>1.0.0</version>
         <configuration>
-          <serverId>docker-hub</serverId>
-          <imageName>imagenarium/${project.artifactId}:${project.version}</imageName>
+          <serverId>registry</serverId>
+          <imageName>${env.CI_REGISTRY}/${env.CI_PROJECT_PATH_SLUG}/${project.artifactId}:${env.CI_COMMIT_REF_NAME}-${git.commit.id.abbrev}</imageName>
           <baseImage>imagenarium/jre-docker:8</baseImage>
           <entryPoint>["java", "-Xmx256m", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
           <resources>
@@ -269,8 +284,8 @@
   
   <repositories>
     <repository>
-      <id>Spring Milestone</id>
-      <url>http://repo.spring.io/libs-milestone/</url>
+      <id>protobeans</id>
+      <url>https://raw.githubusercontent.com/man4j/protobeans/master/maven</url>
     </repository>
   </repositories>
 </project>

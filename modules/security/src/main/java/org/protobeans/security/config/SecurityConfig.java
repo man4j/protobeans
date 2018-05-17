@@ -23,6 +23,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
@@ -42,6 +43,7 @@ import org.springframework.web.WebApplicationInitializer;
 @EnableWebSecurity
 @InjectFrom(EnableSecurity.class)
 @ComponentScan(basePackageClasses={SecurityService.class, SecurityControllerAdvice.class, CurrentPassword.class})
+@Order(10)//для того, чтобы фильтры SpringSecurity инициализировались позже фильтров WebMVC
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private String[] ignoreUrls;
     

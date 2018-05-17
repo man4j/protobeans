@@ -40,6 +40,8 @@ public class PostgreSqlConfig {
         pgSimpleDataSource.setLoadBalanceHosts(true);
         pgSimpleDataSource.setSsl(false);
         
+        System.out.println("[PROTOBEANS]: Use postgres URL: " + pgSimpleDataSource.getUrl());
+        
         ds.setDataSource(pgSimpleDataSource);
         ds.setMaximumPoolSize(maxPoolSize);
         ds.setAutoCommit(false);

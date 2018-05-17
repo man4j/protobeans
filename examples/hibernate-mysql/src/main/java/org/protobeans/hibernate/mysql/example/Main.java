@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.orm.jpa.vendor.Database;
 
 @EnableMySql(dbHost = "s:host", schema = "s:schema", user = "root", password = "s:password")
-@EnableFlyway(dbHost = "s:host", schema = "s:schema", user = "root", password = "s:password")
+@EnableFlyway
 @EnableHibernate(showSql = "true", dialect = Database.MYSQL, basePackageClasses = User.class)
 @ComponentScan(basePackageClasses = {UserDao.class, UserService.class})
 public class Main {

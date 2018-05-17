@@ -1,12 +1,14 @@
 package org.protobeans.flyway.config;
 
 import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
 
 import org.flywaydb.core.Flyway;
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.flyway.annotation.EnableFlyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -14,30 +16,14 @@ import org.springframework.context.annotation.Configuration;
 public class FlywayConfig {
     private static final Logger logger = LoggerFactory.getLogger(FlywayConfig.class);
     
-    private String dbProtocol;
-    
-    private String dbHost;
-    
-    private String dbPort;
-    
-    private String schema;
-    
-    private String user;
-    
-    private String password;
-    
-    private boolean waitDb;
+    @Autowired
+    private DataSource dataSource;
     
     @PostConstruct
     public void migrate() throws InterruptedException {
         Flyway fw = new Flyway();
         
-        if (dbProtocol.contains("postgresql")) {        
-            fw.setDataSource(dbProtocol + dbHost + ":" + dbPort + "/" + schema, user, password);
-        } else {
-            fw.setDataSource(dbProtocol + dbHost + ":" + dbPort, user, password);
-        }
-        
+        fw.setDataSource(dataSource);
         fw.setLocations("classpath:migrations");
         
         while (true) {
@@ -45,7 +31,7 @@ public class FlywayConfig {
                 fw.migrate();
                 break;
             } catch (Exception e) {
-                if (e.getMessage() != null && e.getMessage().contains("Unable to obtain Jdbc connection") && waitDb) {
+                if (e.getMessage() != null && e.getMessage().contains("Unable to obtain Jdbc connection")) {
                     logger.warn(e.getMessage(), e);
                     logger.warn("Waiting for database...");
                     

@@ -1,5 +1,7 @@
 package org.protobeans.mvcsecurity.example;
 
+import java.nio.charset.StandardCharsets;
+
 import org.protobeans.async.annotation.EnableAsync;
 import org.protobeans.flyway.annotation.EnableFlyway;
 import org.protobeans.freemarker.annotation.EnableFreeMarker;
@@ -15,8 +17,14 @@ import org.protobeans.mvcsecurity.example.service.UserProfileService;
 import org.protobeans.postgresql.annotation.EnablePostgreSql;
 import org.protobeans.security.annotation.EnableSecurity;
 import org.protobeans.undertow.annotation.EnableUndertow;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.orm.jpa.vendor.Database;
+import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.DefaultSecurityFilterChain;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 @EnableUndertow
 @EnableFreeMarker(devMode = "true")
@@ -25,11 +33,21 @@ import org.springframework.orm.jpa.vendor.Database;
 @EnableI18n(isCached = "false")
 @EnableGMail(user = "e:gmailUser", password = "e:gmailPassword")
 @EnableAsync
-@EnablePostgreSql(dbHost = "e:dbHost", dbPort = "26257", schema = "testdb", user = "root", password = "")
-@EnableFlyway(dbProtocol = "jdbc:postgresql://", dbHost = "e:dbHost", dbPort = "26257", schema = "testdb", user = "root", password = "", waitDb = true)
+@EnablePostgreSql(dbHost = "e:dbHosts", dbPort = "0", schema = "testdb", user = "root", password = "")
+@EnableFlyway
 @EnableHibernate(dialect = Database.POSTGRESQL, basePackageClasses = UserProfile.class)
 @ComponentScan(basePackageClasses={MainController.class, UserProfileService.class, UserProfileDao.class})
 public class Main {
+    @Bean
+    public SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> securityConfigurer() {
+        return new SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
+            @Override
+            public void configure(HttpSecurity builder) throws Exception {
+                builder.addFilterBefore(new CharacterEncodingFilter(StandardCharsets.UTF_8.name(), true, true), ChannelProcessingFilter.class);
+            }
+        };
+    }
+    
     public static void main(String[] args) {
         MvcEntryPoint.run(Main.class);
     }
