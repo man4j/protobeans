@@ -1,7 +1,6 @@
 package org.protobeans.flyway.config;
 
 import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
 
 import org.flywaydb.core.Flyway;
 import org.protobeans.core.annotation.InjectFrom;
@@ -11,19 +10,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
+import com.zaxxer.hikari.HikariDataSource;
+
 @Configuration
 @InjectFrom(EnableFlyway.class)
 public class FlywayConfig {
     private static final Logger logger = LoggerFactory.getLogger(FlywayConfig.class);
     
     @Autowired
-    private DataSource dataSource;
+    private HikariDataSource dataSource;
     
     @PostConstruct
     public void migrate() throws InterruptedException {
         Flyway fw = new Flyway();
         
-        fw.setDataSource(dataSource);
+        fw.setDataSource(dataSource.getDataSource());
         fw.setLocations("classpath:migrations");
         
         while (true) {
