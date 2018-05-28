@@ -5,9 +5,9 @@ import java.nio.charset.StandardCharsets;
 import org.protobeans.async.annotation.EnableAsync;
 import org.protobeans.flyway.annotation.EnableFlyway;
 import org.protobeans.freemarker.annotation.EnableFreeMarker;
-import org.protobeans.gmail.annotation.EnableGMail;
 import org.protobeans.hibernate.annotation.EnableHibernate;
 import org.protobeans.i18n.annotation.EnableI18n;
+import org.protobeans.mail.annotation.EnableMail;
 import org.protobeans.mvc.MvcEntryPoint;
 import org.protobeans.mvc.annotation.EnableMvc;
 import org.protobeans.mvcsecurity.example.controller.MainController;
@@ -31,7 +31,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @EnableMvc(resourcesPath = "static", resourcesUrl = "static")
 @EnableSecurity(ignoreUrls = "static", loginUrl = "/signin")
 @EnableI18n(isCached = "false")
-@EnableGMail(user = "e:gmailUser", password = "e:gmailPassword")
+@EnableMail(user = "e:gmailUser", password = "e:gmailPassword")
 @EnableAsync
 @EnablePostgreSql(dbHost = "e:dbHosts", dbPort = "0", schema = "testdb", user = "root", password = "")
 @EnableFlyway

@@ -23,7 +23,7 @@
     <module>mvc</module>
     <module>mvc-security</module>
     <module>webservices</module>
-    <module>gmail</module>
+    <module>mail</module>
     <module>scheduler</module>
     <module>monitoring</module>
   </modules>
@@ -66,7 +66,7 @@
 
       <dependency>
         <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-gmail</artifactId>
+        <artifactId>protobeans-mail</artifactId>
         <version>${protobeans.version}</version>
       </dependency>
 

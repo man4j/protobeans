@@ -13,8 +13,6 @@
     
     <version.spring>5.0.5.RELEASE</version.spring>
     <version.jackson>2.9.2</version.jackson>
-
-    <maven.repo.dir>${user.dir}/maven</maven.repo.dir>
   </properties>
 
   <modules>
@@ -295,51 +293,15 @@
           </execution>
         </executions>
       </plugin>
-
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.0.2</version>
-        <executions>
-          <execution>
-            <id>copy-configuration-files</id>
-            <phase>install</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${maven.repo.dir}/org/protobeans/${project.artifactId}/${project.version}</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${project.build.directory}</directory>
-                  <includes>
-                    <include>*.jar</include>
-                  </includes>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin> 
-
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.8</version>
-        <executions>
-          <execution>
-            <phase>install</phase>
-            <configuration>
-              <target>
-                <copy file="${project.basedir}/pom.xml" tofile="${maven.repo.dir}/org/protobeans/${project.artifactId}/${project.version}/${project.artifactId}-${project.version}.pom"/>
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>      
     </plugins>
   </build>
+
+  <distributionManagement>
+    <repository>
+      <id>internal</id>
+      <url>file://${user.dir}/maven</url>
+    </repository>
+  </distributionManagement>
   
   <repositories>
     <repository>
