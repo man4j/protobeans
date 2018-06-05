@@ -8,28 +8,34 @@
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
-  <artifactId>protobeans-postgresql</artifactId>
+  <artifactId>protobeans-cxf</artifactId>
   <packaging>jar</packaging>
-
+  
   <dependencies>
     <dependency>
       <groupId>org.protobeans</groupId>
-      <artifactId>protobeans-core</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-jdbc</artifactId>
-    </dependency>
-      
-    <dependency>
-      <groupId>com.zaxxer</groupId>
-      <artifactId>HikariCP</artifactId>
+      <artifactId>protobeans-mvc</artifactId>
     </dependency>
     
     <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
+      <groupId>com.sun.xml.ws</groupId>
+      <artifactId>jaxws-rt</artifactId>
+      <type>pom</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-frontend-jaxws</artifactId>    
+    </dependency>
+        
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-transports-http</artifactId>
+    </dependency>     
+    
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-features-logging</artifactId>
     </dependency>
   </dependencies>
 </project>

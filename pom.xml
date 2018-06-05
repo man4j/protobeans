@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-parent</artifactId>
-  <version>0.1.16</version>
+  <version>0.1.17</version>
   <packaging>pom</packaging>
   
   <properties>
@@ -31,6 +31,7 @@
     <module>modules/async</module>
     <module>modules/scheduler</module>
     <module>modules/security</module>
+    <module>modules/cxf</module>
 <!--    <module>modules/social</module>-->
     <module>modules/future</module>
     <module>modules/monitoring</module>
@@ -181,6 +182,32 @@
         <groupId>org.freemarker</groupId>
         <artifactId>freemarker</artifactId>
         <version>2.3.26-incubating</version>
+      </dependency>
+
+      <!-- CXF -->
+      <dependency>
+        <groupId>com.sun.xml.ws</groupId>
+        <artifactId>jaxws-rt</artifactId>
+        <version>2.3.0</version>
+        <type>pom</type>
+      </dependency>
+    
+      <dependency>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-rt-frontend-jaxws</artifactId>
+        <version>3.2.4</version>    
+      </dependency>
+      
+      <dependency>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-rt-transports-http</artifactId>
+        <version>3.2.4</version>    
+      </dependency>
+      
+      <dependency>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-rt-features-logging</artifactId>
+        <version>3.2.4</version>
       </dependency>
 
       <!-- JSON Assert -->      
