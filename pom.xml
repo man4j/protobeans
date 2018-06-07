@@ -26,13 +26,11 @@
     <module>modules/i18n</module>
     <module>modules/undertow</module>
     <module>modules/mvc</module>
-    <module>modules/webservices</module>
     <module>modules/mail</module>
     <module>modules/async</module>
     <module>modules/scheduler</module>
     <module>modules/security</module>
     <module>modules/cxf</module>
-<!--    <module>modules/social</module>-->
     <module>modules/future</module>
     <module>modules/monitoring</module>
     <module>modules/kafka</module>
@@ -228,7 +226,7 @@
       <dependency>
         <groupId>org.springframework.kafka</groupId>
         <artifactId>spring-kafka</artifactId>
-        <version>2.1.4.RELEASE</version>
+        <version>2.1.6.RELEASE</version>
       </dependency>
 
       <!-- Spring -->
