@@ -83,6 +83,7 @@ public class KafkaMessagingConfig {
         
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
         props.put(ProducerConfig.ACKS_CONFIG, "all");
+        props.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "gzip");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         
@@ -90,7 +91,7 @@ public class KafkaMessagingConfig {
     }
     
     @Bean
-    public KafkaAdmin admin() throws InterruptedException {
+    public KafkaAdmin admin() {
         Map<String, Object> configs = new HashMap<>();
         
         configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
@@ -98,11 +99,6 @@ public class KafkaMessagingConfig {
         KafkaAdmin admin = new KafkaAdmin(configs);
         
         admin.setApplicationContext(ctx);
-
-        while (!admin.initialize()) {
-            System.out.println("Wait kafka broker...");
-            Thread.sleep(3_000);
-        }
 
         return admin;
     }
