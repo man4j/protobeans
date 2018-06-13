@@ -3,12 +3,13 @@
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-security</artifactId>
   <versioning>
-    <release>0.1.18</release>
+    <release>0.1.19</release>
     <versions>
       <version>0.1.16</version>
       <version>0.1.17</version>
       <version>0.1.18</version>
+      <version>0.1.19</version>
     </versions>
-    <lastUpdated>20180610195439</lastUpdated>
+    <lastUpdated>20180613184257</lastUpdated>
   </versioning>
 </metadata>
