@@ -29,6 +29,7 @@ public class FlywayConfig {
         
         while (true) {
             try {
+                fw.repair();
                 fw.migrate();
                 break;
             } catch (Exception e) {
