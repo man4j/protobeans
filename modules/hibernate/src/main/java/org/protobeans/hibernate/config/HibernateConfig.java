@@ -47,6 +47,7 @@ public class HibernateConfig {
                                                             put("hibernate.order_inserts", true);
                                                             put("hibernate.order_updates", true);
                                                             put("hibernate.auto_quote_keyword", true);
+                                                            put("hibernate.physical_naming_strategy", "org.protobeans.hibernate.config.ProtobeansNamingStrategy");
                                                             
                                                             //if connection pool already disables autocommit
                                                             put("hibernate.connection.provider_disables_autocommit", true);
