@@ -11,6 +11,7 @@ import org.protobeans.core.util.LambdaExceptionUtil;
 import org.protobeans.mvc.util.PathUtils;
 import org.protobeans.security.advice.SecurityControllerAdvice;
 import org.protobeans.security.annotation.Anonymous;
+import org.protobeans.security.annotation.DisableCsrf;
 import org.protobeans.security.annotation.EnableSecurity;
 import org.protobeans.security.annotation.PermitAll;
 import org.protobeans.security.auth.UuidAuthenticationProvider;
@@ -75,11 +76,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {     
-        String[] anonymousPatterns = ctx.getBeansWithAnnotation(Anonymous.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(Anonymous.class).value()).toArray(String[]::new);
-        String[] permitAllPatterns = ctx.getBeansWithAnnotation(PermitAll.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(PermitAll.class).value()).toArray(String[]::new);
+        String[] anonymousPatterns = ctx.getBeansWithAnnotation(Anonymous.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(Anonymous.class).mvcPattern()).toArray(String[]::new);
+        String[] permitAllPatterns = ctx.getBeansWithAnnotation(PermitAll.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(PermitAll.class).mvcPattern()).toArray(String[]::new);
+        String[] disableCsrfPatterns = ctx.getBeansWithAnnotation(PermitAll.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(DisableCsrf.class).antPattern()).toArray(String[]::new);
         
         http.authenticationProvider(new UuidAuthenticationProvider())//add custom provider
             .authorizeRequests().mvcMatchers(permitAllPatterns).permitAll().mvcMatchers(anonymousPatterns).anonymous().anyRequest().authenticated()
+            .and().csrf().ignoringAntMatchers(disableCsrfPatterns)
             .and().rememberMe().rememberMeServices(rememberMeServices()).key("123").authenticationSuccessHandler(new CurrentUrlAuthenticationSuccessHandler())
             .and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(loginUrl))
                                       .accessDeniedHandler((req, res, e) -> {res.setStatus(HttpServletResponse.SC_FORBIDDEN);});
