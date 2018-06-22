@@ -7,7 +7,7 @@ import org.springframework.core.annotation.AliasFor;
 import org.springframework.transaction.annotation.Transactional;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Transactional(rollbackFor = Exception.class)
+@Transactional(rollbackFor = Exception.class, transactionManager = "txManager")
 public @interface WithTransaction {
     @AliasFor(annotation = Transactional.class)
     boolean readOnly() default false;
