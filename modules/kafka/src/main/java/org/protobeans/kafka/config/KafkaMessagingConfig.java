@@ -22,6 +22,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.transaction.KafkaTransactionManager;
 
 @Configuration
 @InjectFrom(EnableKafkaMessaging.class)
@@ -45,6 +46,8 @@ public class KafkaMessagingConfig {
         factory.setConsumerFactory(consumerFactory());
         factory.setConcurrency(concurrency == -1 ? Runtime.getRuntime().availableProcessors() : concurrency);
         
+//        factory.getContainerProperties().setTransactionManager(kafkaTransactionManager());
+        
         return factory;
     }
         
@@ -63,6 +66,8 @@ public class KafkaMessagingConfig {
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset);
+//        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
+        props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
         
         return props;
     }
@@ -74,7 +79,16 @@ public class KafkaMessagingConfig {
     
     @Bean
     public ProducerFactory<String, String> producerFactory() {
-        return new DefaultKafkaProducerFactory<>(producerConfigs());
+        DefaultKafkaProducerFactory<String, String> defaultKafkaProducerFactory = new DefaultKafkaProducerFactory<>(producerConfigs());
+        
+        defaultKafkaProducerFactory.setTransactionIdPrefix("transaction");
+        
+        return defaultKafkaProducerFactory;
+    }
+    
+    @Bean
+    public KafkaTransactionManager<String, String> kafkaTransactionManager() {
+        return new KafkaTransactionManager<>(producerFactory());
     }
 
     @Bean

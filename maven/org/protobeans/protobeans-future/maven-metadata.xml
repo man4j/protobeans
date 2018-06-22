@@ -3,7 +3,7 @@
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-future</artifactId>
   <versioning>
-    <release>0.1.23</release>
+    <release>0.1.24</release>
     <versions>
       <version>0.1.16</version>
       <version>0.1.17</version>
@@ -13,7 +13,8 @@
       <version>0.1.21</version>
       <version>0.1.22</version>
       <version>0.1.23</version>
+      <version>0.1.24</version>
     </versions>
-    <lastUpdated>20180620175810</lastUpdated>
+    <lastUpdated>20180622121639</lastUpdated>
   </versioning>
 </metadata>
