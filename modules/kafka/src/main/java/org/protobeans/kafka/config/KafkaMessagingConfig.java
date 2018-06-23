@@ -47,7 +47,7 @@ public class KafkaMessagingConfig {
         factory.setConcurrency(concurrency == -1 ? Runtime.getRuntime().availableProcessors() : concurrency);
         factory.setBatchListener(true);
         
-//        factory.getContainerProperties().setTransactionManager(kafkaTransactionManager());
+        factory.getContainerProperties().setTransactionManager(kafkaTransactionManager());
         
         return factory;
     }
