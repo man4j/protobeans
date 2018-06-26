@@ -2,6 +2,7 @@ package org.protobeans.kafka.config;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -86,7 +87,7 @@ public class KafkaMessagingConfig {
     public ProducerFactory<String, String> producerFactory() {
         DefaultKafkaProducerFactory<String, String> defaultKafkaProducerFactory = new DefaultKafkaProducerFactory<>(producerConfigs());
         
-        defaultKafkaProducerFactory.setTransactionIdPrefix("transaction");
+        defaultKafkaProducerFactory.setTransactionIdPrefix(UUID.randomUUID().toString());
         
         return defaultKafkaProducerFactory;
     }
