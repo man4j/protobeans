@@ -22,6 +22,8 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.listener.ContainerStoppingBatchErrorHandler;
+import org.springframework.kafka.listener.ContainerStoppingErrorHandler;
 import org.springframework.kafka.transaction.KafkaTransactionManager;
 
 @Configuration
@@ -48,6 +50,8 @@ public class KafkaMessagingConfig {
         factory.setBatchListener(true);
         
         factory.getContainerProperties().setTransactionManager(kafkaTransactionManager());
+        factory.getContainerProperties().setErrorHandler(new ContainerStoppingErrorHandler());
+        factory.getContainerProperties().setBatchErrorHandler(new ContainerStoppingBatchErrorHandler());
         
         return factory;
     }
