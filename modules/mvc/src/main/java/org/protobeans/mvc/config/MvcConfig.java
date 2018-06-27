@@ -95,6 +95,11 @@ public class MvcConfig implements WebMvcConfigurer {
     
     @Override
     public Validator getValidator() {
+        return localValidatorFactoryBean();
+    }
+
+    @Bean
+    LocalValidatorFactoryBean localValidatorFactoryBean() {
         LocalValidatorFactoryBean validatorFactoryBean = new LocalValidatorFactoryBean();
         
         boolean cached = true;

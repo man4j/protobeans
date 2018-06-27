@@ -21,6 +21,6 @@ public class EmailExistsValidator implements ConstraintValidator<EmailExists, St
     public boolean isValid(String email, ConstraintValidatorContext context) {
         if (email == null || email.trim().isEmpty()) return true;
         
-        return profileService.getByEmail(email) != null;
+        return profileService.getById(email) != null;
     }
 }

@@ -32,13 +32,13 @@ public class SecurityService {
     public Authentication createUsernamePasswordAuthenticationToken(AbstractProfile profile, String rawPassword) {
         List<GrantedAuthority> authorities = profile.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
-        return new UsernamePasswordAuthenticationToken(new User(profile.getEmail(), profile.getPassword(), profile.isConfirmed(), true, true, true, authorities), rawPassword, authorities);
+        return new UsernamePasswordAuthenticationToken(new User(profile.getId(), profile.getPassword(), profile.isConfirmed(), true, true, true, authorities), rawPassword, authorities);
     }
     
     public Authentication createUuidAuthenticationToken(AbstractProfile profile, String uuid) {
         List<GrantedAuthority> authorities = profile.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
-        return new UuidAuthenticationToken(new UserWithUuid(profile.getEmail(), profile.getPassword(), profile.isConfirmed(), profile.getConfirmUuid(), authorities), uuid, authorities);
+        return new UuidAuthenticationToken(new UserWithUuid(profile.getId(), profile.getPassword(), profile.isConfirmed(), profile.getConfirmUuid(), authorities), uuid, authorities);
     }
 
     public boolean isCurrentUser(String login) {

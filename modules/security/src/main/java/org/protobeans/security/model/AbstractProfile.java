@@ -5,7 +5,7 @@ import java.util.Set;
 public interface AbstractProfile {
     Set<String> getRoles();
     
-    String getEmail();
+    String getId();
 
     String getPassword();
 

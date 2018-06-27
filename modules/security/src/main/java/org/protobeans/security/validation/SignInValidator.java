@@ -37,7 +37,7 @@ public class SignInValidator implements ConstraintValidator<SignIn, SignInForm> 
         
         context.disableDefaultConstraintViolation();
 
-        AbstractProfile profile = profileService.getByEmail(form.getEmail());
+        AbstractProfile profile = profileService.getById(form.getEmail());
         
         try {
             if (profile == null) throw new UsernameNotFoundException("");

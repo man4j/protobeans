@@ -18,7 +18,7 @@ public class ProtobeansUserDetailsService implements UserDetailsService {
     
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-        AbstractProfile profile = profileService.getByEmail(id);
+        AbstractProfile profile = profileService.getById(id);
 
         if (profile == null) {
             throw new UsernameNotFoundException(id);
