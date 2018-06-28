@@ -210,6 +210,6 @@ public @interface EnableHibernate {
      * Also do not forget set log level for org.hibernate.stat to DEBUG
      */
     String enableStatistics() default "false";
-    
-    Class<?>[] basePackageClasses();
+        
+    String[] basePackages();
 }

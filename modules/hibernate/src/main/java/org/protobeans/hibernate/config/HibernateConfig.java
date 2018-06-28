@@ -1,7 +1,6 @@
 package org.protobeans.hibernate.config;
 
 import java.util.HashMap;
-import java.util.stream.Stream;
 
 import javax.sql.DataSource;
 
@@ -26,7 +25,7 @@ public class HibernateConfig {
     
     private String enableStatistics;
     
-    private Class<?>[] basePackageClasses;
+    private String[] basePackages;
     
     @Autowired
     private DataSource dataSource;
@@ -61,7 +60,7 @@ public class HibernateConfig {
                                                           }});
        
        em.setJpaVendorAdapter(jpaVendorAdapter);       
-       em.setPackagesToScan(Stream.of(basePackageClasses).map(c -> c.getPackage().getName()).toArray(String[]::new));
+       em.setPackagesToScan(basePackages);
        
        return em;
     }
