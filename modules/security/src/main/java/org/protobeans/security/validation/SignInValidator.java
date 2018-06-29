@@ -32,8 +32,8 @@ public class SignInValidator implements ConstraintValidator<SignIn, SignInForm> 
 
     @Override
     public boolean isValid(SignInForm form, ConstraintValidatorContext context) {
-        if (form.getEmail() == null || form.getEmail().trim().isEmpty()) return true;
-        if (form.getPassword() == null || form.getPassword().trim().isEmpty()) return true;
+        if (form.getEmail() == null || form.getEmail().trim().isEmpty()) return false;
+        if (form.getPassword() == null || form.getPassword().trim().isEmpty()) return false;
         
         context.disableDefaultConstraintViolation();
 
