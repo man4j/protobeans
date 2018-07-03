@@ -32,12 +32,12 @@ public class SignInValidator implements ConstraintValidator<SignIn, SignInForm> 
 
     @Override
     public boolean isValid(SignInForm form, ConstraintValidatorContext context) {
-        if (form.getEmail() == null || form.getEmail().trim().isEmpty()) return true;
+        if (form.getId() == null || form.getId().trim().isEmpty()) return true;
         if (form.getPassword() == null || form.getPassword().trim().isEmpty()) return true;
         
         context.disableDefaultConstraintViolation();
 
-        AbstractProfile profile = profileService.getById(form.getEmail());
+        AbstractProfile profile = profileService.getById(form.getId());
         
         try {
             if (profile == null) throw new UsernameNotFoundException("");
