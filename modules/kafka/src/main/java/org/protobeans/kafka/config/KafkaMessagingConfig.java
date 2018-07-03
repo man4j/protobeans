@@ -23,10 +23,37 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.listener.AbstractMessageListenerContainer.AckMode;
 import org.springframework.kafka.listener.ContainerStoppingBatchErrorHandler;
 import org.springframework.kafka.listener.ContainerStoppingErrorHandler;
 import org.springframework.kafka.transaction.KafkaTransactionManager;
 
+/***
+ * 
+   KafkaProducer producer = createKafkaProducer(
+     “bootstrap.servers”, “localhost:9092”,
+     “transactional.id”, “my-transactional-id”);
+
+   producer.initTransactions();
+
+   KafkaConsumer consumer = createKafkaConsumer(
+     “bootstrap.servers”, “localhost:9092”,
+     “group.id”, “my-group-id”,
+     "isolation.level", "read_committed");
+
+   consumer.subscribe(singleton(“inputTopic”));
+
+   while (true) {
+     ConsumerRecords records = consumer.poll(Long.MAX_VALUE);
+     producer.beginTransaction();
+     for (ConsumerRecord record : records) {
+       producer.send(producerRecord(“outputTopic”, record));
+     }
+     producer.sendOffsetsToTransaction(currentOffsets(consumer), group);  
+     producer.commitTransaction();
+   }
+ *
+ */
 @Configuration
 @InjectFrom(EnableKafkaMessaging.class)
 @EnableKafka
@@ -50,6 +77,7 @@ public class KafkaMessagingConfig {
         factory.setConcurrency(concurrency == -1 ? Runtime.getRuntime().availableProcessors() : concurrency);
         factory.setBatchListener(true);
         
+        factory.getContainerProperties().setAckMode(AckMode.BATCH);
         factory.getContainerProperties().setTransactionManager(kafkaTransactionManager());
         factory.getContainerProperties().setErrorHandler(new ContainerStoppingErrorHandler());
         factory.getContainerProperties().setBatchErrorHandler(new ContainerStoppingBatchErrorHandler());
@@ -72,7 +100,7 @@ public class KafkaMessagingConfig {
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset);
-//        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
         
         return props;

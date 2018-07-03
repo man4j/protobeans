@@ -15,13 +15,18 @@ import org.protobeans.undertow.annotation.EnableUndertow;
 import org.protobeans.undertow.annotation.Initializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.util.MimeType;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.SpringServletContainerInitializer;
 import org.springframework.web.WebApplicationInitializer;
 
 import io.undertow.Undertow;
 import io.undertow.Undertow.Builder;
+import io.undertow.predicate.Predicate;
 import io.undertow.predicate.Predicates;
 import io.undertow.server.HttpHandler;
+import io.undertow.server.HttpServerExchange;
 import io.undertow.server.handlers.encoding.ContentEncodingRepository;
 import io.undertow.server.handlers.encoding.EncodingHandler;
 import io.undertow.server.handlers.encoding.GzipEncodingProvider;
@@ -82,7 +87,16 @@ public class UndertowConfig {
             deploymentInfo.addServletContainerInitalizer(new ServletContainerInitializerInfo(SpringServletContainerInitializer.class, springInitializersSet));
         }
         
-        final EncodingHandler handler = new EncodingHandler(new ContentEncodingRepository().addEncodingHandler("gzip", new GzipEncodingProvider(), 5, Predicates.parse("max-content-size[50000]"))).setNext(createServletDeploymentHandler());
+        final EncodingHandler handler = new EncodingHandler(new ContentEncodingRepository().addEncodingHandler("gzip", 
+                new GzipEncodingProvider(8), 50, Predicates.and(Predicates.maxContentSize(1024), 
+                                                               new CompressibleMimeTypePredicate("text/html",
+                                                                                                 "text/xml",
+                                                                                                 "text/plain",
+                                                                                                 "text/css",
+                                                                                                 "text/javascript",
+                                                                                                 "application/javascript",
+                                                                                                 "application/json"))))
+                                                          .setNext(createServletDeploymentHandler());
         
         return Undertow.builder().addHttpListener(Integer.parseInt(port), host)
                                  .setHandler(handler);
@@ -105,5 +119,31 @@ public class UndertowConfig {
     @PreDestroy
     public void stop() {
         undertow.stop();
+    }
+    
+    private static class CompressibleMimeTypePredicate implements Predicate {
+        private final List<MimeType> mimeTypes;
+
+        public CompressibleMimeTypePredicate(String... mimeTypes) {
+            this.mimeTypes = new ArrayList<>(mimeTypes.length);
+            for (String mimeTypeString : mimeTypes) {
+                this.mimeTypes.add(MimeTypeUtils.parseMimeType(mimeTypeString));
+            }
+        }
+
+        @Override
+        public boolean resolve(HttpServerExchange value) {
+            String contentType = value.getResponseHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
+            
+            if (contentType != null) {
+                for (MimeType mimeType : this.mimeTypes) {
+                    if (mimeType.isCompatibleWith(MimeTypeUtils.parseMimeType(contentType))) {
+                        return true;
+                    }
+                }
+            }
+            
+            return false;
+        }
     }
 }

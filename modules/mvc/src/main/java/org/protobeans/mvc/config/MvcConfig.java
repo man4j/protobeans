@@ -10,6 +10,7 @@ import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.mvc.annotation.EnableMvc;
 import org.protobeans.mvc.controller.advice.InitBinderControllerAdvice;
 import org.protobeans.mvc.util.FileUtils;
+import org.protobeans.mvc.util.FilterBean;
 import org.protobeans.mvc.util.GlobalModelAttribute;
 import org.protobeans.mvc.util.PathUtils;
 import org.protobeans.mvc.util.ProtobeansMessageInterpolator;
@@ -60,9 +61,16 @@ public class MvcConfig implements WebMvcConfigurer {
     @Autowired(required = false)
     private List<HttpMessageConverter<?>> converters = new ArrayList<>();
     
+    @Autowired(required = false)
+    private FilterBean filterBean;
+    
     @Bean
     public Class<? extends WebApplicationInitializer> mvcInitializer(ConfigurableWebApplicationContext ctx) {
         MvcInitializer.rootApplicationContext = ctx;
+        
+        if (filterBean != null) {
+            MvcInitializer.filters = filterBean.getFilters();
+        }
         
         return MvcInitializer.class; 
     }

@@ -2,6 +2,7 @@ package org.protobeans.hibernate.dao;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -57,6 +58,10 @@ abstract public class BaseDao<T> {
     
     public List<T> list(List<String> ids) {
         return em.unwrap(Session.class).byMultipleIds(entityClass).multiLoad(ids);
+    }
+    
+    public List<T> list(Set<String> ids) {
+        return em.unwrap(Session.class).byMultipleIds(entityClass).multiLoad(List.copyOf(ids));
     }
     
     public void delete(T entity) {

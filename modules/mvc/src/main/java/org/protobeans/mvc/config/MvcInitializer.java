@@ -1,7 +1,10 @@
 package org.protobeans.mvc.config;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
+import javax.servlet.Filter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.SessionTrackingMode;
@@ -16,6 +19,8 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     public static ConfigurableWebApplicationContext rootApplicationContext;
     
+    public static List<Filter> filters = new ArrayList<>();
+    
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return null;
@@ -24,6 +29,11 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
     @Override
     protected Class<?>[] getServletConfigClasses() {
         return null;
+    }
+    
+    @Override
+    protected Filter[] getServletFilters() {
+        return filters.toArray(new Filter[] {});
     }
 
     @Override

@@ -39,6 +39,7 @@ public class PostgreSqlConfig {
         pgSimpleDataSource.setDatabaseName(schema);
         pgSimpleDataSource.setLoadBalanceHosts(true);
         pgSimpleDataSource.setSsl(false);
+        pgSimpleDataSource.setReWriteBatchedInserts(true);
         
         System.out.println("[PROTOBEANS]: Use postgres URL: " + pgSimpleDataSource.getUrl());
         
