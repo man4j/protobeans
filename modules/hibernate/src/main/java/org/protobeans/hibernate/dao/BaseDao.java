@@ -56,11 +56,11 @@ abstract public class BaseDao<T> {
         return detachedEntity;
     }
     
-    public List<T> list(List<Serializable> ids) {
+    public List<T> list(List<? extends Serializable> ids) {
         return em.unwrap(Session.class).byMultipleIds(entityClass).multiLoad(ids);
     }
     
-    public List<T> list(Set<Serializable> ids) {
+    public List<T> list(Set<? extends Serializable> ids) {
         return em.unwrap(Session.class).byMultipleIds(entityClass).multiLoad(List.copyOf(ids));
     }
     
