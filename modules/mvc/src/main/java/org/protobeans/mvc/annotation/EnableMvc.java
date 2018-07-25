@@ -8,10 +8,11 @@ import java.lang.annotation.Target;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.protobeans.mvc.config.MvcConfig;
+import org.protobeans.mvc.config.MvcValidatorConfig;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Import(MvcConfig.class)
+@Import({MvcValidatorConfig.class, MvcConfig.class})
 @Configuration
 public @interface EnableMvc {
     String resourcesPath() default "";

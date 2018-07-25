@@ -13,7 +13,7 @@ import org.springframework.orm.jpa.vendor.Database;
 
 @EnableMySql(dbHost = "s:host", schema = "s:schema", user = "root", password = "s:password")
 @EnableFlyway
-@EnableHibernate(showSql = "true", dialect = Database.MYSQL, basePackageClasses = User.class)
+@EnableHibernate(showSql = "true", dialect = Database.MYSQL, basePackages = "org.protobeans.hibernate.mysql.example")
 @ComponentScan(basePackageClasses = {UserDao.class, UserService.class})
 public class Main {
     public static void main(String[] args) {

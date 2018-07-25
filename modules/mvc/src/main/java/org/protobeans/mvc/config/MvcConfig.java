@@ -1,6 +1,5 @@
 package org.protobeans.mvc.config;
 
-import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,22 +12,15 @@ import org.protobeans.mvc.util.FileUtils;
 import org.protobeans.mvc.util.FilterBean;
 import org.protobeans.mvc.util.GlobalModelAttribute;
 import org.protobeans.mvc.util.PathUtils;
-import org.protobeans.mvc.util.ProtobeansMessageInterpolator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.DelegatingMessageSource;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.validation.beanvalidation.MessageSourceResourceBundleLocator;
-import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
@@ -55,15 +47,15 @@ public class MvcConfig implements WebMvcConfigurer {
     private String resourcesPath;
     
     private String resourcesUrl;
-    
-    @Autowired
-    private MessageSource messageSource;
-    
+        
     @Autowired(required = false)
     private List<HttpMessageConverter<?>> converters = new ArrayList<>();
     
     @Autowired(required = false)
     private FilterBean filterBean;
+    
+    @Autowired
+    private LocalValidatorFactoryBean localValidatorFactoryBean;
     
     @Bean
     public Class<? extends WebApplicationInitializer> mvcInitializer(ConfigurableWebApplicationContext ctx) {
@@ -104,47 +96,9 @@ public class MvcConfig implements WebMvcConfigurer {
     
     @Override
     public Validator getValidator() {
-        return localValidatorFactoryBean();
+        return localValidatorFactoryBean;
     }
 
-    @Bean
-    LocalValidatorFactoryBean localValidatorFactoryBean() {
-        LocalValidatorFactoryBean validatorFactoryBean = new LocalValidatorFactoryBean();
-        
-        boolean cached = true;
-        
-        if (messageSource instanceof DelegatingMessageSource) {
-            DelegatingMessageSource dms = (DelegatingMessageSource) messageSource;
-
-            MessageSource parentMessageSource = dms.getParentMessageSource();
-
-            while (parentMessageSource instanceof DelegatingMessageSource) {
-                parentMessageSource = ((DelegatingMessageSource) parentMessageSource).getParentMessageSource();
-            }
-            
-            if (parentMessageSource instanceof ReloadableResourceBundleMessageSource) {
-                ReloadableResourceBundleMessageSource rms = (ReloadableResourceBundleMessageSource) parentMessageSource;
-
-                Field f = ReflectionUtils.findField(ReloadableResourceBundleMessageSource.class, "cacheMillis");
-                
-                f.setAccessible(true);
-                
-                try {
-                    long millis = f.getLong(rms);
-                    
-                    cached = (millis == -1);
-                } catch (IllegalArgumentException | IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        
-        //validatorFactoryBean.setValidationMessageSource(messageSource);
-        validatorFactoryBean.setMessageInterpolator(new ProtobeansMessageInterpolator(new MessageSourceResourceBundleLocator(messageSource), cached));
-        
-        return validatorFactoryBean;
-    }
-    
     @Bean
     public GlobalModelAttribute globalModelAttribute() {
         String value = null;
@@ -194,14 +148,5 @@ public class MvcConfig implements WebMvcConfigurer {
     public StandardServletMultipartResolver multipartResolver(){
         return new StandardServletMultipartResolver();
     }
-    
-//    @Bean
-//    public MethodValidationPostProcessor methodValidationPostProcessor() {
-//        MethodValidationPostProcessor methodValidationPostProcessor = new MethodValidationPostProcessor();
-//        
-//        methodValidationPostProcessor.setValidator(localValidatorFactoryBean());
-//         
-//        return methodValidationPostProcessor;
-//    }
 }
 
