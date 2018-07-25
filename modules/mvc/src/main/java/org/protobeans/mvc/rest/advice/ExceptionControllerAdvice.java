@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import javax.validation.ConstraintViolationException;
 
 import org.protobeans.mvc.rest.exception.BusinessException;
-import org.protobeans.mvc.rest.model.Field;
+import org.protobeans.mvc.rest.model.ProtobeansFieldError;
 import org.protobeans.mvc.rest.model.RestResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,16 +29,16 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Object> handleBusinessException(BusinessException ex) {
-        return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult<>(ex.getMessage()));
+        return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(ex.getMessage()));
     }
     
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex) {
-        List<Field> errorFields = ex.getConstraintViolations().stream()
-                                                              .map(cv -> new Field(cv.getPropertyPath().toString(), cv.getMessage()))
+        List<ProtobeansFieldError> errorFields = ex.getConstraintViolations().stream()
+                                                              .map(cv -> new ProtobeansFieldError(cv.getPropertyPath().toString(), cv.getMessage()))
                                                               .collect(Collectors.toList());
         
-        return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult<>(errorFields));
+        return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(errorFields));
     }
     
     @Override
@@ -46,30 +46,30 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
         List<ObjectError> globalErrors = ex.getBindingResult().getGlobalErrors();
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
         
-        List<Field> errorFields = new ArrayList<>();
+        List<ProtobeansFieldError> errorFields = new ArrayList<>();
 
         int counter = 1;
         
         for (ObjectError err : globalErrors) {
-            errorFields.add(new Field(err.getObjectName() + "_" + counter++, err.getDefaultMessage()));
+            errorFields.add(new ProtobeansFieldError(err.getObjectName() + "_" + counter++, err.getDefaultMessage()));
         }
         
         for (FieldError err : fieldErrors) {
-            errorFields.add(new Field(err.getField(), err.getDefaultMessage()));
+            errorFields.add(new ProtobeansFieldError(err.getField(), err.getDefaultMessage()));
         }
         
-        return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult<>(errorFields));
+        return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(errorFields));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleServerException(Exception ex) {
         logger.error("", ex);
         
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult<>(ex.getMessage()));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(ex.getMessage()));
     }
     
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult<>(ex.getMessage()));
+        return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(ex.getMessage()));
     }
 }

@@ -5,14 +5,14 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class RestResult<T> {    
-    private List<T> errors = new ArrayList<>();
+public class RestResult {    
+    private List<ProtobeansFieldError> errors = new ArrayList<>();
     
-    public RestResult(T error) {
-        this.errors.add(error);
+    public RestResult(String error) {
+        this.errors.add(new ProtobeansFieldError("default", error));
     }
 
-    public RestResult(List<T> errors) {
+    public RestResult(List<ProtobeansFieldError> errors) {
         this.errors = errors;
     }
     
@@ -21,7 +21,7 @@ public class RestResult<T> {
     }
 
     @JsonProperty("errors")
-    public List<T> getErrors() {
+    public List<ProtobeansFieldError> getErrors() {
         return errors;
     }
     
