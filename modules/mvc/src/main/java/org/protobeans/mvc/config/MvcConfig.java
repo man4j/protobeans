@@ -195,13 +195,13 @@ public class MvcConfig implements WebMvcConfigurer {
         return new StandardServletMultipartResolver();
     }
     
-    @Bean
-    public MethodValidationPostProcessor methodValidationPostProcessor() {
-        MethodValidationPostProcessor methodValidationPostProcessor = new MethodValidationPostProcessor();
-        
-        methodValidationPostProcessor.setValidator(localValidatorFactoryBean());
-         
-        return methodValidationPostProcessor;
-    }
+//    @Bean
+//    public MethodValidationPostProcessor methodValidationPostProcessor() {
+//        MethodValidationPostProcessor methodValidationPostProcessor = new MethodValidationPostProcessor();
+//        
+//        methodValidationPostProcessor.setValidator(localValidatorFactoryBean());
+//         
+//        return methodValidationPostProcessor;
+//    }
 }
 
