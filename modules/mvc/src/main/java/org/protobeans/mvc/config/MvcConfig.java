@@ -28,6 +28,7 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.MessageSourceResourceBundleLocator;
+import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
@@ -192,6 +193,15 @@ public class MvcConfig implements WebMvcConfigurer {
     @Bean
     public StandardServletMultipartResolver multipartResolver(){
         return new StandardServletMultipartResolver();
+    }
+    
+    @Bean
+    public MethodValidationPostProcessor methodValidationPostProcessor() {
+        MethodValidationPostProcessor methodValidationPostProcessor = new MethodValidationPostProcessor();
+        
+        methodValidationPostProcessor.setValidator(localValidatorFactoryBean());
+         
+        return methodValidationPostProcessor;
     }
 }
 
