@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-parent</artifactId>
-  <version>0.1.37</version>
+  <version>0.1.38</version>
   <packaging>pom</packaging>
   
   <properties>
@@ -219,6 +219,13 @@
         <groupId>org.apache.cxf</groupId>
         <artifactId>cxf-rt-features-logging</artifactId>
         <version>3.2.5</version>
+      </dependency>
+      
+      <!-- Fileupload -->
+      <dependency>
+        <groupId>commons-fileupload</groupId>
+        <artifactId>commons-fileupload</artifactId>
+        <version>1.3.3</version>
       </dependency>
 
       <!-- JSON Assert -->      

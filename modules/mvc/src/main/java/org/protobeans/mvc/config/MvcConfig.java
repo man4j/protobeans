@@ -23,7 +23,8 @@ import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
-import org.springframework.web.multipart.support.StandardServletMultipartResolver;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -145,8 +146,12 @@ public class MvcConfig implements WebMvcConfigurer {
     } 
     
     @Bean
-    public StandardServletMultipartResolver multipartResolver(){
-        return new StandardServletMultipartResolver();
+    public MultipartResolver multipartResolver(){
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+        
+        resolver.setDefaultEncoding("UTF-8");
+        
+        return resolver;
     }
 }
 
