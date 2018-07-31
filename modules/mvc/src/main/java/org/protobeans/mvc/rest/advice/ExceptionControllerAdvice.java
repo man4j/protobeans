@@ -34,31 +34,27 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex) {
-        List<ProtobeansFieldError> errorFields = ex.getConstraintViolations().stream()
-                                                              .map(cv -> new ProtobeansFieldError(cv.getPropertyPath().toString(), cv.getMessage()))
-                                                              .collect(Collectors.toList());
+        List<ProtobeansFieldError> fieldErrors = ex.getConstraintViolations().stream()
+                                                                             .map(cv -> new ProtobeansFieldError(cv.getPropertyPath().toString(), cv.getMessage()))
+                                                                             .collect(Collectors.toList());
         
-        return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(errorFields));
+        return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(fieldErrors));
     }
     
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        List<ObjectError> globalErrors = ex.getBindingResult().getGlobalErrors();
-        List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
+        List<ProtobeansFieldError> fieldErrors = new ArrayList<>();
+        List<String> globalErrors = new ArrayList<>();
         
-        List<ProtobeansFieldError> errorFields = new ArrayList<>();
-
-        int counter = 1;
-        
-        for (ObjectError err : globalErrors) {
-            errorFields.add(new ProtobeansFieldError(err.getObjectName() + "_" + counter++, err.getDefaultMessage()));
+        for (FieldError err : ex.getBindingResult().getFieldErrors()) {
+            fieldErrors.add(new ProtobeansFieldError(err.getField(), err.getDefaultMessage()));
         }
         
-        for (FieldError err : fieldErrors) {
-            errorFields.add(new ProtobeansFieldError(err.getField(), err.getDefaultMessage()));
+        for (ObjectError err : ex.getBindingResult().getGlobalErrors()) {
+            globalErrors.add(err.getDefaultMessage());
         }
         
-        return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(errorFields));
+        return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(fieldErrors, globalErrors));
     }
 
     @ExceptionHandler(Exception.class)
