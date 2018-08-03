@@ -3,7 +3,7 @@
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-mail</artifactId>
   <versioning>
-    <release>0.1.39</release>
+    <release>0.1.40</release>
     <versions>
       <version>0.1.16</version>
       <version>0.1.17</version>
@@ -29,7 +29,8 @@
       <version>0.1.37</version>
       <version>0.1.38</version>
       <version>0.1.39</version>
+      <version>0.1.40</version>
     </versions>
-    <lastUpdated>20180731130910</lastUpdated>
+    <lastUpdated>20180803091628</lastUpdated>
   </versioning>
 </metadata>
