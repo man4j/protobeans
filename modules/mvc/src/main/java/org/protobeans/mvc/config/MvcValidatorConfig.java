@@ -39,9 +39,10 @@ public class MvcValidatorConfig {
     private boolean isCached() {
         boolean isCached = true;
         
-        if (System.getProperty("os.name").toLowerCase().contains("windows") || System.getProperty("cacheResources").equalsIgnoreCase("false")) {
+        if (System.getProperty("os.name").toLowerCase().contains("windows") || "false".equals(System.getProperty("cacheMessages"))) {
             isCached = false;
         }
+        
         return isCached;
     }
     
