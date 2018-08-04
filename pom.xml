@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-parent</artifactId>
-  <version>0.1.40</version>
+  <version>0.1.41</version>
   <packaging>pom</packaging>
   
   <properties>
