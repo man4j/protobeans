@@ -1,6 +1,7 @@
 package org.protobeans.hibernate.dao;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -61,7 +62,7 @@ abstract public class BaseDao<T> {
     }
     
     public List<T> list(Set<? extends Serializable> ids) {
-        return em.unwrap(Session.class).byMultipleIds(entityClass).multiLoad(List.copyOf(ids));
+        return em.unwrap(Session.class).byMultipleIds(entityClass).multiLoad(new ArrayList<>(ids));
     }
     
     public void delete(T entity) {

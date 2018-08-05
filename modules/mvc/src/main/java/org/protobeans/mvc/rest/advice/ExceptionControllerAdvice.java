@@ -29,7 +29,7 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Object> handleBusinessException(BusinessException ex) {
-        return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(List.of(), ex.getMessages()));
+        return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(new ArrayList<>(), ex.getMessages()));
     }
     
     @ExceptionHandler(ConstraintViolationException.class)
