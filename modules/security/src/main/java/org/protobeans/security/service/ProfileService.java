@@ -6,7 +6,7 @@ public interface ProfileService {
     AbstractProfile getById(String id);
     
     default AbstractProfile getByLogin(String login) {
-      return null;
+        return null;
     };
     
     AbstractProfile update(AbstractProfile profile);
