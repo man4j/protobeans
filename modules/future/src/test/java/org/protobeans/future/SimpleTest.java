@@ -18,7 +18,7 @@ public class SimpleTest {
         MockitoAnnotations.initMocks(this);
     }
     
-    @Test
+  /* @Test
     public void shouldWork() throws InterruptedException, ExecutionException {
         UnboundedCacheableComputation<String, String> cacheableComputation = new UnboundedCacheableComputation<>(computation);
         
@@ -30,5 +30,5 @@ public class SimpleTest {
         cacheableComputation.compute(key, computeFunction).get();
         
         Mockito.verify(computation, Mockito.times(1)).compute(key, computeFunction);
-    }
+    }*/
 }
