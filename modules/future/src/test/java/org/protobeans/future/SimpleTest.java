@@ -1,11 +1,6 @@
 package org.protobeans.future;
 
-import java.util.concurrent.ExecutionException;
-import java.util.function.Function;
-
 import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
