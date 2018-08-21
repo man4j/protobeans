@@ -56,6 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private ApplicationContext ctx;
     
+    private boolean disableCsrf; 
+    
     @Autowired(required = false)
     private List<SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>> configurers = new ArrayList<>();
     
@@ -81,11 +83,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         String[] disableCsrfPatterns = ctx.getBeansWithAnnotation(DisableCsrf.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(DisableCsrf.class).antPattern()).toArray(String[]::new);
         
         http.authenticationProvider(new UuidAuthenticationProvider())//add custom provider
-            .authorizeRequests().mvcMatchers(permitAllPatterns).permitAll().mvcMatchers(anonymousPatterns).anonymous().anyRequest().authenticated()
-            .and().csrf().ignoringAntMatchers(disableCsrfPatterns)
+            .authorizeRequests().mvcMatchers(permitAllPatterns).permitAll().mvcMatchers(anonymousPatterns).anonymous().anyRequest().authenticated()            
             .and().rememberMe().rememberMeServices(rememberMeServices()).key("123").authenticationSuccessHandler(new CurrentUrlAuthenticationSuccessHandler())
             .and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(loginUrl))
                                       .accessDeniedHandler((req, res, e) -> {res.setStatus(HttpServletResponse.SC_FORBIDDEN);});
+        
+        if (disableCsrf) {
+            http.csrf().disable();
+        } else {
+            http.csrf().ignoringAntMatchers(disableCsrfPatterns);
+        }
         
         configurers.forEach(LambdaExceptionUtil.rethrowConsumer(http::apply));
     }

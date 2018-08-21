@@ -18,4 +18,6 @@ public @interface EnableSecurity {
     String[] ignoreUrls();
     
     String loginUrl();
+    
+    boolean disableCsrf() default false;
 }

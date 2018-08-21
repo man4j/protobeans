@@ -50,7 +50,7 @@ public class SignInValidator implements ConstraintValidator<SignIn, SignInForm> 
         
             SecurityContextHolder.getContext().setAuthentication(authenticationManager.authenticate(securityService.createUsernamePasswordAuthenticationToken(profile, form.getPassword())));
         } catch (@SuppressWarnings("unused") UsernameNotFoundException | BadCredentialsException e) {
-            context.buildConstraintViolationWithTemplate("{SignInValidator.incorrectEmailOrPassword}").addPropertyNode("email").addConstraintViolation();
+            context.buildConstraintViolationWithTemplate("{SignInValidator.incorrectIdOrPassword}").addPropertyNode("id").addConstraintViolation();
             context.buildConstraintViolationWithTemplate("").addPropertyNode("password").addConstraintViolation();
             
             return false;
