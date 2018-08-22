@@ -29,6 +29,8 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Object> handleBusinessException(BusinessException ex) {
+        logger.warn(ex.getMessage());
+        
         return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(new ArrayList<>(), ex.getMessages()));
     }
     
@@ -37,6 +39,8 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
         List<ProtobeansFieldError> fieldErrors = ex.getConstraintViolations().stream()
                                                                              .map(cv -> new ProtobeansFieldError(cv.getPropertyPath().toString(), cv.getMessage()))
                                                                              .collect(Collectors.toList());
+        
+        logger.warn(fieldErrors.toString());
         
         return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(fieldErrors));
     }
@@ -54,6 +58,9 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
             globalErrors.add(err.getDefaultMessage());
         }
         
+        logger.warn(fieldErrors.toString());
+        logger.warn(globalErrors.toString());
+        
         return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(fieldErrors, globalErrors));
     }
 
@@ -66,6 +73,8 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        logger.warn(ex.getMessage());
+        
         return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(ex.getMessage()));
     }
 }

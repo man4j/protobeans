@@ -21,4 +21,9 @@ public class ProtobeansFieldError {
     public String getValue() {
         return fieldError;
     }
+    
+    @Override
+    public String toString() {
+        return fieldName + " : " + fieldError;
+    }
 }
