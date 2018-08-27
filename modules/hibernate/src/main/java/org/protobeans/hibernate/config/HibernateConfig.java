@@ -41,7 +41,6 @@ public class HibernateConfig {
        
        em.setJpaPropertyMap(new HashMap<String, Object>() {{put("hibernate.id.new_generator_mappings", true);
                                                             put("hibernate.format_sql", true);
-                                                            put("hibernate.jdbc.fetch_size", 100);
                                                             put("hibernate.jdbc.batch_size", 1000);
                                                             put("hibernate.order_inserts", true);
                                                             put("hibernate.order_updates", true);
