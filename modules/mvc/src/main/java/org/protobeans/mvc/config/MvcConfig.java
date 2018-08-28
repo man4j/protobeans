@@ -141,7 +141,7 @@ public class MvcConfig implements WebMvcConfigurer {
     @Bean
     public LocaleResolver localeResolver() {
         CookieLocaleResolver resolver = new CookieLocaleResolver();
-        resolver.setDefaultLocale(Locale.US);
+        resolver.setDefaultLocale(new Locale("ru", "RU"));
         return resolver;
     } 
     
