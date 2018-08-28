@@ -12,6 +12,7 @@ public class UuidAuthenticationToken extends AbstractAuthenticationToken {
         super(authorities);
         setDetails(principal);
         this.uuid = uuid;
+        super.setAuthenticated(true);
     }
 
     @Override
