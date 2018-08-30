@@ -43,7 +43,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @EnableWebMvc
 @Configuration
 @InjectFrom(EnableMvc.class)
-@ComponentScan(basePackageClasses = InitBinderControllerAdvice.class)
+@ComponentScan(basePackages = "org.protobeans.mvc.controller")
 public class MvcConfig implements WebMvcConfigurer {
     private String resourcesPath;
     

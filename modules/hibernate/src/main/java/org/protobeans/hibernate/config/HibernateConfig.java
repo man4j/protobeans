@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.hibernate.annotation.EnableHibernate;
+import org.protobeans.hibernate.service.HibernateStatsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -72,5 +73,10 @@ public class HibernateConfig {
     @Bean
     public TransactionTemplate transactionTemplate() {
         return new TransactionTemplate(txManager());
+    }
+    
+    @Bean
+    public HibernateStatsService hibernateStatsService() {
+        return new HibernateStatsService();
     }
 }
