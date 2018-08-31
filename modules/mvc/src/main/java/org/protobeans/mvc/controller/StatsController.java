@@ -18,7 +18,7 @@ public class StatsController {
     private ProtobeansContext context;
     
     @GetMapping("/stats/query")
-    String getQueryStats(Model model) {        
+    String getQueryStats(Model model) {
         Supplier<List<QueryStatInfo>> statsSupplier = context.getValue(QueryStatInfo.QUERY_STATS_KEY);
         
         model.addAttribute("queryList", statsSupplier.get());

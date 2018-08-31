@@ -45,7 +45,7 @@
 	                                        <td>${item.query}</td>
 	                                        <td>${item.minTime} ms</td>
 	                                        <td>${item.maxTime} ms</td>
-	                                        <td>${item.avgTime}</td>
+	                                        <td>${item.avgTime} ms</td>
 	                                        <td>${item.count}</td>
 	                                    </tr>
 	                                  </#list>

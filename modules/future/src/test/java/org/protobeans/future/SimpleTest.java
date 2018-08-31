@@ -3,8 +3,8 @@ package org.protobeans.future;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -13,7 +13,7 @@ public class SimpleTest {
     @Spy
     private ForkJoinPooledComputation<String, String> computation;
     
-    @Before 
+    @BeforeAll
     public void initMocks() {
         MockitoAnnotations.initMocks(this);
     }
