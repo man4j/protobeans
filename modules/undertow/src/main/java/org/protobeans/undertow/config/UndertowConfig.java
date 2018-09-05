@@ -74,7 +74,7 @@ public class UndertowConfig {
         }
         
         for (Initializer initializer : initializers) {
-            deploymentInfo.addServletContainerInitalizer(new ServletContainerInitializerInfo(initializer.initializer(), new HashSet<>(Arrays.asList(initializer.handleTypes()))));
+            deploymentInfo.addServletContainerInitializer(new ServletContainerInitializerInfo(initializer.initializer(), new HashSet<>(Arrays.asList(initializer.handleTypes()))));
         }
 
         if (!springInitializers.isEmpty()) {
@@ -84,7 +84,7 @@ public class UndertowConfig {
                 springInitializersSet.add(initializer);
             }
             
-            deploymentInfo.addServletContainerInitalizer(new ServletContainerInitializerInfo(SpringServletContainerInitializer.class, springInitializersSet));
+            deploymentInfo.addServletContainerInitializer(new ServletContainerInitializerInfo(SpringServletContainerInitializer.class, springInitializersSet));
         }
         
         final EncodingHandler handler = new EncodingHandler(new ContentEncodingRepository().addEncodingHandler("gzip", 

@@ -7,7 +7,6 @@ import java.util.Locale;
 
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.mvc.annotation.EnableMvc;
-import org.protobeans.mvc.controller.advice.InitBinderControllerAdvice;
 import org.protobeans.mvc.util.FileUtils;
 import org.protobeans.mvc.util.FilterBean;
 import org.protobeans.mvc.util.GlobalModelAttribute;

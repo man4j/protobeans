@@ -1,5 +1,6 @@
 package org.protobeans.mvc.config;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,11 +10,13 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.SessionTrackingMode;
 
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextListener;
+import org.springframework.web.context.support.ServletContextAwareProcessor;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -57,8 +60,24 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
             
             //Некоторые классы вроде WebMvcConfigurationSupport зависят от servletContext, но получается, что пост-процессор
             //почему-то срабатывает позже, чем это нужно поэтому распихиваем servletContext вручную
-            ConfigurableListableBeanFactory bf = (ConfigurableListableBeanFactory) rootApplicationContext.getAutowireCapableBeanFactory();
+            DefaultListableBeanFactory bf = (DefaultListableBeanFactory) rootApplicationContext.getAutowireCapableBeanFactory();
             bf.getBeansOfType(ServletContextAware.class).values().forEach(b -> b.setServletContext(servletContext));
+            
+            for (BeanPostProcessor pp : bf.getBeanPostProcessors()) {
+                if (pp instanceof ServletContextAwareProcessor) {
+                    ServletContextAwareProcessor p = (ServletContextAwareProcessor) pp;
+                    
+                    try {
+                        Field f = p.getClass().getDeclaredField("servletContext");
+                        
+                        f.setAccessible(true);
+                        
+                        f.set(p, servletContext);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
         }
         
         super.onStartup(servletContext);
