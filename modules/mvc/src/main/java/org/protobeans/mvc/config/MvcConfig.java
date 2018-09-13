@@ -36,6 +36,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -76,7 +77,8 @@ public class MvcConfig implements WebMvcConfigurer {
                                  .setVisibility(PropertyAccessor.SETTER, Visibility.NONE)
                                  .setVisibility(PropertyAccessor.CREATOR, Visibility.NONE)
                                  .setSerializationInclusion(Include.NON_EMPTY)
-                                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                                 .configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
     }
     
     @Bean
