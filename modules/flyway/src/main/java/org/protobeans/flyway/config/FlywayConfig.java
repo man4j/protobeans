@@ -24,7 +24,7 @@ public class FlywayConfig {
     public void migrate() throws InterruptedException {
         Flyway fw = new Flyway();
         
-        fw.setDataSource(dataSource.getDataSource());
+        fw.setDataSource(dataSource.getDataSource() == null ? dataSource : dataSource.getDataSource());
         fw.setLocations("classpath:migrations");
         
         while (true) {
@@ -41,8 +41,10 @@ public class FlywayConfig {
                     
                     continue;
                 }
+
+                logger.error("", e);
                 
-                throw e;
+                System.exit(1);
             }
         }
     }
