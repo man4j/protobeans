@@ -212,4 +212,6 @@ public @interface EnableHibernate {
     String enableStatistics() default "false";
         
     String[] basePackages();
+    
+    int batchSize() default 1_000;
 }
