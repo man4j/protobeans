@@ -40,12 +40,7 @@ public class RestResult {
     public List<String> getGlobalErrors() {
         return globalErrors;
     }
-    
-    @JsonProperty("errors")
-    public List<String> getErrors() {
-        return globalErrors;
-    }
-    
+
     @JsonProperty("success")
     public boolean isSuccess() {
         return getFieldErrors().isEmpty() && getGlobalErrors().isEmpty();

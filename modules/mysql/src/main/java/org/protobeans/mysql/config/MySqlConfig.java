@@ -1,5 +1,7 @@
 package org.protobeans.mysql.config;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
+
 import javax.sql.DataSource;
 
 import org.protobeans.core.annotation.InjectFrom;
@@ -36,6 +38,8 @@ public class MySqlConfig {
         ds.setMaximumPoolSize(maxPoolSize);
         ds.setPassword(password);
         ds.setAutoCommit(false);
+        ds.setIdleTimeout(MINUTES.toMillis(5));
+        ds.setMaxLifetime(MINUTES.toMillis(10));
 
         ds.addDataSourceProperty("useSSL", "false");
         ds.addDataSourceProperty("characterEncoding", "UTF-8");
