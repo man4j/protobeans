@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
 import org.protobeans.mvc.rest.exception.BusinessException;
@@ -11,6 +12,8 @@ import org.protobeans.mvc.rest.model.ProtobeansFieldError;
 import org.protobeans.mvc.rest.model.RestResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,17 +24,33 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
 public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     private Logger logger = LoggerFactory.getLogger(ExceptionControllerAdvice.class);
     
+    @Autowired
+    private MessageSource messageSource;
+    
+    @Autowired
+    private LocaleResolver localeResolver;
+    
+    @Autowired
+    private HttpServletRequest request;
+    
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Object> handleBusinessException(BusinessException ex) {
-        logger.warn(ex.getMessage());
+        List<String> messages = ex.getMessagesWithParams().stream()
+                                                          .map(entry -> messageSource.getMessage(entry.getKey(), entry.getValue(), entry.getKey(), localeResolver.resolveLocale(request)))
+                                                          .collect(Collectors.toList());
+
+        logger.warn(String.join("\n", messages));
         
-        return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(new ArrayList<>(), ex.getMessages()));
+        return ResponseEntity.badRequest()
+                             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                             .body(new RestResult(new ArrayList<>(), messages));
     }
     
     @ExceptionHandler(ConstraintViolationException.class)
