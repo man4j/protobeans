@@ -1,5 +1,6 @@
 package org.protobeans.hibernate.config;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.sql.DataSource;
@@ -17,6 +18,8 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Configuration
 @InjectFrom(EnableHibernate.class)
 public class HibernateConfig {
@@ -33,6 +36,9 @@ public class HibernateConfig {
     @Autowired
     private DataSource dataSource;
     
+    @Autowired
+    private ObjectMapper mapper;
+    
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
@@ -41,6 +47,8 @@ public class HibernateConfig {
        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
        jpaVendorAdapter.setShowSql("true".equals(showSql));
        jpaVendorAdapter.setDatabase(dialect);
+       
+       JacksonSupplier.objectMapper = mapper;
        
        em.setJpaPropertyMap(new HashMap<String, Object>() {{put("hibernate.id.new_generator_mappings", true);
                                                             put("hibernate.format_sql", true);
@@ -61,10 +69,18 @@ public class HibernateConfig {
                                                             }
                                                           }});
        
-       em.setJpaVendorAdapter(jpaVendorAdapter);       
-       em.setPackagesToScan(basePackages);
+       em.setJpaVendorAdapter(jpaVendorAdapter);
+       
+       em.setPackagesToScan(append(basePackages, "org.protobeans.hibernate.entity"));
        
        return em;
+    }
+    
+    private <T> T[] append(T[] arr, T element) {
+        final int N = arr.length;
+        arr = Arrays.copyOf(arr, N + 1);
+        arr[N] = element;
+        return arr;
     }
     
     @Bean

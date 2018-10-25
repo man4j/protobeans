@@ -122,7 +122,7 @@ default strategy, and we’ll talk more about it later in section 12.1.1.
 @Fetch(FetchMode.SELECT)
 User user;
 
-This fetch mode generate following N+1 SQL queries:
+This fetch mode generate following 2 SQL queries:
     select
         post0_.id as id1_2_,
         post0_.content as content2_2_,
@@ -148,6 +148,7 @@ User user;
 
 If child entity loaded by range (f.e. "SELECT p FROM Post p") then 
 @Fetch(FetchMode.JOIN) converts to @Fetch(FetchMode.SELECT)
+(Because queries ignore fetch modes. When you write a query, you are telling what is joined and what is not joined.)
 
 If child entity loaded by id (f.e. em.find(Post.class, id)) then
 @Fetch(FetchMode.JOIN) generate following JOIN query:
