@@ -54,13 +54,14 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
         servletContext.addListener(RequestContextListener.class);//Для того, чтобы запрос был доступен в фильтрах, например в SocialAuthenticationFilter
         servletContext.setSessionTrackingModes(Collections.singleton(SessionTrackingMode.COOKIE));
 
+        DefaultListableBeanFactory bf = (DefaultListableBeanFactory) rootApplicationContext.getAutowireCapableBeanFactory();
+        
         if (rootApplicationContext.getServletContext() == null) {//in case then spring-test already inject MockServletContext
             rootApplicationContext.setServletContext(servletContext);
             servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, rootApplicationContext);
             
             //Некоторые классы вроде WebMvcConfigurationSupport зависят от servletContext, но получается, что пост-процессор
             //почему-то срабатывает позже, чем это нужно поэтому распихиваем servletContext вручную
-            DefaultListableBeanFactory bf = (DefaultListableBeanFactory) rootApplicationContext.getAutowireCapableBeanFactory();
             bf.getBeansOfType(ServletContextAware.class).values().forEach(b -> b.setServletContext(servletContext));
             
             for (BeanPostProcessor pp : bf.getBeanPostProcessors()) {

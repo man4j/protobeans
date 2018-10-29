@@ -84,7 +84,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         String[] disableCsrfPatterns = ctx.getBeansWithAnnotation(DisableCsrf.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(DisableCsrf.class).antPattern()).toArray(String[]::new);
         
         http.authenticationProvider(new UuidAuthenticationProvider())//add custom provider
-            .authorizeRequests().mvcMatchers(permitAllPatterns).permitAll().mvcMatchers(anonymousPatterns).anonymous().anyRequest().authenticated()            
+            .authorizeRequests().mvcMatchers(permitAllPatterns).permitAll()
+                                .antMatchers("/swagger-ui.html/**", "/swagger-resources/**", "/v2/api-docs/**", "/webjars/**").permitAll()
+                                .mvcMatchers(anonymousPatterns).anonymous()
+                                .anyRequest().authenticated()            
             .and().rememberMe().rememberMeServices(rememberMeServices()).key("123").authenticationSuccessHandler(new CurrentUrlAuthenticationSuccessHandler())
             .and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(loginUrl))
                                       .accessDeniedHandler((req, res, e) -> {res.setStatus(HttpServletResponse.SC_FORBIDDEN);})                                      

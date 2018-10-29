@@ -5,16 +5,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.protobeans.mvc.config.MvcConfig;
+import org.protobeans.mvc.config.SwaggerConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import io.swagger.annotations.Info;
+import io.swagger.annotations.Tag;
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Import(MvcConfig.class)
+@Import({SwaggerConfig.class})
 @Configuration
-public @interface EnableMvc {
-    String resourcesPath() default "";
+public @interface EnableSwagger {
+    Info info() default @Info(title = "", version = "");
     
-    String resourcesUrl() default "";
+    Tag[] tags() default @Tag(name = "default");
 }
