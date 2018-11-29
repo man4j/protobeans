@@ -38,8 +38,8 @@ public class MySqlConfig {
         ds.setMaximumPoolSize(maxPoolSize);
         ds.setPassword(password);
         ds.setAutoCommit(false);
-        ds.setIdleTimeout(MINUTES.toMillis(5));
-        ds.setMaxLifetime(MINUTES.toMillis(10));
+        ds.setIdleTimeout(MINUTES.toMillis(2));
+        ds.setMaxLifetime(MINUTES.toMillis(15));
 
         ds.addDataSourceProperty("useSSL", "false");
         ds.addDataSourceProperty("characterEncoding", "UTF-8");
