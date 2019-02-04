@@ -27,6 +27,7 @@ import org.springframework.kafka.listener.AbstractMessageListenerContainer.AckMo
 import org.springframework.kafka.listener.ContainerStoppingBatchErrorHandler;
 import org.springframework.kafka.listener.ContainerStoppingErrorHandler;
 import org.springframework.kafka.transaction.KafkaTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /***
  * 
@@ -57,6 +58,7 @@ import org.springframework.kafka.transaction.KafkaTransactionManager;
 @Configuration
 @InjectFrom(EnableKafkaMessaging.class)
 @EnableKafka
+@EnableTransactionManagement(proxyTargetClass = true)
 public class KafkaMessagingConfig {
     private String brokerList;
     

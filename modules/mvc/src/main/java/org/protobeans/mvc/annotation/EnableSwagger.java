@@ -17,6 +17,8 @@ import io.swagger.annotations.Tag;
 @Import({SwaggerConfig.class})
 @Configuration
 public @interface EnableSwagger {
+    String host() default "";
+    
     Info info() default @Info(title = "", version = "");
     
     Tag[] tags() default @Tag(name = "default");

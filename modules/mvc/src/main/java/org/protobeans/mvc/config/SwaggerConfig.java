@@ -27,12 +27,15 @@ public class SwaggerConfig {
     
     private Tag[] tags;
     
+    private String host;
+    
     @Bean
     public Docket api() {
         List<springfox.documentation.service.Tag> serviceTags = Arrays.stream(tags).map(a -> new springfox.documentation.service.Tag(a.name(), a.description())).collect(Collectors.toList());
         
         return new Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)
+                .host(host)
                 .apiInfo(new ApiInfo(info.title(), info.description(), info.version(), info.termsOfService(), info.contact().name(), info.license().name(), info.license().url()))
                 .tags(serviceTags.get(0), serviceTags.toArray(new springfox.documentation.service.Tag[] {}))
                 .select()
