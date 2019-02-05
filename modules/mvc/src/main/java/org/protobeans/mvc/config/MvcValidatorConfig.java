@@ -1,6 +1,6 @@
 package org.protobeans.mvc.config;
 
-import org.protobeans.mvc.util.ProtobeansMessageInterpolator;
+import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,7 +52,7 @@ public class MvcValidatorConfig {
     public LocalValidatorFactoryBean localValidatorFactoryBean() {
         LocalValidatorFactoryBean validatorFactoryBean = new LocalValidatorFactoryBean();
         
-        validatorFactoryBean.setMessageInterpolator(new ProtobeansMessageInterpolator(new MessageSourceResourceBundleLocator(messageSource()), isCached()));
+        validatorFactoryBean.setMessageInterpolator(new ResourceBundleMessageInterpolator(new MessageSourceResourceBundleLocator(messageSource()), isCached()));
         
         return validatorFactoryBean;
     }

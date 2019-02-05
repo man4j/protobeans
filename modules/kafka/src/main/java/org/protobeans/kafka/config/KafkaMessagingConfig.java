@@ -23,7 +23,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.listener.AbstractMessageListenerContainer.AckMode;
+import org.springframework.kafka.listener.ContainerProperties.AckMode;
 import org.springframework.kafka.listener.ContainerStoppingBatchErrorHandler;
 import org.springframework.kafka.listener.ContainerStoppingErrorHandler;
 import org.springframework.kafka.transaction.KafkaTransactionManager;
@@ -71,6 +71,7 @@ public class KafkaMessagingConfig {
     @Autowired
     private ApplicationContext ctx;
     
+    @SuppressWarnings("boxing")
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
@@ -78,11 +79,11 @@ public class KafkaMessagingConfig {
         factory.setConsumerFactory(consumerFactory());
         factory.setConcurrency(concurrency == -1 ? Runtime.getRuntime().availableProcessors() : concurrency);
         factory.setBatchListener(true);
+        factory.setErrorHandler(new ContainerStoppingErrorHandler());
+        factory.setBatchErrorHandler(new ContainerStoppingBatchErrorHandler());
         
         factory.getContainerProperties().setAckMode(AckMode.BATCH);
         factory.getContainerProperties().setTransactionManager(kafkaTransactionManager());
-        factory.getContainerProperties().setErrorHandler(new ContainerStoppingErrorHandler());
-        factory.getContainerProperties().setBatchErrorHandler(new ContainerStoppingBatchErrorHandler());
         
         return factory;
     }
@@ -98,7 +99,7 @@ public class KafkaMessagingConfig {
         
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "DEFAULT.GROUP");
-        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, maxPollRecords);// By default, offsets are configured to be automatically committed during the consumer’s poll()call at a periodic interval
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, maxPollRecords);// By default, offsets are configured to be automatically committed during the consumer’s poll() call at a periodic interval
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset);

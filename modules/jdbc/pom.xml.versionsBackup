@@ -4,34 +4,22 @@
   <parent>
     <groupId>org.protobeans</groupId>
     <artifactId>protobeans-parent</artifactId>
-    <version>0.0.1</version>
+    <version>0.1.65</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>protobeans-jdbc</artifactId>
   <packaging>jar</packaging>
 
-  <properties>
-    <maven.repo.dir>../../maven</maven.repo.dir>
-  </properties>
-  
   <dependencies>
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-core</artifactId>
-      <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-jdbc</artifactId>
-      <version>${version.spring}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
 </project>

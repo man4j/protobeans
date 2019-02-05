@@ -29,7 +29,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
-    private Logger logger = LoggerFactory.getLogger(ExceptionControllerAdvice.class);
+    private static Logger logger = LoggerFactory.getLogger(ExceptionControllerAdvice.class);
     
     @Autowired
     private MessageSource messageSource;
