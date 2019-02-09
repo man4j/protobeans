@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vladmihalcea.hibernate.type.util.ObjectMapperSupplier;
 
 public class JacksonSupplier implements ObjectMapperSupplier {
-    public static ObjectMapper objectMapper;
+    public static volatile ObjectMapper objectMapper;
     
     @Override
     public ObjectMapper get() {
-        return objectMapper;
+        return objectMapper != null ? objectMapper : new ObjectMapper();
     }
 }

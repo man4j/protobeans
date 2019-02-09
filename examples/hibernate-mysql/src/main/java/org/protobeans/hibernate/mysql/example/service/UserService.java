@@ -26,13 +26,6 @@ public class UserService {
         return userDao.checkAndUpdate(u);
     }
     
-    @WithTransaction
-    public void insertUsers(int count) {
-        for (int i = 0; i < count; i++) {
-            userDao.insert(new User(i, "user" + i + "@mail.com", "pw" + i, "1"));
-        }
-    }
-    
     @WithTransaction(readOnly = true)
     public long count() {
         return userDao.count();

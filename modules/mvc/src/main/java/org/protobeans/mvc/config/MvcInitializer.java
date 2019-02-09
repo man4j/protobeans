@@ -55,28 +55,28 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
         servletContext.setSessionTrackingModes(Collections.singleton(SessionTrackingMode.COOKIE));
 
         DefaultListableBeanFactory bf = (DefaultListableBeanFactory) rootApplicationContext.getAutowireCapableBeanFactory();
+        servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, rootApplicationContext);
         
         if (rootApplicationContext.getServletContext() == null) {//in case then spring-test already inject MockServletContext
             rootApplicationContext.setServletContext(servletContext);
-            servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, rootApplicationContext);
+        }
             
-            //Некоторые классы вроде WebMvcConfigurationSupport зависят от servletContext, но получается, что пост-процессор
-            //почему-то срабатывает позже, чем это нужно поэтому распихиваем servletContext вручную
-            bf.getBeansOfType(ServletContextAware.class).values().forEach(b -> b.setServletContext(servletContext));
-            
-            for (BeanPostProcessor pp : bf.getBeanPostProcessors()) {
-                if (pp instanceof ServletContextAwareProcessor) {
-                    ServletContextAwareProcessor p = (ServletContextAwareProcessor) pp;
+        //Некоторые классы вроде WebMvcConfigurationSupport зависят от servletContext, но получается, что пост-процессор
+        //почему-то срабатывает позже, чем это нужно поэтому распихиваем servletContext вручную
+        bf.getBeansOfType(ServletContextAware.class).values().forEach(b -> b.setServletContext(servletContext));
+        
+        for (BeanPostProcessor pp : bf.getBeanPostProcessors()) {
+            if (pp instanceof ServletContextAwareProcessor) {
+                ServletContextAwareProcessor p = (ServletContextAwareProcessor) pp;
+                
+                try {
+                    Field f = p.getClass().getDeclaredField("servletContext");
                     
-                    try {
-                        Field f = p.getClass().getDeclaredField("servletContext");
-                        
-                        f.setAccessible(true);
-                        
-                        f.set(p, servletContext);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
+                    f.setAccessible(true);
+                    
+                    f.set(p, servletContext);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
             }
         }

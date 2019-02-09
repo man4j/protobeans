@@ -10,22 +10,19 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>    
-    <protobeans.version>0.1.37</protobeans.version>
-    <version.spring>5.0.5.RELEASE</version.spring>
+    <protobeans.version>0.2.0</protobeans.version>
+    <version.spring>5.1.3.RELEASE</version.spring>
   </properties>
 
   <modules>
-    <module>jdbc-mysql</module>
-    <module>hibernate-mysql</module>
+    <module>cxf</module>
     <module>freemarker</module>
+    <module>hibernate-mysql</module>    
     <module>i18n</module>
-    <module>undertow</module>
-    <module>mvc</module>
-    <module>mvc-security</module>
-    <module>webservices</module>
-    <module>mail</module>
+    <module>kafka</module>
     <module>scheduler</module>
-    <module>monitoring</module>
+    <module>undertow</module>
+    <module>webapp</module>
   </modules>
   
   <dependencies>
@@ -38,20 +35,28 @@
     <dependency>
       <groupId>org.codehaus.janino</groupId>
       <artifactId>janino</artifactId>
-      <version>3.0.7</version>
+      <version>3.0.12</version>
     </dependency>
         
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>2.11.0</version>
+      <version>2.24.0</version>
       <scope>test</scope>
     </dependency>
-
+    
+    <!-- JUnit -->
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.3.2</version>
+      <scope>test</scope>    
+    </dependency>
+    
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-launcher</artifactId>
+      <version>1.3.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -79,12 +84,6 @@
       <dependency>
         <groupId>org.protobeans</groupId>
         <artifactId>protobeans-jdbc</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-monitoring</artifactId>
         <version>${protobeans.version}</version>
       </dependency>
 
@@ -147,6 +146,18 @@
         <artifactId>protobeans-undertow</artifactId>
         <version>${protobeans.version}</version>
       </dependency>      
+      
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-kafka</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-cxf</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>
       
       <dependency>
         <groupId>org.springframework</groupId>

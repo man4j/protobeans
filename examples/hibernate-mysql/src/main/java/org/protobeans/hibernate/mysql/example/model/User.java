@@ -2,44 +2,31 @@ package org.protobeans.hibernate.mysql.example.model;
 
 import java.util.UUID;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.OptimisticLockType;
 import org.hibernate.annotations.OptimisticLocking;
 
 @Entity
-@Table(name = "users")
 @DynamicUpdate
 @OptimisticLocking(type = OptimisticLockType.DIRTY)
 public class User {
     @Id
-    private int id;
+    private String id = UUID.randomUUID().toString();
     
     private String email;
     
     private String password;
     
-    @Column(name = "confirm_uuid")
-    private String confirmUuid;
+    private String confirmUuid = UUID.randomUUID().toString();
 
     private boolean confirmed;
 
-    public User(int id, String email, String password) {
-        this.id = id;
+    public User(String email, String password) {
         this.email = email;
         this.password = password;
-        this.confirmUuid = UUID.randomUUID().toString();
-    }
-    
-    public User(int id, String email, String password, String confirmUuid) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.confirmUuid = confirmUuid;
     }
     
     public User() {
@@ -78,7 +65,7 @@ public class User {
         this.confirmed = confirmed;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 }

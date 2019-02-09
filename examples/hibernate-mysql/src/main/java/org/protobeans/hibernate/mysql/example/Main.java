@@ -1,5 +1,7 @@
 package org.protobeans.hibernate.mysql.example;
 
+import java.util.UUID;
+
 import org.protobeans.core.EntryPoint;
 import org.protobeans.flyway.annotation.EnableFlyway;
 import org.protobeans.hibernate.annotation.EnableHibernate;
@@ -20,13 +22,18 @@ public class Main {
         try (AnnotationConfigApplicationContext ctx = EntryPoint.run(Main.class)) {
             UserService userService = ctx.getBean(UserService.class);
             
-            User u = new User(1, "email", "pwd");
+            User u = new User(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6) + "@example.com", 
+                              UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6));
             
             userService.insert(u);
             
-            u.setEmail("email1");
+            u.setEmail(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6) + "@example.com");
             
             userService.update(u);
+            
+            u.setEmail(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6) + "@example.com");
+            
+            userService.checkAndUpdate(u);
         }
     }
 }

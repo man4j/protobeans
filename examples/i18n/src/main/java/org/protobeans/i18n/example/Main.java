@@ -1,5 +1,7 @@
 package org.protobeans.i18n.example;
 
+import java.util.Locale;
+
 import org.protobeans.core.EntryPoint;
 import org.protobeans.i18n.annotation.EnableI18n;
 import org.protobeans.i18n.example.service.HelloService;
@@ -16,7 +18,8 @@ public class Main {
     
     @EventListener(ContextRefreshedEvent.class)
     void start() {
-        helloService.sayHello();
+        helloService.sayHello(new Locale("ru", "RU"));
+        helloService.sayHello(new Locale("en", "US"));
     }
     
     public static void main(String[] args) {

@@ -11,7 +11,7 @@ public class HelloService {
     @Autowired
     private ApplicationContext ctx;
     
-    public void sayHello() {
-        System.out.println(ctx.getMessage("message.hello", new Object[] {}, new Locale("ru", "RU")));
+    public void sayHello(Locale locale) {
+        System.out.println(ctx.getMessage("message.hello", new Object[] {}, locale));
     }
 }

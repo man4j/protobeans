@@ -36,7 +36,7 @@ public class HibernateConfig {
     @Autowired
     private DataSource dataSource;
     
-    @Autowired
+    @Autowired(required = false)
     private ObjectMapper mapper;
     
     @Bean
