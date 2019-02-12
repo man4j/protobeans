@@ -35,7 +35,7 @@ public class Main {
     }
     
     @KafkaListener(id = "group1", topics = "topic1")
-    public void listenHistory(List<String> records) {
+    public void topicListener(List<String> records) {
         for (String value : records) {
             System.out.println("Receive: " + value);
             
