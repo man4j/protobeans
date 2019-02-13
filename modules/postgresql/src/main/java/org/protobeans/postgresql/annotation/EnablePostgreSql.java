@@ -25,4 +25,6 @@ public @interface EnablePostgreSql {
     String password();
     
     int maxPoolSize() default 50; 
+    
+    String transactionIsolation() default "TRANSACTION_READ_COMMITTED";
 }

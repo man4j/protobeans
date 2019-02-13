@@ -1,12 +1,20 @@
 package org.protobeans.postgresql.config;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import javax.sql.DataSource;
 
 import org.postgresql.ds.PGSimpleDataSource;
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.postgresql.annotation.EnablePostgreSql;
+import org.protobeans.scheduler.annotation.EnableScheduler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariDataSource;
@@ -14,7 +22,10 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @InjectFrom(EnablePostgreSql.class)
 @EnableTransactionManagement(proxyTargetClass = true)
+@EnableScheduler
 public class PostgreSqlConfig {
+    private static Logger logger = LoggerFactory.getLogger(PostgreSqlConfig.class);
+    
     private String dbHost;
     
     private String dbPort;
@@ -26,6 +37,12 @@ public class PostgreSqlConfig {
     private String password;
     
     private int maxPoolSize;
+    
+    private String transactionIsolation;
+    
+    private boolean enableAutomaticReindex;
+    
+    private volatile DataSource ds;
     
     @Bean(destroyMethod = "close")
     public DataSource dataSource() {
@@ -46,8 +63,27 @@ public class PostgreSqlConfig {
         ds.setDataSource(pgSimpleDataSource);
         ds.setMaximumPoolSize(maxPoolSize);
         ds.setAutoCommit(false);
-        ds.setTransactionIsolation("TRANSACTION_SERIALIZABLE");
-
+        ds.setTransactionIsolation(transactionIsolation);
+        
+        this.ds = ds;
+        
         return ds;
+    }
+    
+    @Scheduled(cron = "0 0 3 * * *")//at 3 O'clock
+    public void reindex() throws SQLException {
+        if (enableAutomaticReindex) {
+            try(Connection con = ds.getConnection();            
+                Statement st = con.createStatement()) {
+                
+                logger.info("[PROTOBEANS]: Start reindex database: " + schema);
+                
+                long t = System.currentTimeMillis();
+                
+                st.executeQuery("REINDEX DATABASE " + schema);
+                
+                logger.info("[PROTOBEANS]: Reindex database duration: " + (System.currentTimeMillis() - t) + " ms");
+            }
+        }
     }
 }
