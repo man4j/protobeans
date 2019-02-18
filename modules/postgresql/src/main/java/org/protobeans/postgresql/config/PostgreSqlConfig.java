@@ -1,7 +1,6 @@
 package org.protobeans.postgresql.config;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.sql.DataSource;
@@ -9,12 +8,10 @@ import javax.sql.DataSource;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.postgresql.annotation.EnablePostgreSql;
-import org.protobeans.scheduler.annotation.EnableScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariDataSource;
@@ -22,7 +19,6 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @InjectFrom(EnablePostgreSql.class)
 @EnableTransactionManagement(proxyTargetClass = true)
-@EnableScheduler
 public class PostgreSqlConfig {
     private static Logger logger = LoggerFactory.getLogger(PostgreSqlConfig.class);
     
@@ -40,12 +36,10 @@ public class PostgreSqlConfig {
     
     private String transactionIsolation;
     
-    private boolean enableAutomaticReindex;
-    
-    private volatile DataSource ds;
+    private boolean reindexOnStart;
     
     @Bean(destroyMethod = "close")
-    public DataSource dataSource() {
+    public DataSource dataSource() throws Exception {
         HikariDataSource ds = new HikariDataSource();
         
         PGSimpleDataSource pgSimpleDataSource = new PGSimpleDataSource();
@@ -64,15 +58,8 @@ public class PostgreSqlConfig {
         ds.setMaximumPoolSize(maxPoolSize);
         ds.setAutoCommit(false);
         ds.setTransactionIsolation(transactionIsolation);
-        
-        this.ds = ds;
-        
-        return ds;
-    }
-    
-    @Scheduled(cron = "0 0 3 * * *")//at 3 O'clock
-    public void reindex() throws SQLException {
-        if (enableAutomaticReindex) {
+
+        if (reindexOnStart) {
             try(Connection con = ds.getConnection();            
                 Statement st = con.createStatement()) {
                 
@@ -85,5 +72,7 @@ public class PostgreSqlConfig {
                 logger.info("[PROTOBEANS]: Reindex database duration: " + (System.currentTimeMillis() - t) + " ms");
             }
         }
+        
+        return ds;
     }
 }

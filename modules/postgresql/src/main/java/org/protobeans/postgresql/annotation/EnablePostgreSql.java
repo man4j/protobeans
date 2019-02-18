@@ -27,4 +27,6 @@ public @interface EnablePostgreSql {
     int maxPoolSize() default 50; 
     
     String transactionIsolation() default "TRANSACTION_READ_COMMITTED";
+    
+    boolean reindexOnStart() default false;
 }
