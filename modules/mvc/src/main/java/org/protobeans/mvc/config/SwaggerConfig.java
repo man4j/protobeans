@@ -9,7 +9,7 @@ import org.protobeans.mvc.annotation.EnableSwagger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Info;
 import io.swagger.annotations.Tag;
 import springfox.documentation.builders.PathSelectors;
@@ -39,7 +39,7 @@ public class SwaggerConfig {
                 .apiInfo(new ApiInfo(info.title(), info.description(), info.version(), info.termsOfService(), info.contact().name(), info.license().name(), info.license().url()))
                 .tags(serviceTags.get(0), serviceTags.toArray(new springfox.documentation.service.Tag[] {}))
                 .select()
-                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))              
+                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))              
                 .paths(PathSelectors.any())
                 .build();                                           
     }
