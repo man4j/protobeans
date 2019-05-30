@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
 import org.protobeans.mvc.rest.exception.BusinessException;
+import org.protobeans.mvc.rest.exception.NotFoundException;
 import org.protobeans.mvc.rest.model.ProtobeansFieldError;
 import org.protobeans.mvc.rest.model.RestResult;
 import org.slf4j.Logger;
@@ -51,6 +52,11 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest()
                              .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                              .body(new RestResult(new ArrayList<>(), messages));
+    }
+    
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Object> handleBusinessException(@SuppressWarnings("unused") NotFoundException ex) {
+        return ResponseEntity.notFound().build();
     }
     
     @ExceptionHandler(ConstraintViolationException.class)
