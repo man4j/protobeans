@@ -1,7 +1,5 @@
 package org.protobeans.security.model;
 
-import java.util.Locale;
-
 import javax.validation.constraints.NotBlank;
 
 import org.protobeans.security.validation.SignIn;
@@ -17,7 +15,7 @@ public class SignInForm {
     private boolean rememberMe;
 
     public String getId() {
-        return id == null ? null : id.toLowerCase(Locale.US);
+        return id;
     }
 
     public void setId(String id) {
