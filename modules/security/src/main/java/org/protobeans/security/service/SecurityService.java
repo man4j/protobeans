@@ -20,10 +20,12 @@ public class SecurityService {
     public User getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        Object principal = auth.getPrincipal();
-
-        if (principal instanceof User) {
-            return (User) principal;
+        if (auth != null) {        
+            Object principal = auth.getPrincipal();
+    
+            if (principal instanceof User) {
+                return (User) principal;
+            }
         }
 
         return null;

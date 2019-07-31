@@ -37,6 +37,8 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.logout.ForwardLogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -83,13 +85,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         String[] permitAllPatterns = ctx.getBeansWithAnnotation(PermitAll.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(PermitAll.class).mvcPattern()).toArray(String[]::new);
         String[] disableCsrfPatterns = ctx.getBeansWithAnnotation(DisableCsrf.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(DisableCsrf.class).antPattern()).toArray(String[]::new);
         
+        LoginUrlAuthenticationEntryPoint authenticationEntryPoint = new LoginUrlAuthenticationEntryPoint(loginUrl);
+        authenticationEntryPoint.setUseForward(true);
+        
+        LogoutSuccessHandler logoutSuccessHandler = new ForwardLogoutSuccessHandler(loginUrl);
+        
         http.authenticationProvider(new UuidAuthenticationProvider())//add custom provider
             .authorizeRequests().mvcMatchers(permitAllPatterns).permitAll()
                                 .antMatchers("/swagger-ui.html/**", "/swagger-resources/**", "/v2/api-docs/**", "/webjars/**").permitAll()
                                 .mvcMatchers(anonymousPatterns).anonymous()
                                 .anyRequest().authenticated()            
             .and().rememberMe().rememberMeServices(rememberMeServices()).key("123").authenticationSuccessHandler(new CurrentUrlAuthenticationSuccessHandler())
-            .and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint(loginUrl))
+            .and().logout().logoutSuccessHandler(logoutSuccessHandler)
+            .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)                                      
                                       .accessDeniedHandler((req, res, e) -> {res.setStatus(HttpServletResponse.SC_FORBIDDEN);})                                      
             .and().addFilterBefore(new CharacterEncodingFilter(StandardCharsets.UTF_8.name(), true, true), ChannelProcessingFilter.class);
         
