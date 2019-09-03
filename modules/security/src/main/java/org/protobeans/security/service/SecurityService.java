@@ -34,7 +34,7 @@ public class SecurityService {
     public Authentication createUsernamePasswordAuthenticationToken(AbstractProfile profile, String rawPassword) {
         List<GrantedAuthority> authorities = profile.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
-        return new UsernamePasswordAuthenticationToken(new User(profile.getId(), profile.getPassword(), profile.isConfirmed(), true, true, true, authorities), rawPassword, authorities);
+        return new UsernamePasswordAuthenticationToken(new User(profile.getId(), profile.getPassword(), profile.isConfirmed(), true, true, !profile.isLocked(), authorities), rawPassword, authorities);
     }
     
     public Authentication createUuidAuthenticationToken(AbstractProfile profile, String uuid) {
