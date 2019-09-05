@@ -2,7 +2,6 @@ package org.protobeans.kafka.config;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -62,6 +61,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class KafkaMessagingConfig {
     private String brokerList;
     
+    private String transactionalIdPrefix;
+
     private int concurrency;
     
     private String autoOffsetReset;
@@ -71,7 +72,6 @@ public class KafkaMessagingConfig {
     @Autowired
     private ApplicationContext ctx;
     
-    @SuppressWarnings("boxing")
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
@@ -118,7 +118,23 @@ public class KafkaMessagingConfig {
     public ProducerFactory<String, String> producerFactory() {
         DefaultKafkaProducerFactory<String, String> defaultKafkaProducerFactory = new DefaultKafkaProducerFactory<>(producerConfigs());
         
-        defaultKafkaProducerFactory.setTransactionIdPrefix(UUID.randomUUID().toString());
+        /**
+         * Per Producer. This property is mapped to the transactional.id directly like this:
+
+           configs.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG,
+                    this.transactionIdPrefix + this.transactionIdSuffix.getAndIncrement());
+                    
+           You really can stick with the same value here. It definitely must be different for 
+           several producer-based applications in parallel, but that's fine to reuse the same transaction.id.prefix over restart.
+           
+           If you are running multiple instances of the same app concurrently, each app instance needs a unique prefix. Otherwise 
+           you'll get transaction.id collisions. You don't need a different value for non-concurrent executions of the same application.
+           
+           Using :
+           props.put("transaction.id.prefix", UUID.randomUUID());
+           Is not a good idea since if the app crash it will generate a new one (on restart) instead of using the last prefix to resume ongoing transactions                    
+         */
+        defaultKafkaProducerFactory.setTransactionIdPrefix(transactionalIdPrefix);
         
         return defaultKafkaProducerFactory;
     }
@@ -137,6 +153,8 @@ public class KafkaMessagingConfig {
         props.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "gzip");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 1);
+        props.put(ProducerConfig.RETRIES_CONFIG, 0);
         
         return props;
     }

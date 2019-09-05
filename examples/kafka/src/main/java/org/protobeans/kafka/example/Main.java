@@ -15,7 +15,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.annotation.KafkaListener;
 
-@EnableKafkaMessaging(brokerList = "91.242.38.69:9092")
+@EnableKafkaMessaging(brokerList = "91.242.38.71:9092")
 @ComponentScan(basePackageClasses=KafkaService.class)
 public class Main {
     @Autowired
@@ -49,7 +49,7 @@ public class Main {
     
     @Bean
     public NewTopic mytopic() {
-        return new NewTopic("topic1", 6, (short) 3);
+        return new NewTopic("topic1", 6, (short) 1);
     }
     
     public static void main(String[] args) {

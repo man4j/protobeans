@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-parent</artifactId>
-  <version>0.2.8</version>
+  <version>0.2.9</version>
   <packaging>pom</packaging>
   
   <properties>
@@ -27,7 +27,7 @@
     <module>modules/undertow</module>
     <module>modules/mvc</module>
     <module>modules/mail</module>
-    <module>modules/async</module>
+<!-- <module>modules/async</module> -->
     <module>modules/scheduler</module>
     <module>modules/security</module>
     <module>modules/cxf</module>
@@ -285,7 +285,7 @@
       <dependency>
         <groupId>org.springframework.kafka</groupId>
         <artifactId>spring-kafka</artifactId>
-        <version>2.2.3.RELEASE</version>
+        <version>2.2.8.RELEASE</version>
       </dependency>
 
       <!-- Spring -->
