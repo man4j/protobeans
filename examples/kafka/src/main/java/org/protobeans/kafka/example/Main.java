@@ -15,7 +15,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.annotation.KafkaListener;
 
-@EnableKafkaMessaging(brokerList = "91.242.38.71:9092")
+@EnableKafkaMessaging(brokerList = "91.242.38.71:9092", transactionalIdPrefix = "123")
 @ComponentScan(basePackageClasses=KafkaService.class)
 public class Main {
     @Autowired
