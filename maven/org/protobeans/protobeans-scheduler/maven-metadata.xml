@@ -3,7 +3,7 @@
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-scheduler</artifactId>
   <versioning>
-    <release>0.2.11</release>
+    <release>0.2.12</release>
     <versions>
       <version>0.1.16</version>
       <version>0.1.17</version>
@@ -65,7 +65,8 @@
       <version>0.2.9</version>
       <version>0.2.10</version>
       <version>0.2.11</version>
+      <version>0.2.12</version>
     </versions>
-    <lastUpdated>20191028110352</lastUpdated>
+    <lastUpdated>20191103160634</lastUpdated>
   </versioning>
 </metadata>
