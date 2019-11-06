@@ -1,5 +1,7 @@
 package org.protobeans.undertow.config;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -30,6 +32,8 @@ import io.undertow.server.HttpServerExchange;
 import io.undertow.server.handlers.encoding.ContentEncodingRepository;
 import io.undertow.server.handlers.encoding.EncodingHandler;
 import io.undertow.server.handlers.encoding.GzipEncodingProvider;
+import io.undertow.server.handlers.proxy.LoadBalancingProxyClient;
+import io.undertow.server.handlers.proxy.ProxyHandler;
 import io.undertow.server.handlers.resource.ClassPathResourceManager;
 import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.DeploymentInfo;
@@ -56,6 +60,10 @@ public class UndertowConfig {
     private String errorPage;
     
     private int sessionTimeout;
+
+    private String ignoreProxyPathPrefix;
+
+    private String proxyBackend;
     
     @Autowired(required = false)
     private List<Class<? extends WebApplicationInitializer>> springInitializers = new ArrayList<>();
@@ -87,7 +95,9 @@ public class UndertowConfig {
             deploymentInfo.addServletContainerInitializer(new ServletContainerInitializerInfo(SpringServletContainerInitializer.class, springInitializersSet));
         }
         
-        final EncodingHandler handler = new EncodingHandler(new ContentEncodingRepository().addEncodingHandler("gzip", 
+        HttpHandler firstHandler = null;
+        
+        final EncodingHandler encodingHandler = new EncodingHandler(new ContentEncodingRepository().addEncodingHandler("gzip", 
                 new GzipEncodingProvider(8), 50, Predicates.and(Predicates.maxContentSize(1024), 
                                                                new CompressibleMimeTypePredicate("text/html",
                                                                                                  "text/xml",
@@ -98,8 +108,37 @@ public class UndertowConfig {
                                                                                                  "application/json"))))
                                                           .setNext(createServletDeploymentHandler());
         
+        if (!proxyBackend.isEmpty()) {
+            LoadBalancingProxyClient proxyClient = new LoadBalancingProxyClient() {
+                @Override
+                public ProxyTarget findTarget(HttpServerExchange exchange) {
+                    if (exchange.getRequestPath().startsWith(ignoreProxyPathPrefix) ||
+                        exchange.getRequestPath().startsWith("/swagger") ||
+                        exchange.getRequestPath().startsWith("/v2/api-docs") ||
+                        exchange.getRequestPath().startsWith("/webjars/") || 
+                        exchange.getRequestPath().startsWith("/csrf")) {
+                        return null;
+                    }
+                    
+                    return super.findTarget(exchange);
+                }
+            };
+            
+            proxyClient.setConnectionsPerThread(20);
+            
+            try {
+                proxyClient.addHost(new URI(proxyBackend));
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+            
+            firstHandler = ProxyHandler.builder().setProxyClient(proxyClient).setNext(encodingHandler).build();
+        } else {
+            firstHandler = encodingHandler;
+        }
+            
         return Undertow.builder().addHttpListener(Integer.parseInt(port), host)
-                                 .setHandler(handler);
+                                 .setHandler(firstHandler);
     }
     
     private HttpHandler createServletDeploymentHandler() throws ServletException {

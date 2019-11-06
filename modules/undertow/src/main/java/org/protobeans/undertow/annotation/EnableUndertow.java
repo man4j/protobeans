@@ -27,4 +27,8 @@ public @interface EnableUndertow {
     String errorPage() default "";
     
     int sessionTimeout() default 30000;
+    
+    String ignoreProxyPathPrefix() default "";
+
+    String proxyBackend() default "";
 }
