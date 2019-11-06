@@ -12,7 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanExpressionContext;
+import org.springframework.beans.factory.config.BeanExpressionResolver;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.ReflectionUtils;
 
@@ -73,7 +76,15 @@ public class InjectFromAnnotationBeanPostProcessor implements BeanPostProcessor 
                                     
                                     f.set(bean, value.get());
                                 } else {
-                                    f.set(bean, injectedString);
+                                    String result;
+                                    
+                                    try {
+                                        result = (String) resolveExpression(ctx, injectedString);
+                                    } catch (@SuppressWarnings("unused") Exception e) {
+                                        result = injectedString;
+                                    }
+                                    
+                                    f.set(bean, result);
                                 }
                             } else {
                                 f.set(bean, injectedValue);
@@ -92,5 +103,14 @@ public class InjectFromAnnotationBeanPostProcessor implements BeanPostProcessor 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         return bean;
+    }
+    
+    private Object resolveExpression(ApplicationContext ctx, String expression) {
+        DefaultListableBeanFactory bf = (DefaultListableBeanFactory) ctx.getAutowireCapableBeanFactory();
+
+        String placeholdersResolved = bf.resolveEmbeddedValue(expression);
+        BeanExpressionResolver expressionResolver = bf.getBeanExpressionResolver();
+        
+        return expressionResolver.evaluate(placeholdersResolved, new BeanExpressionContext(bf, null));
     }
 }
