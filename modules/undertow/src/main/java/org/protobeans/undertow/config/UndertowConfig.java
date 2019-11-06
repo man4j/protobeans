@@ -61,7 +61,7 @@ public class UndertowConfig {
     
     private int sessionTimeout;
 
-    private String ignoreProxyPathPrefix;
+    private String[] ignoreProxyPathPrefix;
 
     private String proxyBackend;
     
@@ -112,8 +112,13 @@ public class UndertowConfig {
             LoadBalancingProxyClient proxyClient = new LoadBalancingProxyClient() {
                 @Override
                 public ProxyTarget findTarget(HttpServerExchange exchange) {
-                    if (exchange.getRequestPath().startsWith(ignoreProxyPathPrefix) ||
-                        exchange.getRequestPath().startsWith("/swagger") ||
+                    for (String prefix : ignoreProxyPathPrefix) {
+                        if (exchange.getRequestPath().startsWith(prefix)) {
+                            return null;
+                        }
+                    }
+                    
+                    if (exchange.getRequestPath().startsWith("/swagger") ||
                         exchange.getRequestPath().startsWith("/v2/api-docs") ||
                         exchange.getRequestPath().startsWith("/webjars/") || 
                         exchange.getRequestPath().startsWith("/csrf")) {
