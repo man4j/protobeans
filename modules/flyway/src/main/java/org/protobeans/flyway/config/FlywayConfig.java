@@ -22,10 +22,9 @@ public class FlywayConfig {
     
     @PostConstruct
     public void migrate() throws InterruptedException {
-        Flyway fw = new Flyway();
-        
-        fw.setDataSource(dataSource.getDataSource() == null ? dataSource : dataSource.getDataSource());
-        fw.setLocations("classpath:migrations");
+        Flyway fw = Flyway.configure().locations("classpath:migrations")
+                                      .dataSource(dataSource.getDataSource() == null ? dataSource : dataSource.getDataSource())
+                                      .load();
         
         while (true) {
             try {

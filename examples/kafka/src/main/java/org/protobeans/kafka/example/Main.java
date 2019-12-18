@@ -14,8 +14,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.config.TopicBuilder;
 
-@EnableKafkaMessaging(brokerList = "91.242.38.71:9092", transactionalIdPrefix = "123")
+@EnableKafkaMessaging(brokerList = "10.0.76.1:9092", transactionalIdPrefix = "123")
 @ComponentScan(basePackageClasses=KafkaService.class)
 public class Main {
     @Autowired
@@ -49,7 +50,7 @@ public class Main {
     
     @Bean
     public NewTopic mytopic() {
-        return new NewTopic("topic1", 6, (short) 1);
+        return TopicBuilder.name("topic1").partitions(6).replicas(3).build();
     }
     
     public static void main(String[] args) {

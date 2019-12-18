@@ -84,6 +84,7 @@ public class KafkaMessagingConfig {
         
         factory.getContainerProperties().setAckMode(AckMode.BATCH);
         factory.getContainerProperties().setTransactionManager(kafkaTransactionManager());
+        factory.getContainerProperties().setSubBatchPerPartition(true);
         
         return factory;
     }
@@ -141,7 +142,10 @@ public class KafkaMessagingConfig {
     
     @Bean
     public KafkaTransactionManager<String, String> kafkaTransactionManager() {
-        return new KafkaTransactionManager<>(producerFactory());
+        KafkaTransactionManager<String, String> kafkaTransactionManager = new KafkaTransactionManager<>(producerFactory());
+        kafkaTransactionManager.setTransactionIdPrefix(transactionalIdPrefix);
+        
+        return kafkaTransactionManager;
     }
 
     @Bean
@@ -154,7 +158,6 @@ public class KafkaMessagingConfig {
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 1);
-        props.put(ProducerConfig.RETRIES_CONFIG, 0);
         
         return props;
     }
