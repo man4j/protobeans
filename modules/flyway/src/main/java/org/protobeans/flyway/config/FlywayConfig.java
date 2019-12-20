@@ -16,15 +16,13 @@ import com.zaxxer.hikari.HikariDataSource;
 @InjectFrom(EnableFlyway.class)
 public class FlywayConfig {
     private static final Logger logger = LoggerFactory.getLogger(FlywayConfig.class);
-    
+        
     @Autowired
     private HikariDataSource dataSource;
     
     @PostConstruct
     public void migrate() throws InterruptedException {
-        Flyway fw = Flyway.configure().locations("classpath:migrations")
-                                      .dataSource(dataSource.getDataSource() == null ? dataSource : dataSource.getDataSource())
-                                      .load();
+        Flyway fw = Flyway.configure().locations("classpath:migrations").dataSource(dataSource.getDataSource() == null ? dataSource : dataSource.getDataSource()).load();
         
         while (true) {
             try {

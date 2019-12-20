@@ -88,6 +88,12 @@
       
       <dependency>
         <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-postgresql</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.protobeans</groupId>
         <artifactId>protobeans-mvc</artifactId>
         <version>${project.version}</version>
       </dependency>
