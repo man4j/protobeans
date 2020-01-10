@@ -51,6 +51,8 @@ public class MvcConfig implements WebMvcConfigurer {
     private String resourcesPath;
     
     private String resourcesUrl;
+    
+    private String sessionCookieName;
         
     @Autowired(required = false)
     private List<HttpMessageConverter<?>> converters = new ArrayList<>();
@@ -64,6 +66,7 @@ public class MvcConfig implements WebMvcConfigurer {
     @Bean
     public Class<? extends WebApplicationInitializer> mvcInitializer(ConfigurableWebApplicationContext ctx) {
         MvcInitializer.rootApplicationContext = ctx;
+        MvcInitializer.sessionCookieName = sessionCookieName;
         
         if (filterBean != null) {
             MvcInitializer.filters = filterBean.getFilters();

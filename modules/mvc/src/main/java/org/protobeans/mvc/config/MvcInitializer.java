@@ -24,6 +24,8 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
     
     public static List<Filter> filters = new ArrayList<>();
     
+    public static String sessionCookieName;
+    
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return null;
@@ -53,6 +55,10 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
     public void onStartup(ServletContext servletContext) throws ServletException {
         servletContext.addListener(RequestContextListener.class);//Для того, чтобы запрос был доступен в фильтрах, например в SocialAuthenticationFilter
         servletContext.setSessionTrackingModes(Collections.singleton(SessionTrackingMode.COOKIE));
+        
+        if (sessionCookieName != null && !sessionCookieName.isBlank()) {
+            servletContext.getSessionCookieConfig().setName(sessionCookieName);
+        }
 
         DefaultListableBeanFactory bf = (DefaultListableBeanFactory) rootApplicationContext.getAutowireCapableBeanFactory();
         servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, rootApplicationContext);

@@ -17,4 +17,6 @@ public @interface EnableMvc {
     String resourcesPath() default "";
     
     String resourcesUrl() default "";
+    
+    String sessionCookieName() default "";
 }
