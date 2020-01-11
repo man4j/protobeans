@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import org.protobeans.core.bean.ProtobeansContext;
-import org.protobeans.core.model.QueryStatInfo;
+import org.protobeans.core.model.CouchDbQueryStatInfo;
+import org.protobeans.core.model.HibernateQueryStatInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +18,21 @@ public class StatsController {
     @Autowired
     private ProtobeansContext context;
     
-    @GetMapping("/stats/query")
-    String getQueryStats(Model model) {
-        Supplier<List<QueryStatInfo>> statsSupplier = context.getValue(QueryStatInfo.QUERY_STATS_KEY);
+    @GetMapping("/stats/hibernate")
+    String getHibernateQueryStats(Model model) {
+        Supplier<List<HibernateQueryStatInfo>> statsSupplier = context.getValue(HibernateQueryStatInfo.QUERY_STATS_KEY);
         
         model.addAttribute("queryList", statsSupplier.get());
         
-        return "/queryStats";
+        return "/hibernateQueryStats";
+    }
+    
+    @GetMapping("/stats/couchdb")
+    String getCouchDbQueryStats(Model model) {
+        Supplier<List<CouchDbQueryStatInfo>> statsSupplier = context.getValue(CouchDbQueryStatInfo.QUERY_STATS_KEY);
+        
+        model.addAttribute("queryList", statsSupplier.get());
+        
+        return "/couchdbQueryStats";
     }
 }

@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-parent</artifactId>
-  <version>0.3.1</version>
+  <version>0.3.2</version>
   <packaging>pom</packaging>
   
   <properties>
@@ -219,13 +219,6 @@
         <version>2.0.28.Final</version>
       </dependency>
 
-      <!-- Async Http Client -->      
-      <dependency>
-        <groupId>org.asynchttpclient</groupId>
-        <artifactId>async-http-client</artifactId>
-        <version>2.10.4</version>
-      </dependency>
-      
       <!-- Freemarker -->
       <dependency>
         <groupId>org.freemarker</groupId>
@@ -264,6 +257,13 @@
         <groupId>commons-fileupload</groupId>
         <artifactId>commons-fileupload</artifactId>
         <version>1.4</version>
+      </dependency>
+      
+      <!-- CouchDB -->
+      <dependency>
+        <groupId>com.equiron</groupId>
+        <artifactId>async-couchdb-client</artifactId>
+        <version>3.0-2.3.1</version>
       </dependency>
       
       <!-- Hibernate -->

@@ -34,7 +34,7 @@
                                         <th>Query</th>
                                         <th>Min</th>
                                         <th>Max</th>
-                                        <th>AVG</th>
+                                        <th>Avg</th>
                                         <th>Count</th>
                                     </tr>
                                 </thead>

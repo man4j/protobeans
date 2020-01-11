@@ -13,7 +13,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.stat.QueryStatistics;
 import org.hibernate.stat.Statistics;
 import org.protobeans.core.bean.ProtobeansContext;
-import org.protobeans.core.model.QueryStatInfo;
+import org.protobeans.core.model.HibernateQueryStatInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class HibernateStatsService {
@@ -26,24 +26,24 @@ public class HibernateStatsService {
     @SuppressWarnings("resource")
     @PostConstruct
     public void init() {
-        Supplier<List<QueryStatInfo>> statsSupplier = () -> {
+        Supplier<List<HibernateQueryStatInfo>> statsSupplier = () -> {
             SessionFactory sessionFactory = emf.unwrap(SessionFactory.class);
             
             Statistics statistics = sessionFactory.getStatistics();
             
-            List<QueryStatInfo> stats = new ArrayList<>();
+            List<HibernateQueryStatInfo> stats = new ArrayList<>();
             
             for (String query : statistics.getQueries()) {
                 QueryStatistics queryStatistics = statistics.getQueryStatistics(query);
                 
-                stats.add(new QueryStatInfo(query, queryStatistics.getExecutionMinTime(), queryStatistics.getExecutionMaxTime(), queryStatistics.getExecutionAvgTime(), queryStatistics.getExecutionCount()));
+                stats.add(new HibernateQueryStatInfo(query, queryStatistics.getExecutionMinTime(), queryStatistics.getExecutionMaxTime(), queryStatistics.getExecutionAvgTime(), queryStatistics.getExecutionCount()));
             }
             
-            Collections.sort(stats, Comparator.comparing(QueryStatInfo::getAvgTime).reversed());
+            Collections.sort(stats, Comparator.comparing(HibernateQueryStatInfo::getAvgTime).reversed());
             
             return stats;
         };
         
-        protobeansContext.putValue(QueryStatInfo.QUERY_STATS_KEY, statsSupplier);
+        protobeansContext.putValue(HibernateQueryStatInfo.QUERY_STATS_KEY, statsSupplier);
     }
 }

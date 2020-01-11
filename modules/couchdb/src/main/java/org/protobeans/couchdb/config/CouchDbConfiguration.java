@@ -1,8 +1,5 @@
 package org.protobeans.couchdb.config;
 
-import org.asynchttpclient.AsyncHttpClient;
-import org.asynchttpclient.DefaultAsyncHttpClient;
-import org.asynchttpclient.DefaultAsyncHttpClientConfig;
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.couchdb.annotation.EnableCouchDb;
 import org.springframework.context.annotation.Bean;
@@ -21,14 +18,10 @@ public class CouchDbConfiguration {
     
     private String password;
     
-    @SuppressWarnings("resource")
     @Bean
     public CouchDbConfig couchDbConfig() {
-        AsyncHttpClient httpClient = new DefaultAsyncHttpClient(new DefaultAsyncHttpClientConfig.Builder().setRequestTimeout(-1).setReadTimeout(60_000).build());
-        
         CouchDbConfig.Builder builder = new CouchDbConfig.Builder().setIp(dbHost)
-                                                                   .setPort(Integer.parseInt(dbPort))
-                                                                   .setHttpClient(httpClient);
+                                                                   .setPort(Integer.parseInt(dbPort));
         
         if (password != null) {
             builder.setUser(user).setPassword(password);

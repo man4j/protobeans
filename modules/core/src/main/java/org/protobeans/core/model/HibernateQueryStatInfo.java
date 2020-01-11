@@ -1,6 +1,6 @@
 package org.protobeans.core.model;
 
-public class QueryStatInfo {
+public class HibernateQueryStatInfo {
     public static final String QUERY_STATS_KEY = "QUERY_STATS";
     
     private String query;
@@ -13,7 +13,7 @@ public class QueryStatInfo {
     
     private long count;
 
-    public QueryStatInfo(String query, long minTime, long maxTime, long avgTime, long count) {
+    public HibernateQueryStatInfo(String query, long minTime, long maxTime, long avgTime, long count) {
         this.query = query;
         this.minTime = minTime;
         this.maxTime = maxTime;
