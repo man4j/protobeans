@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.protobeans</groupId>
     <artifactId>protobeans-parent</artifactId>
-    <version>0.3.5</version>
+    <version>0.3.8</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
