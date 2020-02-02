@@ -2,6 +2,7 @@ package org.protobeans.postgresql.config;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
 
@@ -58,6 +59,7 @@ public class PostgreSqlConfig {
         ds.setMaximumPoolSize(maxPoolSize);
         ds.setAutoCommit(false);
         ds.setTransactionIsolation(transactionIsolation);
+        ds.setMaxLifetime(TimeUnit.MINUTES.toMillis(10));
 
         if (reindexOnStart) {
             try(Connection con = ds.getConnection();            
