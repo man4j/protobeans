@@ -28,6 +28,8 @@ public @interface EnableUndertow {
     
     int sessionTimeout() default 30000;
     
+    int proxyConnectionsCount() default 20;
+    
     String[] ignoreProxyPathPrefix() default {};
 
     String proxyBackend() default "";

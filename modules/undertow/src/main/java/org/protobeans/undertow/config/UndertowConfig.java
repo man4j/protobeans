@@ -65,6 +65,8 @@ public class UndertowConfig {
 
     private String proxyBackend;
     
+    private int proxyConnectionsCount;
+    
     @Autowired(required = false)
     private List<Class<? extends WebApplicationInitializer>> springInitializers = new ArrayList<>();
     
@@ -129,7 +131,8 @@ public class UndertowConfig {
                 }
             };
             
-            proxyClient.setConnectionsPerThread(20);
+            System.out.println("Proxy connections per thread: " + proxyConnectionsCount);
+            proxyClient.setConnectionsPerThread(proxyConnectionsCount);
             
             try {
                 proxyClient.addHost(new URI(proxyBackend));
