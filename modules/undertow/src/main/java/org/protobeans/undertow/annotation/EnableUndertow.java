@@ -30,6 +30,8 @@ public @interface EnableUndertow {
     
     int proxyConnectionsCount() default 20;
     
+    String workerThreads() default "-1";
+    
     String[] ignoreProxyPathPrefix() default {};
 
     String proxyBackend() default "";

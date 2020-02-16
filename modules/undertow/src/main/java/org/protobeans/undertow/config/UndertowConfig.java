@@ -67,6 +67,8 @@ public class UndertowConfig {
     
     private int proxyConnectionsCount;
     
+    private String workerThreads;
+    
     @Autowired(required = false)
     private List<Class<? extends WebApplicationInitializer>> springInitializers = new ArrayList<>();
     
@@ -145,8 +147,17 @@ public class UndertowConfig {
             firstHandler = encodingHandler;
         }
             
-        return Undertow.builder().addHttpListener(Integer.parseInt(port), host)
-                                 .setHandler(firstHandler);
+        Builder builder = Undertow.builder().addHttpListener(Integer.parseInt(port), host)
+                                            .setHandler(firstHandler);
+        
+        int iWorkerThreads = Integer.parseInt(workerThreads);
+        
+        if (iWorkerThreads > 0) {
+            System.out.println("Worker threads: " + iWorkerThreads);
+            builder.setWorkerThreads(iWorkerThreads);
+        }
+        
+        return builder;
     }
     
     private HttpHandler createServletDeploymentHandler() throws ServletException {
