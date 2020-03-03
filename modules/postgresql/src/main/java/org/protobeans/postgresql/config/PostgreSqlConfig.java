@@ -33,7 +33,7 @@ public class PostgreSqlConfig {
     
     private String password;
     
-    private int maxPoolSize;
+    private String maxPoolSize;
     
     private String transactionIsolation;
     
@@ -56,7 +56,7 @@ public class PostgreSqlConfig {
         System.out.println("[PROTOBEANS]: Use postgres URL: " + pgSimpleDataSource.getUrl());
         
         ds.setDataSource(pgSimpleDataSource);
-        ds.setMaximumPoolSize(maxPoolSize);
+        ds.setMaximumPoolSize(Integer.parseInt(maxPoolSize));
         ds.setAutoCommit(false);
         ds.setTransactionIsolation(transactionIsolation);
         ds.setMaxLifetime(TimeUnit.MINUTES.toMillis(10));
