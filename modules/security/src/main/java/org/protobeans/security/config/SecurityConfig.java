@@ -92,7 +92,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         
         http.authenticationProvider(new UuidAuthenticationProvider())//add custom provider
             .authorizeRequests().mvcMatchers(permitAllPatterns).permitAll()
-                                .antMatchers("/swagger-ui.html/**", "/swagger-resources/**", "/v2/api-docs/**", "/webjars/**", "/csrf").permitAll()
+                                .antMatchers("/swagger-ui.html/**", 
+                                             "/v3/swagger-ui.html/**",
+                                             "/swagger-resources/**", 
+                                             "/v3/swagger-ui/**", 
+                                             "/v2/api-docs/**", 
+                                             "/v3/api-docs/**", 
+                                             "/webjars/**", 
+                                             "/v3/webjars/**", 
+                                             "/csrf").permitAll()
                                 .mvcMatchers(anonymousPatterns).anonymous()
                                 .anyRequest().authenticated()            
             .and().rememberMe().rememberMeServices(rememberMeServices()).key("123").authenticationSuccessHandler(new CurrentUrlAuthenticationSuccessHandler())

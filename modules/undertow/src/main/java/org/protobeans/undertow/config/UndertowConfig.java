@@ -125,6 +125,10 @@ public class UndertowConfig {
                     if (exchange.getRequestPath().startsWith("/swagger") ||
                         exchange.getRequestPath().startsWith("/v2/api-docs") ||
                         exchange.getRequestPath().startsWith("/webjars/") || 
+                        exchange.getRequestPath().startsWith("/v3/swagger") || 
+                        exchange.getRequestPath().startsWith("/swagger-resources") || 
+                        exchange.getRequestPath().startsWith("/v3/api-docs") || 
+                        exchange.getRequestPath().startsWith("/v3/webjars") || 
                         exchange.getRequestPath().startsWith("/csrf")) {
                         return null;
                     }

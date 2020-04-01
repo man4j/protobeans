@@ -55,9 +55,6 @@ public class MvcConfig implements WebMvcConfigurer {
     private String sessionCookieName;
         
     @Autowired(required = false)
-    private List<HttpMessageConverter<?>> converters = new ArrayList<>();
-    
-    @Autowired(required = false)
     private FilterBean filterBean;
     
     @Autowired
@@ -130,7 +127,6 @@ public class MvcConfig implements WebMvcConfigurer {
             long lastModified = FileUtils.getLastModified(dashedResourcesPath);
             
             registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-       
             registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
         
             registry.addResourceHandler(dashedResourcesUrl + lastModified + "/**")
@@ -141,7 +137,8 @@ public class MvcConfig implements WebMvcConfigurer {
     
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> defaultConverters) {
-        defaultConverters.addAll(converters);
+        defaultConverters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
+        defaultConverters.add(new MappingJackson2HttpMessageConverter(mapper()));
     }
         
     @Override
