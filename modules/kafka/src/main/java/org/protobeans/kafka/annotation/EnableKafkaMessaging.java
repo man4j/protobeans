@@ -39,4 +39,8 @@ public @interface EnableKafkaMessaging {
     String autoOffsetReset() default "earliest";
     
     String maxPollRecords() default "500";
+    
+    String backOffInterval() default "5000";
+    
+    String backOffMaxAttempts() default "9999999999";
 }

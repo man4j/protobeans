@@ -23,10 +23,11 @@ import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.listener.ContainerProperties.AckMode;
-import org.springframework.kafka.listener.ContainerStoppingBatchErrorHandler;
-import org.springframework.kafka.listener.ContainerStoppingErrorHandler;
+import org.springframework.kafka.listener.SeekToCurrentBatchErrorHandler;
+import org.springframework.kafka.listener.SeekToCurrentErrorHandler;
 import org.springframework.kafka.transaction.KafkaTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.backoff.FixedBackOff;
 
 /***
  * 
@@ -69,6 +70,10 @@ public class KafkaMessagingConfig {
     
     private String maxPollRecords;
     
+    private String backOffInterval;
+    
+    private String backOffMaxAttempts;
+    
     @Autowired
     private ApplicationContext ctx;
     
@@ -79,8 +84,10 @@ public class KafkaMessagingConfig {
         factory.setConsumerFactory(consumerFactory());
         factory.setConcurrency(concurrency == -1 ? Runtime.getRuntime().availableProcessors() : concurrency);
         factory.setBatchListener(true);
-        factory.setErrorHandler(new ContainerStoppingErrorHandler());
-        factory.setBatchErrorHandler(new ContainerStoppingBatchErrorHandler());
+        factory.setErrorHandler(new SeekToCurrentErrorHandler(new FixedBackOff(Long.parseLong(backOffInterval), Long.parseLong(backOffMaxAttempts))));
+        SeekToCurrentBatchErrorHandler batchErrorHandler = new SeekToCurrentBatchErrorHandler();
+        batchErrorHandler.setBackOff(new FixedBackOff(Long.parseLong(backOffInterval), Long.parseLong(backOffMaxAttempts)));
+        factory.setBatchErrorHandler(batchErrorHandler);
         
         factory.getContainerProperties().setAckMode(AckMode.BATCH);
         factory.getContainerProperties().setTransactionManager(kafkaTransactionManager());

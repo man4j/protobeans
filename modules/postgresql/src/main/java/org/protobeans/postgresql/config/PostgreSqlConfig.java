@@ -1,7 +1,9 @@
 package org.protobeans.postgresql.config;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
@@ -41,6 +43,36 @@ public class PostgreSqlConfig {
     
     @Bean(destroyMethod = "close")
     public DataSource dataSource() throws Exception {
+        String url = String.format("jdbc:postgresql://%s:%s/postgres", dbHost, dbPort);
+        
+        logger.info("Check database exists: {}", url);
+        
+        org.postgresql.Driver driver = new org.postgresql.Driver();
+
+        Properties props = new Properties();
+        props.put("user", user);
+        props.put("password", password);
+        props.put("ssl", false);
+        
+        try (Connection conn = driver.connect(url, props);
+             PreparedStatement ps = conn.prepareStatement("SELECT FROM pg_database WHERE datname = ?");) {
+            ps.setString(1, schema);
+            
+            if (ps.executeQuery().getRow() == 0) {
+                logger.info("Create database: {}", schema);
+                
+                try (PreparedStatement ps1 = conn.prepareStatement(String.format("CREATE DATABASE %s", schema))) {
+                    ps1.execute();
+                }
+                
+                try (PreparedStatement ps1 = conn.prepareStatement(String.format("GRANT ALL PRIVILEGES ON DATABASE %s TO %s", schema, user))) {
+                    ps1.execute();
+                }
+            } else {
+                logger.info("Database {} already exists", schema);
+            }
+        }
+        
         HikariDataSource ds = new HikariDataSource();
         
         PGSimpleDataSource pgSimpleDataSource = new PGSimpleDataSource();
