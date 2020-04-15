@@ -58,7 +58,7 @@ public class PostgreSqlConfig {
              PreparedStatement ps = conn.prepareStatement("SELECT FROM pg_database WHERE datname = ?");) {
             ps.setString(1, schema);
             
-            if (ps.executeQuery().getRow() == 0) {
+            if (!ps.executeQuery().next()) {
                 logger.info("Create database: {}", schema);
                 
                 try (PreparedStatement ps1 = conn.prepareStatement(String.format("CREATE DATABASE %s", schema))) {
