@@ -1,7 +1,6 @@
 package org.protobeans.mvc.config;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -16,7 +15,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.Validator;
@@ -139,6 +140,8 @@ public class MvcConfig implements WebMvcConfigurer {
     public void configureMessageConverters(List<HttpMessageConverter<?>> defaultConverters) {
         defaultConverters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
         defaultConverters.add(new MappingJackson2HttpMessageConverter(mapper()));
+        defaultConverters.add(new ByteArrayHttpMessageConverter());
+        defaultConverters.add(new ResourceHttpMessageConverter());
     }
         
     @Override
