@@ -69,6 +69,8 @@ public class UndertowConfig {
     
     private String workerThreads;
     
+    private String ioThreads;
+    
     @Autowired(required = false)
     private List<Class<? extends WebApplicationInitializer>> springInitializers = new ArrayList<>();
     
@@ -155,10 +157,16 @@ public class UndertowConfig {
                                             .setHandler(firstHandler);
         
         int iWorkerThreads = Integer.parseInt(workerThreads);
+        int iIoThreads = Integer.parseInt(ioThreads);
         
         if (iWorkerThreads > 0) {
             System.out.println("Worker threads: " + iWorkerThreads);
             builder.setWorkerThreads(iWorkerThreads);
+        }
+        
+        if (iIoThreads > 0) {
+            System.out.println("IO threads: " + iIoThreads);
+            builder.setIoThreads(iIoThreads);
         }
         
         return builder;

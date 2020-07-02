@@ -32,6 +32,8 @@ public @interface EnableUndertow {
     
     String workerThreads() default "-1";
     
+    String ioThreads() default "-1";
+    
     String[] ignoreProxyPathPrefix() default {};
 
     String proxyBackend() default "";
