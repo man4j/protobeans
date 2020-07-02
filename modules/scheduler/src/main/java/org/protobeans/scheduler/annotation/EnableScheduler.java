@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Import;
 @Import(SchedulerConfig.class)
 @Configuration
 public @interface EnableScheduler {
-    int poolSize() default 1;
+    String poolSize() default "1";
     
     boolean interruptOnClose() default false;
 }

@@ -13,7 +13,7 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 @EnableScheduling
 @InjectFrom(EnableScheduler.class)
 public class SchedulerConfig implements SchedulingConfigurer {
-    private int poolSize;
+    private String poolSize;
     
     private boolean interruptOnClose;
     
@@ -26,7 +26,7 @@ public class SchedulerConfig implements SchedulingConfigurer {
     public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
         
-        scheduler.setPoolSize(poolSize);
+        scheduler.setPoolSize(Integer.parseInt(poolSize));
         scheduler.setAwaitTerminationSeconds(Integer.MAX_VALUE);
         scheduler.setRemoveOnCancelPolicy(true);
         scheduler.setWaitForTasksToCompleteOnShutdown(!interruptOnClose);
