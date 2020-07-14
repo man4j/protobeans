@@ -12,13 +12,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @DirtiesContext
-@EnableMail(host = "smtp.sendgrid.net", user = "apikey", password = "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")
+@EnableMail(host = "", user = "", password = "")
 @ContextConfiguration(classes = SendTest.class)
 public class SendTest {
     @Autowired
     private JavaMailSender javaMailSender;
     
-    @Test
+    //@Test
     public void shouldSend() {
         SimpleMailMessage simpleMessage = new SimpleMailMessage();
         
