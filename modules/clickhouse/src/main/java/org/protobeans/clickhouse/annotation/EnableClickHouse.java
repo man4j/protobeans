@@ -1,24 +1,22 @@
-package org.protobeans.flyway.annotation;
+package org.protobeans.clickhouse.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.protobeans.flyway.config.FlywayConfig;
+import org.protobeans.clickhouse.config.ClickHouseConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Import(FlywayConfig.class)
+@Import(ClickHouseConfig.class)
 @Configuration
-public @interface EnableFlyway {
-    String url() default "";
+public @interface EnableClickHouse {
+    String dbHost();
     
-    String user() default "";
+    String dbPort() default "5432";
     
-    String password() default "";
-    
-    boolean repair() default true;
+    String schema() default "default";
 }

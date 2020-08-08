@@ -41,6 +41,8 @@ public class PostgreSqlConfig {
     
     private boolean reindexOnStart;
     
+    private boolean disablePreparedStatements;
+    
     @Bean(destroyMethod = "close")
     public DataSource dataSource() throws Exception {
         String url = String.format("jdbc:postgresql://%s:%s/postgres", dbHost, dbPort);
@@ -84,6 +86,10 @@ public class PostgreSqlConfig {
         pgSimpleDataSource.setLoadBalanceHosts(true);
         pgSimpleDataSource.setSsl(false);
         pgSimpleDataSource.setReWriteBatchedInserts(true);
+        
+        if (disablePreparedStatements) {
+            pgSimpleDataSource.setPrepareThreshold(0);
+        }
         
         System.out.println("[PROTOBEANS]: Use postgres URL: " + pgSimpleDataSource.getUrl());
         

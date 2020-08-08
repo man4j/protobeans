@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-parent</artifactId>
-  <version>0.3.30</version>
+  <version>0.3.31</version>
   <packaging>pom</packaging>
   
   <properties>
@@ -19,6 +19,7 @@
     <module>modules/core</module>
     <module>modules/jdbc</module>
     <module>modules/postgresql</module>
+    <module>modules/clickhouse</module>
     <module>modules/couchdb</module>
     <module>modules/hibernate</module>
     <module>modules/flyway</module>
@@ -196,7 +197,7 @@
         <artifactId>HikariCP</artifactId>
         <version>3.4.1</version>
       </dependency>
-      
+
       <!-- PostgreSQL -->
       <dependency>
         <groupId>org.postgresql</groupId>
@@ -204,11 +205,18 @@
         <version>42.2.8</version>
       </dependency>
 
+      <!-- ClickHouse -->
+      <dependency>
+        <groupId>ru.yandex.clickhouse</groupId>
+        <artifactId>clickhouse-jdbc</artifactId>
+        <version>0.2.4</version>
+      </dependency>
+
       <!-- Flyway -->      
       <dependency>
         <groupId>org.flywaydb</groupId>
         <artifactId>flyway-core</artifactId>
-        <version>6.1.0</version>
+        <version>6.5.3</version>
       </dependency>
 
       <!-- Servlet API -->
@@ -315,6 +323,12 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-jdbc</artifactId>
         <version>${version.spring}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.springframework.data</groupId>
+        <artifactId>spring-data-jdbc</artifactId>
+        <version>2.0.2.RELEASE</version>
       </dependency>
 
       <dependency>

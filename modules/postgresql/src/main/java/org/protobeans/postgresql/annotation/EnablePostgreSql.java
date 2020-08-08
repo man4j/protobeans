@@ -29,4 +29,6 @@ public @interface EnablePostgreSql {
     String transactionIsolation() default "TRANSACTION_READ_COMMITTED";
     
     boolean reindexOnStart() default false;
+    
+    boolean disablePreparedStatements() default false;
 }

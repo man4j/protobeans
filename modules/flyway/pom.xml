@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.protobeans</groupId>
     <artifactId>protobeans-parent</artifactId>
-    <version>0.3.30</version>
+    <version>0.3.31</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
@@ -25,11 +25,6 @@
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-core</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.zaxxer</groupId>
-      <artifactId>HikariCP</artifactId>
     </dependency>
   </dependencies>
 </project>
