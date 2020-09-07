@@ -80,7 +80,7 @@ public class MvcConfig implements WebMvcConfigurer {
                                  .setVisibility(PropertyAccessor.IS_GETTER, Visibility.NONE)
                                  .setVisibility(PropertyAccessor.SETTER, Visibility.NONE)
                                  .setVisibility(PropertyAccessor.CREATOR, Visibility.NONE)
-                                 .setSerializationInclusion(Include.NON_EMPTY)
+                                 .setSerializationInclusion(Include.NON_NULL)
                                  .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                                  .configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
     }
