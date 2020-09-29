@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.protobeans</groupId>
     <artifactId>protobeans-parent</artifactId>
-    <version>0.3.32</version>
+    <version>0.3.4</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
@@ -41,7 +41,7 @@
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-test</artifactId>
-      <version>${version.spring}</version>
+      <version>${version.spring.security}</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>

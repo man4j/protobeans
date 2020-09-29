@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-parent</artifactId>
-  <version>0.3.32</version>
+  <version>0.3.4</version>
   <packaging>pom</packaging>
   
   <properties>
@@ -11,8 +11,9 @@
     <maven.compiler.source>12</maven.compiler.source>
     <maven.compiler.target>12</maven.compiler.target>
     
-    <version.spring>5.2.1.RELEASE</version.spring>
-    <version.jackson>2.10.1</version.jackson>
+    <version.spring>5.2.9.RELEASE</version.spring>
+    <version.spring.security>5.3.4.RELEASE</version.spring.security>
+    <version.jackson>2.11.2</version.jackson>
   </properties>
 
   <modules>
@@ -51,7 +52,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.2.0</version>
+      <version>3.5.13</version>
       <scope>test</scope>
     </dependency>
     
@@ -59,14 +60,14 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.5.2</version>
+      <version>5.7.0</version>
       <scope>test</scope>    
     </dependency>
     
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-launcher</artifactId>
-      <version>1.5.2</version>
+      <version>1.7.0</version>
       <scope>test</scope>
     </dependency>
 
@@ -154,7 +155,7 @@
       <dependency>
         <groupId>org.hibernate.validator</groupId>
         <artifactId>hibernate-validator</artifactId>
-        <version>6.0.18.Final</version>
+        <version>6.1.5.Final</version>
       </dependency>
       
       <dependency>
@@ -167,7 +168,7 @@
       <dependency>
         <groupId>net.logstash.logback</groupId>
         <artifactId>logstash-logback-encoder</artifactId>
-        <version>6.2</version>
+        <version>6.4</version>
       </dependency>
       
       <!-- Mail -->
@@ -195,14 +196,14 @@
       <dependency>
         <groupId>com.zaxxer</groupId>
         <artifactId>HikariCP</artifactId>
-        <version>3.4.1</version>
+        <version>3.4.5</version>
       </dependency>
 
       <!-- PostgreSQL -->
       <dependency>
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
-        <version>42.2.8</version>
+        <version>42.2.16</version>
       </dependency>
 
       <!-- ClickHouse -->
@@ -230,14 +231,14 @@
       <dependency>
         <groupId>io.undertow</groupId>
         <artifactId>undertow-servlet</artifactId>
-        <version>2.0.28.Final</version>
+        <version>2.2.0.Final</version>
       </dependency>
 
       <!-- Freemarker -->
       <dependency>
         <groupId>org.freemarker</groupId>
         <artifactId>freemarker</artifactId>
-        <version>2.3.29</version>
+        <version>2.3.30</version>
       </dependency>
 
       <!-- CXF -->
@@ -284,13 +285,13 @@
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-core</artifactId>
-        <version>5.4.9.Final</version>
+        <version>5.4.21.Final</version>
       </dependency>
       
       <dependency>
         <groupId>com.vladmihalcea</groupId>
         <artifactId>hibernate-types-52</artifactId>
-        <version>2.7.1</version>
+        <version>2.9.13</version>
       </dependency>
 
       <!-- Kafka -->
@@ -364,13 +365,13 @@
       <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-web</artifactId>
-        <version>${version.spring}</version>
+        <version>${version.spring.security}</version>
       </dependency>
       
       <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-config</artifactId>
-        <version>${version.spring}</version>
+        <version>${version.spring.security}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
