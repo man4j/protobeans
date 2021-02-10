@@ -29,13 +29,15 @@ public class FlywayConfig {
     
     private boolean repair;
     
+    private String migrationsPath;
+    
     @Autowired
     private ApplicationContext ctx;
         
     @PostConstruct
     public void migrate() throws InterruptedException {
         FluentConfiguration fwConfig = Flyway.configure().ignoreMissingMigrations(true)
-                                                         .locations("classpath:migrations");
+                                                         .locations("classpath:" + migrationsPath);
         
         if (url.isBlank()) {
             HikariDataSource hikariDs = null;

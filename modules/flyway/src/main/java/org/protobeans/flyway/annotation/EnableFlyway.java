@@ -21,4 +21,6 @@ public @interface EnableFlyway {
     String password() default "";
     
     boolean repair() default true;
+    
+    String migrationsPath() default "migrations";
 }
