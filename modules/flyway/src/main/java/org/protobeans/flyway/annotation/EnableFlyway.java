@@ -23,4 +23,6 @@ public @interface EnableFlyway {
     boolean repair() default true;
     
     String migrationsPath() default "migrations";
+    
+    boolean validate() default true;
 }

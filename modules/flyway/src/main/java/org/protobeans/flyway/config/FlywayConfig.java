@@ -31,12 +31,15 @@ public class FlywayConfig {
     
     private String migrationsPath;
     
+    private boolean validate;
+    
     @Autowired
     private ApplicationContext ctx;
         
     @PostConstruct
     public void migrate() throws InterruptedException {
         FluentConfiguration fwConfig = Flyway.configure().ignoreMissingMigrations(true)
+                                                         .validateOnMigrate(validate)
                                                          .locations("classpath:" + migrationsPath);
         
         if (url.isBlank()) {
