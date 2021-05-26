@@ -21,7 +21,7 @@ public class ClickHouseConfig {
     private String schema;
     
     @Bean
-    public DataSource dataSource() throws Exception {
+    public ClickHouseDataSource dataSource() throws Exception {
         return new ClickHouseDataSource(String.format("jdbc:clickhouse://%s:%s/%s", dbHost, dbPort, schema));
     }
 }
