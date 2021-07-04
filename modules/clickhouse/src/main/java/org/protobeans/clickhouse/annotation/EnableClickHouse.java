@@ -19,4 +19,6 @@ public @interface EnableClickHouse {
     String dbPort() default "5432";
     
     String schema() default "default";
+    
+    String migrationsPath() default "clickhouse/migrations";
 }

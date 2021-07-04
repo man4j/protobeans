@@ -8,7 +8,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.protobeans.core.annotation.InjectFrom;
-import org.protobeans.core.util.LambdaExceptionUtil;
 import org.protobeans.mvc.util.PathUtils;
 import org.protobeans.security.advice.SecurityControllerAdvice;
 import org.protobeans.security.annotation.Anonymous;
@@ -115,7 +114,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             http.csrf().ignoringAntMatchers(disableCsrfPatterns);
         }
         
-        configHelpers.forEach(LambdaExceptionUtil.rethrowConsumer(h -> h.configure(http)));
+        for (HttpSecurityConfigHelper h : configHelpers) {
+            h.configure(http);
+        }
     }
     
     @Bean

@@ -1,0 +1,32 @@
+{
+	"folders": {},
+	"connections": {
+		"yandex_clickhouse-17a671cceb3-7bac193bdc7d44bc": {
+			"provider": "clickhouse",
+			"driver": "yandex_clickhouse",
+			"name": "default",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"host": "127.0.0.1",
+				"port": "8123",
+				"database": "default",
+				"url": "jdbc:clickhouse://127.0.0.1:8123/default",
+				"type": "dev",
+				"auth-model": "native",
+				"handlers": {}
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Разработка",
+			"color": "255,255,255",
+			"description": "База данных для разработки",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"auto-close-transactions": false
+		}
+	}
+}

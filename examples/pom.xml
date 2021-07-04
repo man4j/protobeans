@@ -4,59 +4,61 @@
   <artifactId>examples-parent</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.compiler.source>13</maven.compiler.source>
-    <maven.compiler.target>13</maven.compiler.target>    
-    <protobeans.version>0.3</protobeans.version>
-    <version.spring>5.2.1.RELEASE</version.spring>
+
+    <maven.compiler.source>16</maven.compiler.source>
+    <maven.compiler.target>16</maven.compiler.target>
+
+    <protobeans.version>0.5.0</protobeans.version>
+    <version.spring>5.3.8</version.spring>
   </properties>
 
   <modules>
-    <module>cxf</module>
-    <module>freemarker</module>
-    <module>hibernate-mysql</module>    
-    <module>i18n</module>
-    <module>kafka</module>
-    <module>scheduler</module>
-    <module>undertow</module>
-    <module>webapp</module>
+    <module>cockroachdb</module>
   </modules>
-  
+
   <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.20</version>
+    </dependency>
+  
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>1.2.3</version>
     </dependency>
-    
+
     <dependency>
       <groupId>org.codehaus.janino</groupId>
       <artifactId>janino</artifactId>
-      <version>3.0.12</version>
+      <version>3.1.4</version>
     </dependency>
-        
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>2.24.0</version>
-      <scope>test</scope>
-    </dependency>
-    
+
     <!-- JUnit -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.3.2</version>
-      <scope>test</scope>    
+      <version>5.7.2</version>
+      <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-launcher</artifactId>
-      <version>1.3.2</version>
+      <version>1.7.2</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- for Spring MVC TestFramework -->
+    <dependency>
+      <groupId>org.skyscreamer</groupId>
+      <artifactId>jsonassert</artifactId>
+      <version>1.5.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -65,31 +67,7 @@
     <dependencies>
       <dependency>
         <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-freemarker</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-mail</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-hibernate</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-jdbc</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-mysql</artifactId>
+        <artifactId>protobeans-cockroachdb</artifactId>
         <version>${protobeans.version}</version>
       </dependency>
       
@@ -98,64 +76,10 @@
         <artifactId>protobeans-postgresql</artifactId>
         <version>${protobeans.version}</version>
       </dependency>
-
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-flyway</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-i18n</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-scheduler</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-webservices</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>
       
       <dependency>
         <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-mvc</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-async</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-security</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>      
-
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-undertow</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>      
-      
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-kafka</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-cxf</artifactId>
+        <artifactId>protobeans-clickhouse</artifactId>
         <version>${protobeans.version}</version>
       </dependency>
       
@@ -164,139 +88,6 @@
         <artifactId>spring-test</artifactId>
         <version>${version.spring}</version>
       </dependency>
-      
-      <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-test</artifactId>
-        <version>${version.spring}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.asynchttpclient</groupId>
-        <artifactId>async-http-client</artifactId>
-        <version>2.4.7</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.skyscreamer</groupId>
-        <artifactId>jsonassert</artifactId>
-        <version>1.5.0</version>    
-      </dependency>
     </dependencies>
-  </dependencyManagement>  
-
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.1.1</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>            
-            <configuration>
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>${project.groupId}.${project.artifactId}.Main</mainClass>
-                </transformer>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/spring.handlers</resource>
-                </transformer>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/spring.schemas</resource>
-                </transformer>
-              </transformers> 
-              <filters>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <excludes>
-                    <exclude>META-INF/*.SF</exclude>
-                    <exclude>META-INF/*.DSA</exclude>
-                    <exclude>META-INF/*.RSA</exclude>
-                  </excludes>
-                </filter>
-              </filters>  
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.8.2</version>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>3.0.1</version>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      
-      <plugin>
-        <groupId>pl.project13.maven</groupId>
-        <artifactId>git-commit-id-plugin</artifactId>
-        <version>2.2.4</version>
-        <executions>
-          <execution>
-            <id>get-the-git-infos</id>
-            <goals>
-              <goal>revision</goal>
-            </goals>
-            <phase>package</phase>
-          </execution>
-        </executions>
-      </plugin>    
-      
-      <plugin>
-        <groupId>com.spotify</groupId>
-        <artifactId>docker-maven-plugin</artifactId>
-        <version>1.0.0</version>
-        <configuration>
-          <serverId>registry</serverId>
-          <imageName>${env.CI_REGISTRY}/${env.CI_PROJECT_PATH_SLUG}/${project.artifactId}:${env.CI_COMMIT_REF_NAME}-${git.commit.id.abbrev}</imageName>
-          <baseImage>imagenarium/jre-docker:8</baseImage>
-          <entryPoint>["java", "-Xmx256m", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
-          <resources>
-             <resource>
-               <targetPath>/</targetPath>
-               <directory>${project.build.directory}</directory>
-               <include>${project.build.finalName}.jar</include>
-             </resource>
-          </resources>
-        </configuration>
-        <executions>
-          <execution>
-            <id>build-image</id>
-            <phase>package</phase>
-            <goals><goal>build</goal></goals>
-          </execution>
-          <execution>
-            <id>push-image</id>
-            <phase>deploy</phase>
-            <goals><goal>push</goal></goals>
-          </execution>   
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-  
-  <repositories>
-    <repository>
-      <id>protobeans</id>
-      <url>https://raw.githubusercontent.com/man4j/protobeans/master/maven</url>
-    </repository>
-  </repositories>
+  </dependencyManagement>
 </project>

@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.protobeans</groupId>
     <artifactId>protobeans-parent</artifactId>
-    <version>0.4.9</version>
+    <version>0.5.0</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
@@ -18,10 +18,10 @@
     </dependency>
     
     <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-jdbc</artifactId>
+      <groupId>org.protobeans</groupId>
+      <artifactId>protobeans-hibernate</artifactId>
     </dependency>
-      
+    
     <dependency>
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
@@ -30,6 +30,11 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
     </dependency>
   </dependencies>
 </project>

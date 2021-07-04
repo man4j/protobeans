@@ -3,9 +3,9 @@ pipeline {
     docker {
       image 'maven'
       args '-v /var/run/docker.sock:/var/run/docker.sock -v ${PWD}/.m2:/root/.m2'
-    }    
+    }
   }
-  
+
   environment {
     SETTINGS_XML = credentials('settings.xml')
   }
@@ -42,10 +42,10 @@ pipeline {
       }
     }
   }
-  
+
   post {
     always {
-      junit 'examples/mvc-security/target/surefire-reports/*.xml'    
+      junit 'examples/mvc-security/target/surefire-reports/*.xml'
     }
   }
 }

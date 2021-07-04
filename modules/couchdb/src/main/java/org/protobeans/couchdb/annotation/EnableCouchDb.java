@@ -9,6 +9,8 @@ import org.protobeans.couchdb.config.CouchDbConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import com.equiron.acc.provider.HttpClientProviderType;
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Import(CouchDbConfiguration.class)
@@ -21,4 +23,6 @@ public @interface EnableCouchDb {
     String user() default "admin";
 
     String password();
+    
+    HttpClientProviderType httpClientProviderType() default HttpClientProviderType.JDK; 
 }

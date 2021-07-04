@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.protobeans.clickhouse.annotation.EnableClickHouse;
-import org.protobeans.flyway.annotation.EnableFlyway;
-import org.protobeans.jdbc.annotation.EnableJdbc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -28,14 +26,12 @@ import ru.yandex.clickhouse.ClickHouseDataSource;
 @ContextConfiguration(classes=InsertTest.class)
 @DirtiesContext
 @EnableClickHouse(dbHost = "172.17.0.1", dbPort = "8123")
-@EnableFlyway(repair = false)
-@EnableJdbc
 public class InsertTest {
     @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private NamedParameterJdbcTemplate clickHouseNamedParameterJdbcTemplate;
     
     @Autowired
-    private JdbcTemplate jdbcTemplate; 
+    private JdbcTemplate clickHouseJdbcTemplate; 
     
     @Autowired
     private ClickHouseDataSource clickHouseDataSource;
@@ -69,17 +65,17 @@ public class InsertTest {
     }
     
     public void optimize() throws Exception {
-        jdbcTemplate.execute("OPTIMIZE TABLE stats_codes");//for deduplication
-        jdbcTemplate.execute("OPTIMIZE TABLE stats_codes_incoming");//for deduplication
-        jdbcTemplate.execute("OPTIMIZE TABLE stats_codes_outgoing");//for deduplication
+        clickHouseJdbcTemplate.execute("OPTIMIZE TABLE stats_codes");//for deduplication
+        clickHouseJdbcTemplate.execute("OPTIMIZE TABLE stats_codes_incoming");//for deduplication
+        clickHouseJdbcTemplate.execute("OPTIMIZE TABLE stats_codes_outgoing");//for deduplication
     }
     
     public List<CodeStatsRecord> getStats(long startDate, long endDate, long limit, long offset) {
-        return namedParameterJdbcTemplate.query("SELECT * FROM stats_codes_outgoing "
-                                              + "WHERE create_time >= :startDate AND create_time < :endDate "
-                                              + "ORDER BY create_time DESC LIMIT :limit OFFSET :offset", Map.of("startDate", startDate / 1_000, 
-                                                                                                                "endDate", endDate / 1_000, 
-                                                                                                                "limit", limit, 
-                                                                                                                "offset", offset), new BeanPropertyRowMapper<>(CodeStatsRecord.class));
+        return clickHouseNamedParameterJdbcTemplate.query("SELECT * FROM stats_codes_outgoing "
+                                                        + "WHERE create_time >= :startDate AND create_time < :endDate "
+                                                        + "ORDER BY create_time DESC LIMIT :limit OFFSET :offset", Map.of("startDate", startDate / 1_000, 
+                                                                                                                          "endDate", endDate / 1_000, 
+                                                                                                                          "limit", limit, 
+                                                                                                                          "offset", offset), new BeanPropertyRowMapper<>(CodeStatsRecord.class));
     }
 }
