@@ -150,25 +150,23 @@ public class InsertTest {
         List<BeanPropertySqlParameterSource> sources = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                CodeStatsRecord codeStatsRecord = new CodeStatsRecord(i + "",//orderId 
-                                                                      "1",
-                                                                      1,
-                                                                      1, 
-                                                                      1,
-                                                                      1, 
-                                                                      1, 
-                                                                      "issuer1", 
-                                                                      "issuer1", 
-                                                                      "sender1", 
-                                                                      "sender1", 
-                                                                      "recipient1", 
-                                                                      "recipient1", 
-                                                                      System.currentTimeMillis());
-                Thread.sleep(10);
-                
-                sources.add(new BeanPropertySqlParameterSource(codeStatsRecord));
-            }
+            CodeStatsRecord codeStatsRecord = new CodeStatsRecord(i + "",//orderId 
+                                                                  "1",
+                                                                  1,
+                                                                  1, 
+                                                                  1,
+                                                                  1, 
+                                                                  1, 
+                                                                  "issuer1", 
+                                                                  "issuer1", 
+                                                                  "sender1", 
+                                                                  "sender1", 
+                                                                  "recipient1", 
+                                                                  "recipient1", 
+                                                                  System.currentTimeMillis());
+            Thread.sleep(10);
+            
+            sources.add(new BeanPropertySqlParameterSource(codeStatsRecord));
         }
         
         new SimpleJdbcInsert(clickHouseDataSource).withTableName("stats_codes").executeBatch(sources.toArray(new BeanPropertySqlParameterSource[] {}));
