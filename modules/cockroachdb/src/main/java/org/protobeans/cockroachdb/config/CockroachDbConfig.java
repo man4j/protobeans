@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.protobeans.cockroachdb.annotation.EnableCockroachDb;
+import org.protobeans.cockroachdb.transaction.RetryableTransactionTemplate;
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.hibernate.config.JacksonSupplier;
 import org.slf4j.Logger;
@@ -176,5 +177,10 @@ public class CockroachDbConfig {
                 System.exit(1);
             }
         }
+    }
+    
+    @Bean
+    public RetryableTransactionTemplate retryableTransactionTemplate() {
+        return new RetryableTransactionTemplate();
     }
 }
