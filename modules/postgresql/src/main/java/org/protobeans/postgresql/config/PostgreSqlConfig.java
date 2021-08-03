@@ -206,7 +206,7 @@ public class PostgreSqlConfig {
     @PostConstruct
     public void migrate() throws Exception {
         Flyway fw = Flyway.configure().ignoreMissingMigrations(true)
-                                      .validateOnMigrate(true)
+                                      .validateOnMigrate(false)
                                       .locations("classpath:" + migrationsPath)
                                       .dataSource(pgDataSource())
                                       .baselineOnMigrate(true)

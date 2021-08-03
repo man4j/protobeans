@@ -91,10 +91,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         
         http.authenticationProvider(new UuidAuthenticationProvider())//add custom provider
             .authorizeRequests().mvcMatchers(permitAllPatterns).permitAll()
-                                .antMatchers("/swagger-ui.html/**", 
+                                .antMatchers("/swagger-ui.html/**",
+                                            "/swagger-ui/**",
                                              "/v3/swagger-ui.html/**",
-                                             "/swagger-resources/**", 
                                              "/v3/swagger-ui/**", 
+                                             "/swagger-resources/**", 
                                              "/v2/api-docs/**", 
                                              "/v3/api-docs/**", 
                                              "/webjars/**", 
