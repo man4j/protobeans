@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HandlesTypes;
 
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.undertow.annotation.EnableUndertow;
@@ -88,7 +89,17 @@ public class UndertowConfig {
         }
         
         for (Initializer initializer : initializers) {
-            deploymentInfo.addServletContainerInitializer(new ServletContainerInitializerInfo(initializer.initializer(), new HashSet<>(Arrays.asList(initializer.handleTypes()))));
+        	Set<Class<?>> handlesTypes = new HashSet<>(Arrays.asList(initializer.handleTypes()));
+        	
+        	if (handlesTypes.isEmpty()) {
+        		HandlesTypes annotation = initializer.initializer().getAnnotation(HandlesTypes.class);
+        		
+        		if (annotation != null) {
+        			handlesTypes = Set.of(annotation.value());
+        		}
+        	}
+        	
+            deploymentInfo.addServletContainerInitializer(new ServletContainerInitializerInfo(initializer.initializer(), handlesTypes));
         }
 
         if (!springInitializers.isEmpty()) {
