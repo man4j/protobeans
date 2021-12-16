@@ -1,6 +1,5 @@
 package org.protobeans.mail;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.protobeans.mail.annotation.EnableMail;
 import org.springframework.beans.factory.annotation.Autowired;

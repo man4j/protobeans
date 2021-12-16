@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.protobeans</groupId>
     <artifactId>protobeans-parent</artifactId>
-    <version>0.5.2</version>
+    <version>0.5.2-jakartaee9</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
@@ -18,13 +18,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-web</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>io.undertow</groupId>
-      <artifactId>undertow-servlet</artifactId>
-    </dependency>
+  	  <groupId>io.undertow</groupId>
+  	  <artifactId>undertow-websockets-jsr-jakarta</artifactId>
+ 	</dependency>  
   </dependencies>
 </project>
