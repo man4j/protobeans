@@ -37,16 +37,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @EnableHibernate(dialect = Database.POSTGRESQL, basePackages = "org.protobeans.webapp.example.model")
 @ComponentScan(basePackageClasses={MainController.class, UserProfileService.class, UserProfileDao.class})
 public class Main {
-    @Bean
-    public SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> securityConfigurer() {
-        return new SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
-            @Override
-            public void configure(HttpSecurity builder) throws Exception {
-                builder.addFilterBefore(new CharacterEncodingFilter(StandardCharsets.UTF_8.name(), true, true), ChannelProcessingFilter.class);
-            }
-        };
-    }
-    
     public static void main(String[] args) {
         MvcEntryPoint.run(Main.class);
     }
