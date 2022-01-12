@@ -1,19 +1,12 @@
 package org.protobeans.faces.config;
 
-import com.sun.faces.config.FacesInitializer;
-import jakarta.faces.context.FacesContext;
-import jakarta.faces.validator.BeanValidator;
-import jakarta.servlet.DispatcherType;
-import jakarta.servlet.ServletContainerInitializer;
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.MessageInterpolator;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
+import java.io.IOException;
+import java.util.EnumSet;
+import java.util.Locale;
+import java.util.Set;
+
+import javax.annotation.PostConstruct;
+
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
 import org.jboss.weld.environment.servlet.EnhancedListener;
 import org.omnifaces.ApplicationInitializer;
@@ -34,11 +27,25 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.MessageSourceResourceBundleLocator;
 
-import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.util.EnumSet;
-import java.util.Locale;
-import java.util.Set;
+import com.sun.faces.config.FacesInitializer;
+
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.validator.BeanValidator;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletContainerInitializer;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.MessageInterpolator;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 
 @Configuration
 @InjectFrom(EnableFaces.class)
@@ -99,13 +106,13 @@ class ContextParamsInitializer implements ServletContainerInitializer {
     @SuppressWarnings("resource")
     @Override
     public void onStartup(Set<Class<?>> c, ServletContext ctx) throws ServletException {
-        ctx.setInitParameter("primefaces.THEME", "nova-light");
+        ctx.setInitParameter("primefaces.THEME", "none");
         ctx.setInitParameter("primefaces.MOVE_SCRIPTS_TO_BOTTOM", "true");
         ctx.setInitParameter("primefaces.SUBMIT", "partial");
         ctx.setInitParameter("primefaces.CLIENT_SIDE_VALIDATION", "true");
         ctx.setInitParameter("primefaces.MULTI_VIEW_STATE_STORE", "client-window");
         ctx.setInitParameter("primefaces.TRANSFORM_METADATA", "true");
-        
+
         ctx.setInitParameter("jakarta.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL", "true");
         ctx.setInitParameter("jakarta.faces.FACELETS_REFRESH_PERIOD", "0");
         ctx.setInitParameter("jakarta.faces.validator.ENABLE_VALIDATE_WHOLE_BEAN", "true");
@@ -113,14 +120,14 @@ class ContextParamsInitializer implements ServletContainerInitializer {
         ctx.setInitParameter("jakarta.faces.DISABLE_FACESSERVLET_TO_XHTML", "true");
         ctx.setInitParameter("jakarta.faces.FACELETS_SUFFIX", ".jsf");
         ctx.setInitParameter("jakarta.faces.DEFAULT_SUFFIX", ".jsf");
-        
+
         ctx.setInitParameter("org.omnifaces.SOCKET_ENDPOINT_ENABLED", "true");
         ctx.setInitParameter("org.omnifaces.VERSIONED_RESOURCE_HANDLER_VERSION", (System.currentTimeMillis() / 1_000) + "");
-        
+
         ctx.setInitParameter("org.jboss.weld.context.mapping", ".*\\.jsf");
-        
+
         ctx.setAttribute(BeanValidator.VALIDATOR_FACTORY_KEY, ProtobeansFacesConfig.springContext.getBean(ValidatorFactory.class));
-        
+
         ctx.addServlet("welcome", new HttpServlet() {
             @Override
             protected void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
@@ -137,6 +144,17 @@ class ContextParamsInitializer implements ServletContainerInitializer {
         
         ctx.addFilter("gzipResponseFilter", GzipResponseFilter.class)
            .addMappingForServletNames(EnumSet.of(DispatcherType.REQUEST), true, "FacesServlet");
+        
+        ctx.addFilter("cssFilter", new Filter() {
+            @Override
+            public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+                HttpServletRequest req = (HttpServletRequest) request;
+                
+                if (!req.getRequestURI().contains("components.css")) {
+                    chain.doFilter(request, response);
+                }
+            }
+        }).addMappingForServletNames(EnumSet.of(DispatcherType.REQUEST), true, "FacesServlet");
     }
 }
 
