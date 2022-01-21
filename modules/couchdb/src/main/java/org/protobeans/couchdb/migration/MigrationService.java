@@ -36,6 +36,7 @@ public class MigrationService {
             
             if (versionDoc == null) {
             	versionDoc = new HashMap<>();
+            	versionDoc.put("_id", "version");
             }
 
             logger.info("Current db version: {}", dbVersion);
