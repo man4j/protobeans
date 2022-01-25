@@ -120,6 +120,7 @@ class ContextParamsInitializer implements ServletContainerInitializer {
         ctx.setInitParameter("jakarta.faces.DISABLE_FACESSERVLET_TO_XHTML", "true");
         ctx.setInitParameter("jakarta.faces.FACELETS_SUFFIX", ".jsf");
         ctx.setInitParameter("jakarta.faces.DEFAULT_SUFFIX", ".jsf");
+        ctx.setInitParameter("javax.faces.FACELETS_SKIP_COMMENTS", "true");
 
         ctx.setInitParameter("org.omnifaces.SOCKET_ENDPOINT_ENABLED", "true");
         ctx.setInitParameter("org.omnifaces.VERSIONED_RESOURCE_HANDLER_VERSION", (System.currentTimeMillis() / 1_000) + "");
