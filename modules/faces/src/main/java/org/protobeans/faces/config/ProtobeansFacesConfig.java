@@ -151,9 +151,9 @@ class ContextParamsInitializer implements ServletContainerInitializer {
             public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
                 HttpServletRequest req = (HttpServletRequest) request;
                 
-                if (!req.getRequestURI().contains("components.css")) {
+//                if (!req.getRequestURI().contains("components.css")) {
                     chain.doFilter(request, response);
-                }
+//                }
             }
         }).addMappingForServletNames(EnumSet.of(DispatcherType.REQUEST), true, "FacesServlet");
     }
