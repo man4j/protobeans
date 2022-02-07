@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.protobeans.core.util.PropsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,32 +27,30 @@ public class MigrationService {
     @PostConstruct
     public void migrate() {
         logger.info("Found migrations: {}", migrations.size());
+        
+        String versionDocName = System.getProperty("service.name") != null ? System.getProperty("service.name") : "version"; 
 
         if (!migrations.isEmpty()) {
-            Map<String, Object> versionDoc = migrationDb.getRaw("version");
+            Map<String, Object> versionDoc = migrationDb.getRaw(versionDocName);
 
             int dbVersion = versionDoc == null ? 0 : (int)versionDoc.get("version");
             
             if (versionDoc == null) {
             	versionDoc = new HashMap<>();
-            	versionDoc.put("_id", "version");
+            	versionDoc.put("_id", versionDocName);
             }
 
             logger.info("Current db version: {}", dbVersion);
             
-            String serviceName = PropsUtil.getProp("SERVICE_NAME");
-
             for (Migration m : migrations.stream().sorted(Comparator.comparing(Migration::getVersion)).filter(m -> m.getVersion() > dbVersion).collect(Collectors.toList())) {
-            	if (serviceName == null || (serviceName != null && serviceName.equals(m.getServiceName()))) {            	
-	            	logger.info("CouchDB migration started. Version: {}", m.getVersion());
-	            	
-	                m.migrate();
-	                
-	                versionDoc.put("version", m.getVersion());
-	                migrationDb.saveOrUpdate(versionDoc);
-	
-	                logger.info("CouchDB Migration finished. Version: {}", m.getVersion());
-            	}                
+            	logger.info("CouchDB migration started. Version: {}", m.getVersion());
+            	
+                m.migrate();
+                
+                versionDoc.put("version", m.getVersion());
+                migrationDb.saveOrUpdate(versionDoc);
+
+                logger.info("CouchDB Migration finished. Version: {}", m.getVersion());
             }
         }
     }
