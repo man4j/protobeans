@@ -1,9 +1,7 @@
 package org.protobeans.couchdb.migration;
 
-public interface Migration {
+public interface ServiceMigration {
     int getVersion();
     
-    String getServiceName();
-
     void migrate();
 }
