@@ -114,12 +114,13 @@ class ContextParamsInitializer implements ServletContainerInitializer {
         ctx.setInitParameter("primefaces.TRANSFORM_METADATA", "true");
 
         ctx.setInitParameter("jakarta.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL", "true");
-        ctx.setInitParameter("jakarta.faces.FACELETS_REFRESH_PERIOD", "0");
+        ctx.setInitParameter("jakarta.faces.FACELETS_REFRESH_PERIOD", "-1");
         ctx.setInitParameter("jakarta.faces.validator.ENABLE_VALIDATE_WHOLE_BEAN", "true");
         ctx.setInitParameter("jakarta.faces.PROJECT_STAGE", "Production");
         ctx.setInitParameter("jakarta.faces.DISABLE_FACESSERVLET_TO_XHTML", "true");
         ctx.setInitParameter("jakarta.faces.FACELETS_SUFFIX", ".jsf");
         ctx.setInitParameter("jakarta.faces.DEFAULT_SUFFIX", ".jsf");
+        ctx.setInitParameter("jakarta.faces.FACELETS_SKIP_COMMENTS", "true");
         ctx.setInitParameter("javax.faces.FACELETS_SKIP_COMMENTS", "true");
 
         ctx.setInitParameter("org.omnifaces.SOCKET_ENDPOINT_ENABLED", "true");
