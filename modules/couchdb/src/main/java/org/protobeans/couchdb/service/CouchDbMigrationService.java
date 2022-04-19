@@ -31,7 +31,7 @@ abstract public class CouchDbMigrationService {
 
             saveVersion(m.getVersion());
             
-            logger.info("CouchDB migrationV2 finished. Version: {}", m.getVersion());
+            logger.info("CouchDB migration finished. Version: {}", m.getVersion());
         }
     }
     
