@@ -2,6 +2,7 @@ package org.protobeans.postgresql.config;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,7 +14,6 @@ import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.protobeans.core.annotation.InjectFrom;
-import org.protobeans.hibernate.config.JacksonSupplier;
 import org.protobeans.postgresql.annotation.EnablePostgreSql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,18 +86,20 @@ public class PostgreSqlConfig {
              PreparedStatement ps = conn.prepareStatement("SELECT FROM pg_database WHERE datname = ?");) {
             ps.setString(1, schema);
             
-            if (!ps.executeQuery().next()) {
-                logger.info("Create database: {}", schema);
-                
-                try (PreparedStatement ps1 = conn.prepareStatement(String.format("CREATE DATABASE %s", schema))) {
-                    ps1.execute();
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    logger.info("Create database: {}", schema);
+                    
+                    try (PreparedStatement ps1 = conn.prepareStatement(String.format("CREATE DATABASE %s", schema))) {
+                        ps1.execute();
+                    }
+                    
+                    try (PreparedStatement ps1 = conn.prepareStatement(String.format("GRANT ALL PRIVILEGES ON DATABASE %s TO %s", schema, user))) {
+                        ps1.execute();
+                    }
+                } else {
+                    logger.info("Database {} already exists", schema);
                 }
-                
-                try (PreparedStatement ps1 = conn.prepareStatement(String.format("GRANT ALL PRIVILEGES ON DATABASE %s TO %s", schema, user))) {
-                    ps1.execute();
-                }
-            } else {
-                logger.info("Database {} already exists", schema);
             }
         }
         
@@ -106,8 +108,8 @@ public class PostgreSqlConfig {
         PGSimpleDataSource pgSimpleDataSource = new PGSimpleDataSource();
         pgSimpleDataSource.setUser(user);
         pgSimpleDataSource.setPassword(password);
-        pgSimpleDataSource.setServerName(dbHost);
-        pgSimpleDataSource.setPortNumber(Integer.parseInt(dbPort));
+        pgSimpleDataSource.setServerNames(new String[] {dbHost});
+        pgSimpleDataSource.setPortNumbers(new int[] {Integer.parseInt(dbPort)});
         pgSimpleDataSource.setDatabaseName(schema);
         pgSimpleDataSource.setLoadBalanceHosts(true);
         pgSimpleDataSource.setSsl(false);
@@ -134,14 +136,13 @@ public class PostgreSqlConfig {
         if (reindexOnStart) {
             try(Connection con = ds.getConnection();            
                 Statement st = con.createStatement()) {
-                
                 logger.info("[PROTOBEANS]: Start reindex database: " + schema);
                 
                 long t = System.currentTimeMillis();
                 
-                st.executeQuery("REINDEX DATABASE " + schema);
-                
-                logger.info("[PROTOBEANS]: Reindex database duration: " + (System.currentTimeMillis() - t) + " ms");
+                try (var rs = st.executeQuery("REINDEX DATABASE " + schema)) {
+                    logger.info("[PROTOBEANS]: Reindex database duration: " + (System.currentTimeMillis() - t) + " ms");
+                }
             }
         }
         
@@ -155,7 +156,6 @@ public class PostgreSqlConfig {
        em.setDataSource(pgDataSource());
        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
        jpaVendorAdapter.setShowSql("true".equals(showSql));
-//       jpaVendorAdapter.setDatabase(dialect);
        
        JacksonSupplier.objectMapper = mapper;
        
@@ -165,7 +165,7 @@ public class PostgreSqlConfig {
                                                             put("hibernate.order_inserts", true);
                                                             put("hibernate.order_updates", true);
                                                             put("hibernate.auto_quote_keyword", true);
-                                                            put("hibernate.physical_naming_strategy", "org.protobeans.hibernate.config.ProtobeansNamingStrategy");
+                                                            put("hibernate.physical_naming_strategy", ProtobeansNamingStrategy.class.getName());
                                                             put("hibernate.dialect", dialect);
                                                             
                                                             //if connection pool already disables autocommit
@@ -205,7 +205,7 @@ public class PostgreSqlConfig {
     
     @PostConstruct
     public void migrate() throws Exception {
-        Flyway fw = Flyway.configure().ignoreMissingMigrations(true)
+        Flyway fw = Flyway.configure().ignoreMigrationPatterns("*:missing")
                                       .validateOnMigrate(false)
                                       .locations("classpath:" + migrationsPath)
                                       .dataSource(pgDataSource())

@@ -6,5 +6,5 @@ import com.equiron.acc.CouchDb;
 
 @Repository
 public class MigrationDb extends CouchDb {
-
+    //empty
 }

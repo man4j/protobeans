@@ -18,7 +18,6 @@ import org.protobeans.undertow.annotation.EnableUndertow;
 import org.protobeans.undertow.annotation.Initializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
 import org.springframework.util.MimeType;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.SpringServletContainerInitializer;
@@ -115,7 +114,7 @@ public class UndertowConfig {
         HttpHandler firstHandler = null;
         
         final EncodingHandler encodingHandler = new EncodingHandler(new ContentEncodingRepository().addEncodingHandler("gzip", 
-                new GzipEncodingProvider(8), 50, Predicates.and(Predicates.maxContentSize(1024), 
+                new GzipEncodingProvider(8), 50, Predicates.and(Predicates.requestLargerThan(1024), 
                                                                new CompressibleMimeTypePredicate("text/html",
                                                                                                  "text/xml",
                                                                                                  "text/plain",
@@ -123,7 +122,7 @@ public class UndertowConfig {
                                                                                                  "text/javascript",
                                                                                                  "application/javascript",
                                                                                                  "application/json"))))
-                                                          .setNext(createServletDeploymentHandler());
+                                                           .setNext(createServletDeploymentHandler());
         
         if (!proxyBackend.isEmpty()) {
             LoadBalancingProxyClient proxyClient = new LoadBalancingProxyClient() {
@@ -214,7 +213,7 @@ public class UndertowConfig {
 
         @Override
         public boolean resolve(HttpServerExchange value) {
-            String contentType = value.getResponseHeaders().getFirst(HttpHeaders.CONTENT_TYPE);
+            String contentType = value.getResponseHeaders().getFirst("Content-Type");
             
             if (contentType != null) {
                 for (MimeType mimeType : this.mimeTypes) {

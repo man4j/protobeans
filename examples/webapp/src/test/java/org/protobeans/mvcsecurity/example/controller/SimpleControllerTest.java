@@ -1,10 +1,11 @@
 package org.protobeans.mvcsecurity.example.controller;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse.BodyHandlers;
 
-import org.asynchttpclient.AsyncHttpClient;
-import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,11 +46,9 @@ public class SimpleControllerTest {
     }
     
     @Test
-    public void shouldWorkWithRest() throws InterruptedException, ExecutionException, IOException {
-        try (AsyncHttpClient client = new DefaultAsyncHttpClient()) {
-            int statusCode = client.prepareGet("http://localhost:8080/signin").execute().get().getStatusCode();
-            
-            Assertions.assertEquals(HttpStatus.OK.value(), statusCode);
-        }
+    public void shouldWorkWithRest() throws InterruptedException, IOException {
+        int statusCode = HttpClient.newHttpClient().send(HttpRequest.newBuilder(URI.create("http://localhost:8787/signin")).build(), BodyHandlers.discarding()).statusCode();
+        
+        Assertions.assertEquals(HttpStatus.OK.value(), statusCode);
     }
 }

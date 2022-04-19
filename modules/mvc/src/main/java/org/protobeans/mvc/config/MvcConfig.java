@@ -29,7 +29,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
@@ -38,9 +37,10 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonParser.Feature;
+import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 
 @EnableWebMvc
@@ -75,14 +75,15 @@ public class MvcConfig implements WebMvcConfigurer {
     
     @Bean
     public ObjectMapper mapper() {
-        return new ObjectMapper().setVisibility(PropertyAccessor.FIELD, Visibility.ANY)
-                                 .setVisibility(PropertyAccessor.GETTER, Visibility.NONE)
-                                 .setVisibility(PropertyAccessor.IS_GETTER, Visibility.NONE)
-                                 .setVisibility(PropertyAccessor.SETTER, Visibility.NONE)
-                                 .setVisibility(PropertyAccessor.CREATOR, Visibility.NONE)
-                                 .setSerializationInclusion(Include.NON_NULL)
-                                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                                 .configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+        return JsonMapper.builder().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                                   .configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS, true)
+                                   .visibility(PropertyAccessor.FIELD, Visibility.ANY)
+                                   .visibility(PropertyAccessor.GETTER, Visibility.NONE)
+                                   .visibility(PropertyAccessor.IS_GETTER, Visibility.NONE)
+                                   .visibility(PropertyAccessor.SETTER, Visibility.NONE)
+                                   .visibility(PropertyAccessor.CREATOR, Visibility.NONE)
+                                   .serializationInclusion(Include.NON_NULL)
+                                   .build();
     }
     
     @Bean
@@ -93,11 +94,6 @@ public class MvcConfig implements WebMvcConfigurer {
     @Bean
     HttpMessageConverter<?> stringMessageConverter() {
         return new StringHttpMessageConverter(StandardCharsets.UTF_8);
-    }
-    
-    @Override
-    public void configurePathMatch(PathMatchConfigurer configurer) {
-        configurer.setUseSuffixPatternMatch(false);
     }
     
     @Override
@@ -159,9 +155,7 @@ public class MvcConfig implements WebMvcConfigurer {
     @Bean
     public MultipartResolver multipartResolver(){
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-        
         resolver.setDefaultEncoding("UTF-8");
-        
         return resolver;
     }
 }

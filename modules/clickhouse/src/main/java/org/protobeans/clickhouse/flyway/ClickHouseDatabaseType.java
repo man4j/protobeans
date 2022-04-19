@@ -39,7 +39,7 @@ public class ClickHouseDatabaseType extends BaseDatabaseType {
     }
 
     @Override
-    public Database createDatabase(Configuration configuration, JdbcConnectionFactory jdbcConnectionFactory, StatementInterceptor statementInterceptor) {
+    public Database<ClickHouseConnection> createDatabase(Configuration configuration, JdbcConnectionFactory jdbcConnectionFactory, StatementInterceptor statementInterceptor) {
         return new ClickHouseDatabase(configuration, jdbcConnectionFactory, statementInterceptor);
     }
 

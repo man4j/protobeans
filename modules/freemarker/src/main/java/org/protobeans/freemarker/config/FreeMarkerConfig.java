@@ -31,9 +31,9 @@ public class FreeMarkerConfig {
     
     @Bean
     public freemarker.template.Configuration freeMarkerConfiguration() {
-        freemarker.template.Configuration config = new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_26);
+        freemarker.template.Configuration config = new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_31);
         
-        DefaultObjectWrapper wrapper = (DefaultObjectWrapper) freemarker.template.Configuration.getDefaultObjectWrapper(freemarker.template.Configuration.VERSION_2_3_24);
+        DefaultObjectWrapper wrapper = (DefaultObjectWrapper) freemarker.template.Configuration.getDefaultObjectWrapper(freemarker.template.Configuration.VERSION_2_3_31);
         
         templateLoaders.add(new SpringTemplateLoader(new DefaultResourceLoader(), "classpath:/templates"));
         

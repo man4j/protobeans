@@ -9,56 +9,49 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <maven.compiler.source>16</maven.compiler.source>
-    <maven.compiler.target>16</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
 
-    <protobeans.version>0.5.0</protobeans.version>
-    <version.spring>5.3.8</version.spring>
+    <protobeans.version>1.0</protobeans.version>
+    <version.spring>5.3.19</version.spring>
+    <version.spring.security>5.6.2</version.spring.security>
   </properties>
 
   <modules>
-    <module>cockroachdb</module>
+    <module>webapp</module>
   </modules>
 
   <dependencies>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.20</version>
+      <version>1.18.22</version>
     </dependency>
   
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.3</version>
+      <version>1.2.11</version>
     </dependency>
-
+    
     <dependency>
       <groupId>org.codehaus.janino</groupId>
       <artifactId>janino</artifactId>
-      <version>3.1.4</version>
+      <version>3.1.6</version>
     </dependency>
 
     <!-- JUnit -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.7.2</version>
+      <version>5.8.2</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-launcher</artifactId>
-      <version>1.7.2</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- for Spring MVC TestFramework -->
-    <dependency>
-      <groupId>org.skyscreamer</groupId>
-      <artifactId>jsonassert</artifactId>
-      <version>1.5.0</version>
+      <version>1.8.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -67,26 +60,60 @@
     <dependencies>
       <dependency>
         <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-cockroachdb</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.protobeans</groupId>
         <artifactId>protobeans-postgresql</artifactId>
         <version>${protobeans.version}</version>
       </dependency>
       
-      <dependency>
+	    <dependency>
         <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-clickhouse</artifactId>
-        <version>${protobeans.version}</version>
+	      <artifactId>protobeans-security</artifactId>
+	      <version>${protobeans.version}</version>
+	    </dependency>
+	    
+	    <dependency>
+	      <groupId>org.protobeans</groupId>
+	      <artifactId>protobeans-mail</artifactId>
+	      <version>${protobeans.version}</version>
+	    </dependency>
+	    
+	    <dependency>
+	      <groupId>org.protobeans</groupId>
+	      <artifactId>protobeans-i18n</artifactId>
+	      <version>${protobeans.version}</version>
+	    </dependency>
+	    
+	    <dependency>
+	      <groupId>org.protobeans</groupId>
+	      <artifactId>protobeans-undertow</artifactId>
+	      <version>${protobeans.version}</version>
+	    </dependency>
+	    
+	    <dependency>
+	      <groupId>org.protobeans</groupId>
+	      <artifactId>protobeans-freemarker</artifactId>
+	      <version>${protobeans.version}</version>
+	    </dependency>    
+	    
+      <!-- for Spring MVC TestFramework -->
+      <dependency>
+        <groupId>org.skyscreamer</groupId>
+        <artifactId>jsonassert</artifactId>
+        <version>1.5.0</version>
+        <scope>test</scope>
       </dependency>
       
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-test</artifactId>
         <version>${version.spring}</version>
+        <scope>test</scope>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-test</artifactId>
+        <version>${version.spring.security}</version>
+        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>

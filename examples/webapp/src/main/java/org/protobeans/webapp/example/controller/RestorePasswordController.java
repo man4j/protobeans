@@ -6,7 +6,7 @@ import org.protobeans.mvc.controller.advice.RequestContextHolder;
 import org.protobeans.security.annotation.Anonymous;
 import org.protobeans.security.model.RestorePasswordForm;
 import org.protobeans.security.service.SecurityService;
-import org.protobeans.webapp.example.model.UserProfile;
+import org.protobeans.webapp.example.entity.UserProfile;
 import org.protobeans.webapp.example.service.EmailService;
 import org.protobeans.webapp.example.service.MessageGenerator;
 import org.protobeans.webapp.example.service.UserProfileService;
@@ -51,7 +51,7 @@ public class RestorePasswordController {
 
         profileService.updatePassword(p.getEmail(), newDecryptedPassword);
 
-        emailService.sendMessage(form.getEmail(), messageGenerator.generateEmailSignInMessage(newDecryptedPassword, p.getConfirmUuid(), p.getEmail(), requestContextHolder.getRequestContext()));
+        emailService.sendMessage(form.getEmail(), "Restore password", messageGenerator.generateEmailSignInMessage(newDecryptedPassword, p.getConfirmUuid(), p.getEmail(), requestContextHolder.getRequestContext()));
 
         return "/check_email";
     }

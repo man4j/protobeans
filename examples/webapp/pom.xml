@@ -19,17 +19,7 @@
     
     <dependency>
       <groupId>org.protobeans</groupId>
-      <artifactId>protobeans-async</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.protobeans</groupId>
       <artifactId>protobeans-postgresql</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.protobeans</groupId>
-      <artifactId>protobeans-hibernate</artifactId>
     </dependency>
     
     <dependency>
@@ -52,11 +42,6 @@
       <artifactId>protobeans-freemarker</artifactId>
     </dependency>
     
-    <dependency>
-      <groupId>org.protobeans</groupId>
-      <artifactId>protobeans-flyway</artifactId>
-    </dependency>
-                
     <!-- Test -->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -89,13 +74,7 @@
         </exclusion>
       </exclusions>
     </dependency>
-        
-    <dependency>
-      <groupId>org.asynchttpclient</groupId>
-      <artifactId>async-http-client</artifactId>
-      <scope>test</scope>
-    </dependency>
-            
+                    
     <!-- For testing spring-mvc json responses -->
     <dependency>
       <groupId>org.skyscreamer</groupId>
@@ -109,7 +88,7 @@
       <!-- preserve original last modified for static resources -->
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.8</version>
+        <version>3.0.0</version>
         <executions>
           <execution>
             <phase>prepare-package</phase>

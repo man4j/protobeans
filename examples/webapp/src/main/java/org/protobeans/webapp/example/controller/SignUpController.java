@@ -4,8 +4,8 @@ import javax.validation.Valid;
 
 import org.protobeans.mvc.controller.advice.RequestContextHolder;
 import org.protobeans.security.annotation.Anonymous;
+import org.protobeans.webapp.example.entity.UserProfile;
 import org.protobeans.webapp.example.model.MySignUpForm;
-import org.protobeans.webapp.example.model.UserProfile;
 import org.protobeans.webapp.example.service.EmailService;
 import org.protobeans.webapp.example.service.MessageGenerator;
 import org.protobeans.webapp.example.service.UserProfileService;
@@ -44,7 +44,7 @@ public class SignUpController {
         
         UserProfile p = profileService.createAndSave(form.getEmail(), form.getPassword(), form.getUserName(), false);
         
-        emailService.sendMessage(form.getEmail(), messageGenerator.generateEmailSignInMessage(form.getPassword(), p.getConfirmUuid(), p.getEmail(), requestContextHolder.getRequestContext()));
+        emailService.sendMessage(form.getEmail(), "Sign Up", messageGenerator.generateEmailSignInMessage(form.getPassword(), p.getConfirmUuid(), p.getEmail(), requestContextHolder.getRequestContext()));
 
         return "/check_email";
     }

@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import org.protobeans.security.annotation.Anonymous;
 import org.protobeans.security.service.SecurityService;
-import org.protobeans.webapp.example.model.UserProfile;
+import org.protobeans.webapp.example.entity.UserProfile;
 import org.protobeans.webapp.example.service.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -13,9 +13,7 @@
       <a href="<@f.url '/change_password' />"><@f.i18n 'page.changepw.content' 'Change Password' /></a>
     </li>
     <li>
-      <@f.form '/logout' 'logout'>
-        <a style="padding-top: 15px; padding-bottom: 15px; display:block;" href="#" onclick="document.getElementById('logout').submit();"><@f.i18n 'page.logout' 'Logout'/></a>
-      </@f.form>
+      <a href="<@f.url '/logout' />"><@f.i18n 'page.logout' 'Logout'/></a>
     </li>
   </#assign>
   
