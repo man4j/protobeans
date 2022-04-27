@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -55,8 +54,6 @@ public class PostgreSqlConfig {
     private boolean disablePreparedStatements;
     
     private String showSql;
-    
-    private String dialect;
     
     private String enableStatistics;
     
@@ -166,7 +163,8 @@ public class PostgreSqlConfig {
                                                             put("hibernate.order_updates", true);
                                                             put("hibernate.auto_quote_keyword", true);
                                                             put("hibernate.physical_naming_strategy", ProtobeansNamingStrategy.class.getName());
-                                                            put("hibernate.dialect", dialect);
+                                                            put("hibernate.dialect", "org.hibernate.dialect.PostgreSQL10Dialect");
+                                                            put("hibernate.types.jackson.object.mapper", JacksonSupplier.class.getName());
                                                             
                                                             //if connection pool already disables autocommit
                                                             put("hibernate.connection.provider_disables_autocommit", true);
@@ -181,16 +179,9 @@ public class PostgreSqlConfig {
        
        em.setJpaVendorAdapter(jpaVendorAdapter);
        
-       em.setPackagesToScan(append(basePackages, "org.protobeans.hibernate.entity"));
+       em.setPackagesToScan(basePackages);
        
        return em;
-    }
-    
-    private <T> T[] append(T[] arr, T element) {
-        final int N = arr.length;
-        arr = Arrays.copyOf(arr, N + 1);
-        arr[N] = element;
-        return arr;
     }
     
     @Bean

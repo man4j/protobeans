@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.protobeans.mvc.config.MvcInitializer;
 import org.protobeans.webapp.example.Main;
+import org.protobeans.webapp.example.repository.UserProfileRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.annotation.DirtiesContext;
@@ -31,6 +33,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @DirtiesContext
 public class SimpleControllerTest {
     private MockMvc mockMvc;
+    
+    @Autowired
+    private UserProfileRepository userProfileRepository;
     
     @BeforeEach
     public void initMockMvc() {

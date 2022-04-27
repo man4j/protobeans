@@ -37,8 +37,6 @@ public @interface EnablePostgreSql {
     
     String showSql() default "false";
     
-    String dialect();
-    
     /**
      * Also do not forget set log level for org.hibernate.stat to DEBUG
      */

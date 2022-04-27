@@ -19,7 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableSecurity(ignoreUrls = "static", loginUrl = "/signin")
 @EnableI18n(isCached = "false")
 @EnableMail(host = "smtp.sendgrid.net", user = "apikey", password = "${emailPassword}")
-@EnablePostgreSql(schema = "postgres", dbHost = "${postgresIp}", dbPort = "${postgresPort}", dialect = "org.hibernate.dialect.PostgreSQL10Dialect", user = "postgres", password = "postgres", basePackages = {"org.protobeans.webapp.example"}, migrationsPath = "migrations")
+@EnablePostgreSql(showSql = "true", schema = "postgres", dbHost = "${postgresIp}", dbPort = "${postgresPort}", dialect = "org.hibernate.dialect.PostgreSQL10Dialect", user = "postgres", password = "postgres", basePackages = {"org.protobeans.webapp.example"}, migrationsPath = "migrations")
 @ComponentScan(basePackageClasses={MainController.class, UserProfileService.class, UserProfileRepository.class})
 public class Main {
     @SuppressWarnings("resource")
