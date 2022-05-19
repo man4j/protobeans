@@ -47,7 +47,5 @@ public @interface EnablePostgreSql {
     
     int batchSize() default 1_000;
     
-    int fetchSize() default 1_00;
-    
     String migrationsPath() default "postgres/migrations";
 }

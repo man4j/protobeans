@@ -64,12 +64,6 @@
         <version>${protobeans.version}</version>
       </dependency>
       
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-cockroachdb</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>
-      
 	    <dependency>
         <groupId>org.protobeans</groupId>
 	      <artifactId>protobeans-security</artifactId>

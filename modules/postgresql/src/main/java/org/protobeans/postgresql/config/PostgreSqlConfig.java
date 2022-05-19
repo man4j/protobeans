@@ -11,7 +11,6 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.flywaydb.core.Flyway;
-import org.hibernate.dialect.PostgreSQL10Dialect;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.postgresql.annotation.EnablePostgreSql;
@@ -61,8 +60,6 @@ public class PostgreSqlConfig {
     private String[] basePackages;
     
     private int batchSize;
-    
-    private int fetchSize;
     
     private String migrationsPath;
     
@@ -162,12 +159,11 @@ public class PostgreSqlConfig {
        em.setJpaPropertyMap(new HashMap<String, Object>() {{put("hibernate.id.new_generator_mappings", true);
                                                             put("hibernate.format_sql", true);
                                                             put("hibernate.jdbc.batch_size", batchSize);
-                                                            put("hibernate.jdbc.fetch_size", fetchSize);//используется для курсоров насколько я понял
                                                             put("hibernate.order_inserts", true);
                                                             put("hibernate.order_updates", true);
                                                             put("hibernate.auto_quote_keyword", true);
                                                             put("hibernate.physical_naming_strategy", ProtobeansNamingStrategy.class.getName());
-                                                            put("hibernate.dialect", PostgreSQL10Dialect.class.getName());
+                                                            put("hibernate.dialect", "org.hibernate.dialect.PostgreSQL10Dialect");
                                                             put("hibernate.types.jackson.object.mapper", JacksonSupplier.class.getName());
                                                             
                                                             //if connection pool already disables autocommit
