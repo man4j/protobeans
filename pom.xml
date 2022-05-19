@@ -2,16 +2,16 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-parent</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
   <packaging>pom</packaging>
-  
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    
+
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
-    
+
     <version.spring>5.3.19</version.spring>
     <version.spring.security>5.6.2</version.spring.security>
     <version.jackson>2.13.2</version.jackson>
@@ -20,6 +20,7 @@
   <modules>
     <module>modules/core</module>
     <module>modules/postgresql</module>
+    <module>modules/cockroachdb</module>
     <module>modules/clickhouse</module>
     <module>modules/couchdb</module>
     <module>modules/freemarker</module>
@@ -30,28 +31,28 @@
     <module>modules/scheduler</module>
     <module>modules/security</module>
   </modules>
-  
+
   <dependencies>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>1.2.11</version>
     </dependency>
-    
+
     <dependency>
       <groupId>org.codehaus.janino</groupId>
       <artifactId>janino</artifactId>
       <version>3.1.6</version>
     </dependency>
-            
+
     <!-- JUnit -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
       <version>5.8.2</version>
-      <scope>test</scope>    
+      <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-launcher</artifactId>
@@ -59,7 +60,7 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- for Spring MVC TestFramework -->    
+    <!-- for Spring MVC TestFramework -->
     <dependency>
       <groupId>org.skyscreamer</groupId>
       <artifactId>jsonassert</artifactId>
@@ -75,73 +76,73 @@
         <artifactId>protobeans-core</artifactId>
         <version>${project.version}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.protobeans</groupId>
         <artifactId>protobeans-mvc</artifactId>
         <version>${project.version}</version>
       </dependency>
-      
+
       <!-- JAXB -->
       <dependency>
         <groupId>com.sun.xml.bind</groupId>
         <artifactId>jaxb-impl</artifactId>
         <version>3.0.2</version>
       </dependency>
-      
-      <!-- Swagger -->      
+
+      <!-- Swagger -->
       <dependency>
         <groupId>org.springdoc</groupId>
         <artifactId>springdoc-openapi-ui</artifactId>
         <version>1.6.7</version>
       </dependency>
-      
+
       <!-- Jackson -->
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
         <version>${version.jackson}</version>
       </dependency>
-        
+
       <dependency>
         <groupId>com.fasterxml.jackson.datatype</groupId>
         <artifactId>jackson-datatype-jsr310</artifactId>
         <version>${version.jackson}</version>
       </dependency>
-    
+
       <!-- Validation -->
       <dependency>
         <groupId>org.hibernate.validator</groupId>
         <artifactId>hibernate-validator</artifactId>
         <version>6.2.3.Final</version>
       </dependency>
-      
+
       <dependency>
         <groupId>javax.el</groupId>
         <artifactId>javax.el-api</artifactId>
         <version>3.0.0</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.glassfish</groupId>
         <artifactId>javax.el</artifactId>
         <version>3.0.0</version>
       </dependency>
-      
+
       <!-- Logstash logback encoder -->
       <dependency>
         <groupId>net.logstash.logback</groupId>
         <artifactId>logstash-logback-encoder</artifactId>
         <version>7.1.1</version>
       </dependency>
-      
+
       <!-- Mail -->
       <dependency>
         <groupId>com.sun.mail</groupId>
         <artifactId>javax.mail</artifactId>
         <version>1.6.2</version>
       </dependency>
-      
+
       <!-- Common annotations -->
       <dependency>
         <groupId>javax.annotation</groupId>
@@ -164,13 +165,13 @@
       </dependency>
 
       <!-- ClickHouse -->
-	  <dependency>
-	    <groupId>com.clickhouse</groupId>
-	    <artifactId>clickhouse-jdbc</artifactId>
-	    <version>0.3.2-patch8</version>
-	  </dependency>
+      <dependency>
+        <groupId>com.clickhouse</groupId>
+        <artifactId>clickhouse-jdbc</artifactId>
+        <version>0.3.2-patch8</version>
+      </dependency>
 
-      <!-- Flyway -->      
+      <!-- Flyway -->
       <dependency>
         <groupId>org.flywaydb</groupId>
         <artifactId>flyway-core</artifactId>
@@ -183,7 +184,7 @@
         <artifactId>javax.servlet-api</artifactId>
         <version>4.0.1</version>
       </dependency>
-      
+
       <!-- Undertow -->
       <dependency>
         <groupId>io.undertow</groupId>
@@ -197,40 +198,40 @@
         <artifactId>freemarker</artifactId>
         <version>2.3.31</version>
       </dependency>
-      
+
       <!-- Fileupload -->
       <dependency>
         <groupId>commons-fileupload</groupId>
         <artifactId>commons-fileupload</artifactId>
         <version>1.4</version>
       </dependency>
-      
+
       <dependency>
-	    <groupId>org.apache.commons</groupId>
-	    <artifactId>commons-text</artifactId>
-	    <version>1.9</version>
-	  </dependency>
-      
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-text</artifactId>
+        <version>1.9</version>
+      </dependency>
+
       <!-- CouchDB -->
       <dependency>
         <groupId>com.equiron</groupId>
         <artifactId>async-couchdb-client</artifactId>
         <version>5.1.10-3.2.0</version>
       </dependency>
-      
+
       <!-- Hibernate -->
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-core</artifactId>
         <version>5.5.9.Final</version>
       </dependency>
-      
-  	  <dependency>
-  	    <groupId>com.vladmihalcea</groupId>
-  	    <artifactId>hibernate-types-55</artifactId>
-  	    <version>2.16.1</version>
-  	  </dependency>
-      
+
+      <dependency>
+        <groupId>com.vladmihalcea</groupId>
+        <artifactId>hibernate-types-55</artifactId>
+        <version>2.16.1</version>
+      </dependency>
+
       <dependency>
         <groupId>org.springframework.data</groupId>
         <artifactId>spring-data-jpa</artifactId>
@@ -243,25 +244,25 @@
         <artifactId>spring-context</artifactId>
         <version>${version.spring}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-context-support</artifactId>
         <version>${version.spring}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-orm</artifactId>
         <version>${version.spring}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-jdbc</artifactId>
         <version>${version.spring}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
@@ -279,19 +280,19 @@
         <artifactId>spring-web</artifactId>
         <version>${version.spring}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-test</artifactId>
         <version>${version.spring}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-web</artifactId>
         <version>${version.spring.security}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-config</artifactId>
@@ -299,7 +300,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  
+
   <build>
     <plugins>
       <plugin>
@@ -341,7 +342,7 @@
       <url>${myMavenRepoWriteUrl}</url>
     </repository>
   </distributionManagement>
-  
+
   <repositories>
     <repository>
       <id>myMavenRepo</id>
