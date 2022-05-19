@@ -3,23 +3,24 @@
 
   <parent>
     <groupId>org.protobeans</groupId>
-    <artifactId>protobeans-parent</artifactId>
-    <version>1.1</version>
-    <relativePath>../../pom.xml</relativePath>
+    <artifactId>examples-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>protobeans-couchdb</artifactId>
+  <artifactId>protobeans-cockroach-postgres-clickhouse</artifactId>
   <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
       <groupId>org.protobeans</groupId>
-      <artifactId>protobeans-core</artifactId>
+      <artifactId>protobeans-cockroachdb</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>com.equiron</groupId>
-      <artifactId>async-couchdb-client</artifactId>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

@@ -118,13 +118,13 @@ public class MvcConfig implements WebMvcConfigurer {
     
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+
         if (!resourcesPath.isEmpty() && !resourcesUrl.isEmpty()) {
             String dashedResourcesPath = PathUtils.dashedPath(resourcesPath);
             String dashedResourcesUrl = PathUtils.dashedPath(resourcesUrl);
             long lastModified = FileUtils.getLastModified(dashedResourcesPath);
-            
-            registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-            registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
         
             registry.addResourceHandler(dashedResourcesUrl + lastModified + "/**")
                     .addResourceLocations("classpath:" + dashedResourcesPath)

@@ -1,20 +1,16 @@
-package org.protobeans.postgresql.config;
+package org.protobeans.cockroachdb.config;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.HashMap;
-import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.flywaydb.core.Flyway;
-import org.hibernate.dialect.PostgreSQL10Dialect;
+import org.hibernate.dialect.CockroachDB201Dialect;
 import org.postgresql.ds.PGSimpleDataSource;
+import org.protobeans.cockroachdb.annotation.EnableCockroachDb;
+import org.protobeans.cockroachdb.transaction.RetryableTransactionTemplate;
 import org.protobeans.core.annotation.InjectFrom;
-import org.protobeans.postgresql.annotation.EnablePostgreSql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,96 +27,59 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@InjectFrom(EnablePostgreSql.class)
+@InjectFrom(EnableCockroachDb.class)
 @EnableTransactionManagement(proxyTargetClass = true)
-public class PostgreSqlConfig {
-    private static Logger logger = LoggerFactory.getLogger(PostgreSqlConfig.class);
-    
-    private String dbHost;
-    
-    private String dbPort;
-    
+public class CockroachDbConfig {
+    private static Logger logger = LoggerFactory.getLogger(CockroachDbConfig.class);
+
+    private String dbHosts;
+
+    private String dbPorts;
+
     private String schema;
-    
-    private String user;
-    
-    private String password;
-    
+
     private String maxPoolSize;
-    
-    private String transactionIsolation;
-    
-    private boolean reindexOnStart;
-    
-    private boolean disablePreparedStatements;
-    
+
     private String showSql;
-    
+
     private String enableStatistics;
-    
+
     private String[] basePackages;
-    
+
     private int batchSize;
-    
+
     private int fetchSize;
-    
+
     private String migrationsPath;
-    
+
     @Autowired(required = false)
     private ObjectMapper mapper;
-    
-    @Bean(destroyMethod = "close")
-    public DataSource pgDataSource() throws Exception {
-        String url = String.format("jdbc:postgresql://%s:%s/postgres", dbHost, dbPort);
-        
-        logger.info("Check database exists: {}", url);
-        
-        org.postgresql.Driver driver = new org.postgresql.Driver();
 
-        Properties props = new Properties();
-        props.put("user", user);
-        props.put("password", password);
-        props.put("ssl", false);
+    @Bean(destroyMethod = "close")
+    public DataSource crdbDataSource() throws Exception {
+        HikariDataSource ds = new HikariDataSource();
+
+        PGSimpleDataSource pgSimpleDataSource = new PGSimpleDataSource();
+        pgSimpleDataSource.setUser("root");
+        pgSimpleDataSource.setServerNames(dbHosts.split(","));
+
+        String[] _dbPorts = dbPorts.split(",");
         
-        try (Connection conn = driver.connect(url, props);
-             PreparedStatement ps = conn.prepareStatement("SELECT FROM pg_database WHERE datname = ?");) {
-            ps.setString(1, schema);
-            
-            try (ResultSet rs = ps.executeQuery()) {
-                if (!rs.next()) {
-                    logger.info("Create database: {}", schema);
-                    
-                    try (PreparedStatement ps1 = conn.prepareStatement(String.format("CREATE DATABASE %s", schema))) {
-                        ps1.execute();
-                    }
-                    
-                    try (PreparedStatement ps1 = conn.prepareStatement(String.format("GRANT ALL PRIVILEGES ON DATABASE %s TO %s", schema, user))) {
-                        ps1.execute();
-                    }
-                } else {
-                    logger.info("Database {} already exists", schema);
-                }
-            }
+        int[] ports = new int[_dbPorts.length];
+        
+        for (int i = 0; i < _dbPorts.length; i++) {
+            ports[i] = Integer.parseInt(_dbPorts[i]);
         }
         
-        HikariDataSource ds = new HikariDataSource();
-        
-        PGSimpleDataSource pgSimpleDataSource = new PGSimpleDataSource();
-        pgSimpleDataSource.setUser(user);
-        pgSimpleDataSource.setPassword(password);
-        pgSimpleDataSource.setServerNames(new String[] {dbHost});
-        pgSimpleDataSource.setPortNumbers(new int[] {Integer.parseInt(dbPort)});
+        pgSimpleDataSource.setPortNumbers(ports);
+
         pgSimpleDataSource.setDatabaseName(schema);
         pgSimpleDataSource.setLoadBalanceHosts(true);
         pgSimpleDataSource.setSsl(false);
         pgSimpleDataSource.setReWriteBatchedInserts(true);
-        
-        if (disablePreparedStatements) {
-            pgSimpleDataSource.setPrepareThreshold(0);
-        }
-        
-        System.out.println("[PROTOBEANS]: Use postgres URL: " + pgSimpleDataSource.getUrl());
-        
+
+        System.out.println("[PROTOBEANS]: Use cockroachDB URL: " + pgSimpleDataSource.getUrl());
+
         ds.setDataSource(pgSimpleDataSource);
 
         if (maxPoolSize.equals("auto")) {
@@ -128,32 +87,18 @@ public class PostgreSqlConfig {
         } else {
             ds.setMaximumPoolSize(Integer.parseInt(maxPoolSize));
         }
-        
+
         ds.setAutoCommit(false);
-        ds.setTransactionIsolation(transactionIsolation);
         ds.setKeepaliveTime(60_000);
 
-        if (reindexOnStart) {
-            try(Connection con = ds.getConnection();            
-                Statement st = con.createStatement()) {
-                logger.info("[PROTOBEANS]: Start reindex database: " + schema);
-                
-                long t = System.currentTimeMillis();
-                
-                try (var rs = st.executeQuery("REINDEX DATABASE " + schema)) {
-                    logger.info("[PROTOBEANS]: Reindex database duration: " + (System.currentTimeMillis() - t) + " ms");
-                }
-            }
-        }
-        
         return ds;
     }
-    
+
     @Bean
-    public LocalContainerEntityManagerFactoryBean pgEntityManager() throws Exception {
+    public LocalContainerEntityManagerFactoryBean crdbEntityManager() throws Exception {
        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
        
-       em.setDataSource(pgDataSource());
+       em.setDataSource(crdbDataSource());
        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
        jpaVendorAdapter.setShowSql("true".equals(showSql));
        
@@ -167,9 +112,9 @@ public class PostgreSqlConfig {
                                                             put("hibernate.order_updates", true);
                                                             put("hibernate.auto_quote_keyword", true);
                                                             put("hibernate.physical_naming_strategy", ProtobeansNamingStrategy.class.getName());
-                                                            put("hibernate.dialect", PostgreSQL10Dialect.class.getName());
+                                                            put("hibernate.dialect", CockroachDB201Dialect.class.getName());
                                                             put("hibernate.types.jackson.object.mapper", JacksonSupplier.class.getName());
-                                                            
+                                                    
                                                             //if connection pool already disables autocommit
                                                             put("hibernate.connection.provider_disables_autocommit", true);
                                                             
@@ -187,26 +132,26 @@ public class PostgreSqlConfig {
        
        return em;
     }
-    
+
     @Bean
-    public PlatformTransactionManager pgTransactionManager() throws Exception {
-        return new JpaTransactionManager(pgEntityManager().getObject());
+    public PlatformTransactionManager crdbTransactionManager() throws Exception {
+        return new JpaTransactionManager(crdbEntityManager().getObject());
     }
-    
+
     @Bean
-    public TransactionTemplate pgTransactionTemplate() throws Exception {
-        return new TransactionTemplate(pgTransactionManager());
+    public RetryableTransactionTemplate crdbTransactionTemplate() throws Exception {
+        return new RetryableTransactionTemplate(new TransactionTemplate(crdbTransactionManager()));
     }
-    
+
     @PostConstruct
     public void migrate() throws Exception {
         Flyway fw = Flyway.configure().ignoreMigrationPatterns("*:missing")
                                       .validateOnMigrate(false)
                                       .locations("classpath:" + migrationsPath)
-                                      .dataSource(pgDataSource())
+                                      .dataSource(crdbDataSource())
                                       .baselineOnMigrate(true)
                                       .load();
-        
+
         while (true) {
             try {
                 fw.migrate();
