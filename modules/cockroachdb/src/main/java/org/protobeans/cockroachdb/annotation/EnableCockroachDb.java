@@ -18,26 +18,26 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Configuration
 public @interface EnableCockroachDb {
     String dbHosts();
-    
+
     String dbPorts() default "5432";
-    
+
     String schema();
-    
-    String maxPoolSize() default "auto"; 
-    
+
+    String maxPoolSize(); 
+
     String showSql() default "false";
-    
-    String dialect();
-    
+
     /**
      * Also do not forget set log level for org.hibernate.stat to DEBUG
      */
     String enableStatistics() default "false";
-        
+
     @AliasFor(annotation = EnableJpaRepositories.class, attribute = "basePackages")
     String[] basePackages();
-    
+
     int batchSize() default 1_000;
-    
+
+    int fetchSize() default 1_00;
+
     String migrationsPath() default "cockroachdb/migrations";
 }

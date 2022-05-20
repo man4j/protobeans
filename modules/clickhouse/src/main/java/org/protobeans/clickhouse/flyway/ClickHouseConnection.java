@@ -10,13 +10,14 @@ public class ClickHouseConnection extends Connection<ClickHouseDatabase> {
         super(database, connection);
     }
 
+    @SuppressWarnings("resource")
     @Override
     protected String getCurrentSchemaNameOrSearchPath() throws SQLException {
         return getJdbcConnection().getCatalog();
     }
 
     @Override
-    public Schema getSchema(String name) {
+    public Schema<ClickHouseDatabase, ClickHouseTable> getSchema(String name) {
         return new ClickHouseSchema(jdbcTemplate, database, name);
     }
 }

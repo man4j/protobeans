@@ -42,10 +42,15 @@ public class ClickHouseDatabase extends Database<ClickHouseConnection> {
     public String getBooleanFalse() {
         return "0";
     }
+    
+    @Override
+    protected String getOpenQuote() {
+        return "`";
+    }
 
     @Override
-    protected String doQuote(String identifier) {
-        return "`" + identifier + "`";
+    protected String getCloseQuote() {
+        return "`";
     }
 
     @Override

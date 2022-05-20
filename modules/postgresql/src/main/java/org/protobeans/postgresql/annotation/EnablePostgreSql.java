@@ -37,8 +37,6 @@ public @interface EnablePostgreSql {
     
     String showSql() default "false";
     
-    String dialect();
-    
     /**
      * Also do not forget set log level for org.hibernate.stat to DEBUG
      */
@@ -48,6 +46,8 @@ public @interface EnablePostgreSql {
     String[] basePackages();
     
     int batchSize() default 1_000;
+    
+    int fetchSize() default 1_00;
     
     String migrationsPath() default "postgres/migrations";
 }

@@ -9,13 +9,9 @@ import org.omnifaces.filter.GzipResponseFilter;
 
 import jakarta.faces.validator.BeanValidator;
 import jakarta.servlet.DispatcherType;
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletContainerInitializer;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -65,16 +61,5 @@ public class ContextParamsInitializer implements ServletContainerInitializer {
         
         ctx.addFilter("gzipResponseFilter", GzipResponseFilter.class)
            .addMappingForServletNames(EnumSet.of(DispatcherType.REQUEST), true, "FacesServlet");
-        
-        ctx.addFilter("cssFilter", new Filter() {
-            @Override
-            public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-                HttpServletRequest req = (HttpServletRequest) request;
-                
-//                if (!req.getRequestURI().contains("components.css")) {
-                    chain.doFilter(request, response);
-//                }
-            }
-        }).addMappingForServletNames(EnumSet.of(DispatcherType.REQUEST), true, "FacesServlet");
     }
 }

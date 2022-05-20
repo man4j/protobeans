@@ -2,7 +2,6 @@ package org.protobeans.cockroachdb.transaction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionException;
@@ -13,10 +12,13 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Component
 public class RetryableTransactionTemplate implements TransactionOperations {
     private static Logger log = LoggerFactory.getLogger(RetryableTransactionTemplate.class);
-    
-    @Autowired
+
     private TransactionTemplate crdbTransactionTemplate;
     
+    public RetryableTransactionTemplate(TransactionTemplate crdbTransactionTemplate) {
+        this.crdbTransactionTemplate = crdbTransactionTemplate;
+    }
+
     @Override
     public <T> T execute(TransactionCallback<T> action) throws TransactionException {
         do {
@@ -24,9 +26,12 @@ public class RetryableTransactionTemplate implements TransactionOperations {
                 return crdbTransactionTemplate.execute(t -> {
                     return action.doInTransaction(t);
                 });
-            } catch (@SuppressWarnings("unused") CannotAcquireLockException e) {
-                log.warn("Transaction conflict detected");
+            } catch (CannotAcquireLockException e) {
+                log.warn("Transaction conflict detected", e);
                 continue;
+            } catch (Exception e) {
+                log.error("Unknown exception", e);
+                throw e;
             }
         } while (true);
     }

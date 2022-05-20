@@ -27,6 +27,7 @@ public class ClickHouseSchema extends Schema<ClickHouseDatabase, ClickHouseTable
         jdbcTemplate.executeStatement("CREATE DATABASE " + database.quote(name));
     }
 
+    @SuppressWarnings("resource")
     @Override
     protected void doDrop() throws SQLException {
         if (jdbcTemplate.getConnection().getCatalog().equals(name)) {
@@ -57,7 +58,7 @@ public class ClickHouseSchema extends Schema<ClickHouseDatabase, ClickHouseTable
     }
 
     @Override
-    public Table getTable(String tableName) {
+    public ClickHouseTable getTable(String tableName) {
         return new ClickHouseTable(jdbcTemplate, database, this, tableName);
     }
 }

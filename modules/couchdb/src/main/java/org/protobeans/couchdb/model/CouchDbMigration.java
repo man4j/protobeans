@@ -5,4 +5,3 @@ public interface CouchDbMigration {
     
     void migrate();
 }
-

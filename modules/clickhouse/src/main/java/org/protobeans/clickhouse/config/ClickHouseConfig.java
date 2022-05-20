@@ -35,18 +35,18 @@ public class ClickHouseConfig {
     }
     
     @Bean
-    public JdbcTemplate clickhouseJdbcTemplate() throws Exception {
+    public JdbcTemplate clickHouseJdbcTemplate() throws Exception {
         return new JdbcTemplate(clickHouseDataSource());
     }
     
     @Bean
     public NamedParameterJdbcTemplate clickHouseNamedParameterJdbcTemplate() throws Exception {
-        return new NamedParameterJdbcTemplate(clickhouseJdbcTemplate());
+        return new NamedParameterJdbcTemplate(clickHouseJdbcTemplate());
     }
     
     @PostConstruct
     public void migrate() throws Exception {
-        Flyway fw = Flyway.configure().ignoreMissingMigrations(true)
+        Flyway fw = Flyway.configure().ignoreMigrationPatterns("*:missing")
                                       .validateOnMigrate(true)
                                       .locations("classpath:" + migrationsPath)
                                       .dataSource(clickHouseDataSource())
