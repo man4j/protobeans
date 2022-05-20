@@ -22,7 +22,6 @@
     <module>modules/cockroachdb</module>
     <module>modules/clickhouse</module>
     <module>modules/couchdb</module>
-    <module>modules/hibernate</module>
     <module>modules/i18n</module>
     <module>modules/undertow</module>
     <module>modules/mail</module>
