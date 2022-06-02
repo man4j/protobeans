@@ -28,4 +28,7 @@ import com.sun.faces.config.FacesInitializer;
 public @interface EnableFaces {
     @AliasFor(annotation = EnableUndertow.class, attribute = "port")
     String port() default "8080";
+    
+    @AliasFor(annotation = EnableUndertow.class, attribute = "sessionTimeout")
+    int sessionTimeout() default 30000;
 }
