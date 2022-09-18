@@ -1,6 +1,5 @@
 package org.protobeans.faces.config;
 
-import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -12,9 +11,6 @@ import jakarta.servlet.DispatcherType;
 import jakarta.servlet.ServletContainerInitializer;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ValidatorFactory;
 
 public class ContextParamsInitializer implements ServletContainerInitializer {
@@ -44,17 +40,6 @@ public class ContextParamsInitializer implements ServletContainerInitializer {
         ctx.setInitParameter("org.jboss.weld.context.mapping", ".*\\.jsf");
 
         ctx.setAttribute(BeanValidator.VALIDATOR_FACTORY_KEY, ProtobeansFacesConfig.springContext.getBean(ValidatorFactory.class));
-
-        ctx.addServlet("welcome", new HttpServlet() {
-            @Override
-            protected void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-                if (req.getRequestURI().equals("/")) {
-                    res.sendRedirect("/index.jsf");
-                } else {
-                    super.service(req, res);
-                }
-            }
-        }).addMapping("/");
         
         //Для инициализации OmniFaces нужен не только initializer, но и этот listener
         ctx.addListener(ApplicationListener.class);

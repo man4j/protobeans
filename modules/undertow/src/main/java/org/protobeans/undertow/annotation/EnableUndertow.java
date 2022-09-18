@@ -20,6 +20,8 @@ public @interface EnableUndertow {
     
     Initializer[] initializers() default {};
     
+    Initializer[] userInitializers() default {};
+    
     String resourcesPath() default "undefined";
     
     String welcomePage() default "index.html";

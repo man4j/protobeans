@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.undertow.annotation.EnableUndertow;
 import org.protobeans.undertow.annotation.Initializer;
@@ -46,6 +47,8 @@ public class UndertowConfig {
     
     private Initializer[] initializers;
     
+    private Initializer[] userInitializers;
+    
     private Undertow undertow;
     
     private String errorPage;
@@ -70,7 +73,9 @@ public class UndertowConfig {
         
         deploymentInfo.getServletContextAttributes().put(WebSocketDeploymentInfo.ATTRIBUTE_NAME, new WebSocketDeploymentInfo());
         
-        for (Initializer initializer : initializers) {
+        Initializer[] resultInitializers = ArrayUtils.addAll(initializers, userInitializers);
+        
+        for (Initializer initializer : resultInitializers) {
         	Set<Class<?>> handlesTypes = new HashSet<>(Arrays.asList(initializer.handleTypes()));
         	
         	if (handlesTypes.isEmpty()) {

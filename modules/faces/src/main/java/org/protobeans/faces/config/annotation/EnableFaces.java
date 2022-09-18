@@ -31,4 +31,7 @@ public @interface EnableFaces {
     
     @AliasFor(annotation = EnableUndertow.class, attribute = "sessionTimeout")
     int sessionTimeout() default 30000;
+    
+    @AliasFor(annotation = EnableUndertow.class, attribute = "userInitializers")
+    Initializer[] userInitializers() default {};
 }
