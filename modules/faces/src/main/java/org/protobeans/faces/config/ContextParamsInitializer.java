@@ -37,14 +37,12 @@ public class ContextParamsInitializer implements ServletContainerInitializer {
         ctx.setInitParameter("org.omnifaces.SOCKET_ENDPOINT_ENABLED", "true");
         ctx.setInitParameter("org.omnifaces.VERSIONED_RESOURCE_HANDLER_VERSION", (System.currentTimeMillis() / 1_000) + "");
 
-        ctx.setInitParameter("org.jboss.weld.context.mapping", ".*\\.jsf");
-
         ctx.setAttribute(BeanValidator.VALIDATOR_FACTORY_KEY, ProtobeansFacesConfig.springContext.getBean(ValidatorFactory.class));
         
         //Для инициализации OmniFaces нужен не только initializer, но и этот listener
         ctx.addListener(ApplicationListener.class);
         
         ctx.addFilter("gzipResponseFilter", GzipResponseFilter.class)
-           .addMappingForServletNames(EnumSet.of(DispatcherType.REQUEST), true, "FacesServlet");
+           .addMappingForServletNames(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD), true, "FacesServlet");
     }
 }

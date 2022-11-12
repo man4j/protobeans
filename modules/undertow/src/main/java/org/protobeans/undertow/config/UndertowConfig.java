@@ -2,6 +2,7 @@ package org.protobeans.undertow.config;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EventListener;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,6 +50,8 @@ public class UndertowConfig {
     
     private Initializer[] userInitializers;
     
+    private Class<? extends EventListener>[] listeners;
+    
     private Undertow undertow;
     
     private String errorPage;
@@ -67,6 +70,10 @@ public class UndertowConfig {
                       .addMimeMapping(new MimeMapping("jsf", "application/xhtml+xml"))
                       .setResourceManager(new ClassPathResourceManager(this.getClass().getClassLoader(), "META-INF/resources"));
         
+        for (Class<? extends EventListener> listenerClass : listeners) {
+            deploymentInfo.addListener(Servlets.listener(listenerClass));
+        }
+        
         if (!errorPage.isEmpty()) {
             deploymentInfo.addErrorPage(Servlets.errorPage(errorPage));
         }
@@ -82,7 +89,7 @@ public class UndertowConfig {
         		HandlesTypes annotation = initializer.initializer().getAnnotation(HandlesTypes.class);
         		
         		if (annotation != null) {
-        			handlesTypes = Set.of(annotation.value());
+        			handlesTypes.addAll(Set.of(annotation.value()));
         		}
         	}
         	
@@ -91,13 +98,13 @@ public class UndertowConfig {
         
         final EncodingHandler encodingHandler = new EncodingHandler(new ContentEncodingRepository().addEncodingHandler("gzip", 
                 new GzipEncodingProvider(8), 50, Predicates.and(Predicates.requestLargerThan(1024), 
-                                                               new CompressibleMimeTypePredicate("text/html",
-                                                                                                 "text/xml",
-                                                                                                 "text/plain",
-                                                                                                 "text/css",
-                                                                                                 "text/javascript",
-                                                                                                 "application/javascript",
-                                                                                                 "application/json"))))
+                                                                new CompressibleMimeTypePredicate("text/html",
+                                                                                                  "text/xml",
+                                                                                                  "text/plain",
+                                                                                                  "text/css",
+                                                                                                  "text/javascript",
+                                                                                                  "application/javascript",
+                                                                                                  "application/json"))))
                                                            .setNext(createServletDeploymentHandler());
         
         Builder builder = Undertow.builder().addHttpListener(Integer.parseInt(port), host)

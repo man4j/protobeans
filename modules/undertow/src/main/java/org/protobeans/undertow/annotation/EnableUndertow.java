@@ -4,6 +4,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.EventListener;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -21,6 +22,8 @@ public @interface EnableUndertow {
     Initializer[] initializers() default {};
     
     Initializer[] userInitializers() default {};
+    
+    Class<? extends EventListener>[] listeners() default {};
     
     String resourcesPath() default "undefined";
     

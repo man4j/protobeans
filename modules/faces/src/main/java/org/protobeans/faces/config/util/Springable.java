@@ -1,13 +1,11 @@
 package org.protobeans.faces.config.util;
 
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-
 import java.io.Serializable;
 
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+
 public class Springable implements Serializable {    
-	@PostConstruct
-    protected void init() {
+    public Springable() {
 	    AutowireCapableBeanFactory ctx = WebApplicationContextUtils.getApplicationContext().getAutowireCapableBeanFactory();
 	    
 	    ctx.autowireBean(this);

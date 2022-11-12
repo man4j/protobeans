@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-parent</artifactId>
-  <version>1.1.3-jakartaee9</version>
+  <version>1.0-jakarta-ee-10</version>
   <packaging>pom</packaging>
 
   <properties>
@@ -13,13 +13,11 @@
     <maven.compiler.target>17</maven.compiler.target>
 
     <version.spring>5.3.19</version.spring>
-    <version.jackson>2.13.2</version.jackson>
+    <version.jackson>2.13.4</version.jackson>
   </properties>
 
   <modules>
     <module>modules/core</module>
-    <module>modules/postgresql</module>
-    <module>modules/clickhouse</module>
     <module>modules/i18n</module>
     <module>modules/undertow</module>
     <module>modules/mail</module>
@@ -34,19 +32,19 @@
       <version>1.18.22</version>
       <scope>provided</scope>
     </dependency>
+    
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>2.0.1</version>
+    </dependency>
   
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.11</version>
+      <version>1.4.3</version>
     </dependency>
     
-    <dependency>
-      <groupId>org.codehaus.janino</groupId>
-      <artifactId>janino</artifactId>
-      <version>3.1.6</version>
-    </dependency>
-            
     <!-- JUnit -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -85,23 +83,11 @@
         <version>${project.version}</version>
       </dependency>
 
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-postgresql</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-                  
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-scheduler</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      
       <!-- JAXB -->
       <dependency>
         <groupId>com.sun.xml.bind</groupId>
         <artifactId>jaxb-impl</artifactId>
-        <version>3.0.2</version>
+        <version>4.0.1</version>
       </dependency>
             
       <!-- Jackson -->
@@ -134,7 +120,7 @@
       <dependency>
         <groupId>net.logstash.logback</groupId>
         <artifactId>logstash-logback-encoder</artifactId>
-        <version>7.1.1</version>
+        <version>7.2</version>
       </dependency>
       
       <!-- Mail -->
@@ -143,85 +129,31 @@
         <artifactId>javax.mail</artifactId>
         <version>1.6.2</version>
       </dependency>
-      
+    
       <!-- Common annotations -->
       <dependency>
         <groupId>javax.annotation</groupId>
         <artifactId>javax.annotation-api</artifactId>
         <version>1.3.2</version>
       </dependency>
-
-      <!-- HikariCP -->
-      <dependency>
-        <groupId>com.zaxxer</groupId>
-        <artifactId>HikariCP</artifactId>
-        <version>5.0.1</version>
-      </dependency>
-
-      <!-- PostgreSQL -->
-      <dependency>
-        <groupId>org.postgresql</groupId>
-        <artifactId>postgresql</artifactId>
-        <version>42.3.4</version>
-      </dependency>
-
-      <!-- ClickHouse -->
-      <dependency>
-        <groupId>com.clickhouse</groupId>
-        <artifactId>clickhouse-jdbc</artifactId>
-        <version>0.3.2-patch8</version>
-      </dependency>
-
-      <!-- Flyway -->      
-      <dependency>
-        <groupId>org.flywaydb</groupId>
-        <artifactId>flyway-core</artifactId>
-        <version>8.5.8</version>
-      </dependency>
       
       <!-- Undertow -->
       <dependency>
         <groupId>io.undertow</groupId>
         <artifactId>undertow-websockets-jsr-jakarta</artifactId>
-        <version>2.2.14.Final</version>
+        <version>2.2.19.Final</version>
       </dependency>
       
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-text</artifactId>
-        <version>1.9</version>
+        <version>1.10.0</version>
       </dependency>
       
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
         <version>3.12.0</version>
-      </dependency>
-            
-      <!-- CouchDB -->
-      <dependency>
-        <groupId>com.equiron</groupId>
-        <artifactId>async-couchdb-client</artifactId>
-        <version>5.1.10-3.2.0</version>
-      </dependency>
-      
-      <!-- Hibernate -->
-      <dependency>
-        <groupId>org.hibernate</groupId>
-        <artifactId>hibernate-core</artifactId>
-        <version>5.5.9.Final</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>com.vladmihalcea</groupId>
-        <artifactId>hibernate-types-55</artifactId>
-        <version>2.16.1</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.springframework.data</groupId>
-        <artifactId>spring-data-jpa</artifactId>
-        <version>2.6.3</version>
       </dependency>
 
       <!-- Spring -->
@@ -230,90 +162,50 @@
         <artifactId>spring-context</artifactId>
         <version>${version.spring}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-context-support</artifactId>
         <version>${version.spring}</version>
       </dependency>
-      
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-orm</artifactId>
-        <version>${version.spring}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-jdbc</artifactId>
-        <version>${version.spring}</version>
-      </dependency>
-            
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-tx</artifactId>
-        <version>${version.spring}</version>
-      </dependency>
 
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-messaging</artifactId>
-        <version>${version.spring}</version>
-      </dependency>
-      
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-test</artifactId>
         <version>${version.spring}</version>
       </dependency>
-
+      
+      <!-- Primefaces -->
       <dependency>
         <groupId>org.primefaces</groupId>
         <artifactId>primefaces</artifactId>
         <version>11.0.0</version>
         <classifier>jakarta</classifier>
       </dependency>
-      
+
       <dependency>
         <groupId>org.omnifaces</groupId>
         <artifactId>omnifaces</artifactId>
-        <version>4.0-M16</version>
+        <version>4.0</version>
       </dependency>
-
+      
+      <!-- Jakarta -->
       <dependency>
         <groupId>org.glassfish</groupId>
         <artifactId>jakarta.faces</artifactId>
-        <version>3.0.1</version>
+        <version>4.0.0</version>
       </dependency>
 
       <dependency>
         <groupId>jakarta.el</groupId>
         <artifactId>jakarta.el-api</artifactId>
-        <version>4.0.0</version>
+        <version>5.0.1</version>
       </dependency>
 
       <dependency>
         <groupId>org.glassfish</groupId>
         <artifactId>jakarta.el</artifactId>
         <version>4.0.2</version>
-      </dependency>
-
-      <dependency>
-        <groupId>jakarta.websocket</groupId>
-        <artifactId>jakarta.websocket-api</artifactId>
-        <version>2.0.0</version>
-      </dependency>
-
-      <dependency>
-        <groupId>jakarta.servlet.jsp</groupId>
-        <artifactId>jakarta.servlet.jsp-api</artifactId>
-        <version>3.0.0</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.jboss.weld.servlet</groupId>
-        <artifactId>weld-servlet-shaded</artifactId>
-        <version>4.0.2.Final</version>
       </dependency>
 
       <dependency>
@@ -327,11 +219,19 @@
         <artifactId>jakarta.json</artifactId>
         <version>2.0.1</version>
       </dependency>
-
+      
+      <!-- Weld -->
+      <dependency>
+        <groupId>org.jboss.weld.servlet</groupId>
+        <artifactId>weld-servlet-core</artifactId>
+        <version>5.1.0.Final</version>
+      </dependency>
+      
+      <!-- Hibernate -->
       <dependency>
         <groupId>org.hibernate.validator</groupId>
         <artifactId>hibernate-validator</artifactId>
-        <version>7.0.1.Final</version>
+        <version>8.0.0.Final</version>
       </dependency>
 
       <dependency>
@@ -359,7 +259,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M6</version>
+        <version>3.0.0-M7</version>
         <configuration>
           <skipTests>true</skipTests>
         </configuration>
