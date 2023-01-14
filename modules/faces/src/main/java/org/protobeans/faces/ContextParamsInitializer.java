@@ -1,10 +1,12 @@
-package org.protobeans.faces.config;
+package org.protobeans.faces;
 
 import java.util.EnumSet;
 import java.util.Set;
 
+import org.jboss.weld.environment.servlet.Listener;
 import org.omnifaces.ApplicationListener;
 import org.omnifaces.filter.GzipResponseFilter;
+import org.protobeans.faces.config.ProtobeansFacesConfig;
 
 import jakarta.faces.validator.BeanValidator;
 import jakarta.servlet.DispatcherType;
@@ -39,9 +41,12 @@ public class ContextParamsInitializer implements ServletContainerInitializer {
 
         ctx.setAttribute(BeanValidator.VALIDATOR_FACTORY_KEY, ProtobeansFacesConfig.springContext.getBean(ValidatorFactory.class));
         
+        //CDI
+        ctx.addListener(Listener.class);
+        
         //Для инициализации OmniFaces нужен не только initializer, но и этот listener
         ctx.addListener(ApplicationListener.class);
-        
+                
         ctx.addFilter("gzipResponseFilter", GzipResponseFilter.class)
            .addMappingForServletNames(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD), true, "FacesServlet");
     }

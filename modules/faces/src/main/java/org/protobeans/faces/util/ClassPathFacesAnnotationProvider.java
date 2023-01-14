@@ -1,4 +1,4 @@
-package org.protobeans.faces.config.util;
+package org.protobeans.faces.util;
 
 import static com.sun.faces.RIConstants.ANNOTATED_CLASSES;
 

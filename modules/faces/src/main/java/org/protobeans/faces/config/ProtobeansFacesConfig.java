@@ -5,8 +5,10 @@ import java.util.Locale;
 import javax.annotation.PostConstruct;
 
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
+import org.omnifaces.ApplicationInitializer;
 import org.protobeans.core.annotation.InjectFrom;
-import org.protobeans.faces.config.annotation.EnableFaces;
+import org.protobeans.faces.ContextParamsInitializer;
+import org.protobeans.faces.annotation.EnableFaces;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
@@ -16,7 +18,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.MessageSourceResourceBundleLocator;
 
+import com.sun.faces.config.FacesInitializer;
+import com.sun.faces.config.FacesInitializer2;
+
 import jakarta.faces.context.FacesContext;
+import jakarta.servlet.ServletContainerInitializer;
 import jakarta.validation.MessageInterpolator;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -24,7 +30,7 @@ import jakarta.validation.ValidatorFactory;
 
 @Configuration
 @InjectFrom(EnableFaces.class)
-@ComponentScan("org.protobeans.faces.config.util")
+@ComponentScan("org.protobeans.faces.util")
 public class ProtobeansFacesConfig {
     public static volatile ApplicationContext springContext;
     
@@ -34,6 +40,26 @@ public class ProtobeansFacesConfig {
     @PostConstruct
     public void init() {
         springContext = ctx;
+    }
+    
+    @Bean
+    public Class<? extends ServletContainerInitializer> contextParamsInitializer() {
+        return ContextParamsInitializer.class;
+    }
+
+    @Bean
+    public Class<? extends FacesInitializer> facesInitializer() {
+        return FacesInitializer.class;
+    }
+    
+    @Bean
+    public Class<? extends FacesInitializer2> facesInitializer2() {
+        return FacesInitializer2.class;
+    }
+    
+    @Bean
+    public Class<? extends ApplicationInitializer> applicationInitializer() {
+        return ApplicationInitializer.class;
     }
     
     @Bean

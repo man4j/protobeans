@@ -1,8 +1,6 @@
 package org.protobeans.undertow.config;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EventListener;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,10 +8,9 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.undertow.annotation.EnableUndertow;
-import org.protobeans.undertow.annotation.Initializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.MimeType;
 import org.springframework.util.MimeTypeUtils;
@@ -34,6 +31,7 @@ import io.undertow.servlet.api.DeploymentManager;
 import io.undertow.servlet.api.MimeMapping;
 import io.undertow.servlet.api.ServletContainerInitializerInfo;
 import io.undertow.websockets.jsr.WebSocketDeploymentInfo;
+import jakarta.servlet.ServletContainerInitializer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.HandlesTypes;
 
@@ -46,11 +44,8 @@ public class UndertowConfig {
     
     private String port;
     
-    private Initializer[] initializers;
-    
-    private Initializer[] userInitializers;
-    
-    private Class<? extends EventListener>[] listeners;
+    @Autowired(required = false)
+    private List<Class<? extends ServletContainerInitializer>> initializers = new ArrayList<>();
     
     private Undertow undertow;
     
@@ -70,30 +65,22 @@ public class UndertowConfig {
                       .addMimeMapping(new MimeMapping("jsf", "application/xhtml+xml"))
                       .setResourceManager(new ClassPathResourceManager(this.getClass().getClassLoader(), "META-INF/resources"));
         
-        for (Class<? extends EventListener> listenerClass : listeners) {
-            deploymentInfo.addListener(Servlets.listener(listenerClass));
-        }
-        
         if (!errorPage.isEmpty()) {
             deploymentInfo.addErrorPage(Servlets.errorPage(errorPage));
         }
         
         deploymentInfo.getServletContextAttributes().put(WebSocketDeploymentInfo.ATTRIBUTE_NAME, new WebSocketDeploymentInfo());
         
-        Initializer[] resultInitializers = ArrayUtils.addAll(initializers, userInitializers);
-        
-        for (Initializer initializer : resultInitializers) {
-        	Set<Class<?>> handlesTypes = new HashSet<>(Arrays.asList(initializer.handleTypes()));
+        for (var initializer : initializers) {
+        	Set<Class<?>> handlesTypes = new HashSet<>();
         	
-        	if (handlesTypes.isEmpty()) {
-        		HandlesTypes annotation = initializer.initializer().getAnnotation(HandlesTypes.class);
-        		
-        		if (annotation != null) {
-        			handlesTypes.addAll(Set.of(annotation.value()));
-        		}
-        	}
+    		HandlesTypes annotation = initializer.getAnnotation(HandlesTypes.class);
+    		
+    		if (annotation != null) {
+    			handlesTypes.addAll(Set.of(annotation.value()));
+    		}
         	
-            deploymentInfo.addServletContainerInitializer(new ServletContainerInitializerInfo(initializer.initializer(), handlesTypes));
+            deploymentInfo.addServletContainerInitializer(new ServletContainerInitializerInfo(initializer, handlesTypes));
         }
         
         final EncodingHandler encodingHandler = new EncodingHandler(new ContentEncodingRepository().addEncodingHandler("gzip", 

@@ -1,4 +1,4 @@
-package org.protobeans.faces.config.util;
+package org.protobeans.faces.util;
 
 import java.io.Serializable;
 
