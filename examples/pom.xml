@@ -12,13 +12,18 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
 
-    <protobeans.version>1.1</protobeans.version>
-    <version.spring>5.3.19</version.spring>
-    <version.spring.security>5.6.2</version.spring.security>
+    <protobeans.version>2.0</protobeans.version>
+    <version.spring>6.0.4</version.spring>
+    <version.spring.security>6.0.1</version.spring.security>
+    <version.jackson>2.14.1</version.jackson>
   </properties>
 
   <modules>
+    <module>freemarker</module>
+    <module>i18n</module>
     <module>webapp</module>
+    <module>scheduler</module>
+    <module>undertow</module>
   </modules>
 
   <dependencies>
@@ -31,27 +36,35 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.11</version>
+      <version>1.4.5</version>
     </dependency>
 
     <dependency>
       <groupId>org.codehaus.janino</groupId>
       <artifactId>janino</artifactId>
-      <version>3.1.6</version>
+      <version>3.1.9</version>
     </dependency>
 
     <!-- JUnit -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.8.2</version>
+      <version>5.9.2</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-launcher</artifactId>
-      <version>1.8.2</version>
+      <version>1.9.2</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- for Spring MVC TestFramework -->
+    <dependency>
+      <groupId>org.skyscreamer</groupId>
+      <artifactId>jsonassert</artifactId>
+      <version>1.5.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -64,12 +77,6 @@
         <version>${protobeans.version}</version>
       </dependency>
       
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-cockroachdb</artifactId>
-        <version>${protobeans.version}</version>
-      </dependency>
-
       <dependency>
         <groupId>org.protobeans</groupId>
         <artifactId>protobeans-security</artifactId>
@@ -99,15 +106,14 @@
         <artifactId>protobeans-freemarker</artifactId>
         <version>${protobeans.version}</version>
       </dependency>
-
-      <!-- for Spring MVC TestFramework -->
+      
       <dependency>
-        <groupId>org.skyscreamer</groupId>
-        <artifactId>jsonassert</artifactId>
-        <version>1.5.0</version>
-        <scope>test</scope>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-scheduler</artifactId>
+        <version>${protobeans.version}</version>
       </dependency>
 
+      <!-- for Spring MVC TestFramework -->
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-test</artifactId>
@@ -123,4 +129,19 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.10.1</version>
+        <configuration>
+          <compilerArgs>
+            <arg>-parameters</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

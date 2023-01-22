@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 import org.springdoc.core.SpringDocConfigProperties;
 import org.springdoc.core.SpringDocConfiguration;
+import org.springdoc.core.SwaggerUiConfigParameters;
 import org.springdoc.core.SwaggerUiConfigProperties;
 import org.springdoc.core.SwaggerUiOAuthProperties;
 import org.springdoc.webmvc.core.MultipleOpenApiSupportConfiguration;
@@ -19,19 +20,23 @@ import org.springframework.context.annotation.PropertySource;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Import({SpringDocConfiguration.class,
-         SpringDocWebMvcConfiguration.class,
-         
+@Import({//common jar
+         SpringDocConfiguration.class,
          SpringDocConfigProperties.class,
-         SwaggerUiConfigProperties.class,
-         SwaggerUiOAuthProperties.class,
-         
+    
+         //core jar
+         SpringDocWebMvcConfiguration.class,
          MultipleOpenApiSupportConfiguration.class,
-         SwaggerConfig.class})
+         
+         //ui jar
+         SwaggerConfig.class,
+         SwaggerUiConfigParameters.class,
+         SwaggerUiConfigProperties.class,
+         SwaggerUiOAuthProperties.class
+         })
 @Configuration
 @EnableConfigurationProperties
 @PropertySource("classpath:swagger.properties")
 public @interface EnableSwagger3 {
-    
-
+    //empty
 }

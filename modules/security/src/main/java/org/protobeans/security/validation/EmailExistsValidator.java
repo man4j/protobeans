@@ -1,13 +1,11 @@
 package org.protobeans.security.validation;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
 import org.protobeans.security.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
 public class EmailExistsValidator implements ConstraintValidator<EmailExists, String> {
     @Autowired
     private ProfileService profileService;

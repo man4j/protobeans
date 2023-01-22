@@ -22,6 +22,7 @@ public class Main {
         helloService.sayHello(new Locale("en", "US"));
     }
     
+    @SuppressWarnings("resource")
     public static void main(String[] args) {
         EntryPoint.run(Main.class);
     }

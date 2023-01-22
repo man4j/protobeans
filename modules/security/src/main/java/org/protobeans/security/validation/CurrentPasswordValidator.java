@@ -1,15 +1,13 @@
 package org.protobeans.security.validation;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
 import org.protobeans.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
-@Component
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
 public class CurrentPasswordValidator implements ConstraintValidator<CurrentPassword, String> {
     @Autowired
     private SecurityService securityService;

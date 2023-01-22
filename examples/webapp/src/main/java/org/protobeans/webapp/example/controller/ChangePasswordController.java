@@ -1,13 +1,12 @@
 package org.protobeans.webapp.example.controller;
 
-import javax.validation.Valid;
-
 import org.protobeans.security.model.ChangePasswordForm;
 import org.protobeans.security.service.SecurityService;
 import org.protobeans.webapp.example.service.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping(path = "/change_password")
+@Validated
 public class ChangePasswordController {
     @Autowired
     private SecurityService securityService;
@@ -28,7 +28,7 @@ public class ChangePasswordController {
     }
     
     @PostMapping
-    String processForm(@ModelAttribute("form") @Valid ChangePasswordForm form, BindingResult result) {
+    String processForm(@ModelAttribute("form") @Validated ChangePasswordForm form, BindingResult result) {
         if (result.hasErrors()) return "/change_password";
         
         profileService.updatePassword(securityService.getCurrentUser().getUsername(), form.getPassword());

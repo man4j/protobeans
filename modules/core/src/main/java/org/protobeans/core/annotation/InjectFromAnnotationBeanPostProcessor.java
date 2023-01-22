@@ -4,8 +4,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,29 +61,15 @@ public class InjectFromAnnotationBeanPostProcessor implements BeanPostProcessor 
                             if (injectedValue instanceof String) {
                                 String injectedString = (String) injectedValue;
                                 
-                                if (injectedString.startsWith("s:") || injectedString.startsWith("e:") || injectedString.startsWith("p:")) {
-                                    String propName = injectedString.split(":")[1];
-                                    
-                                    Optional<String> value = Stream.of(ctx.getEnvironment().getProperty(propName),
-                                                                       ctx.getEnvironment().getProperty(propName.toLowerCase()), 
-                                                                       ctx.getEnvironment().getProperty(propName.toUpperCase())).filter(v -> v != null).findFirst();
-                                    
-                                    if (!value.isPresent()) {
-                                        throw new IllegalStateException("Can not find system property or env variable: " + propName);
-                                    }
-                                    
-                                    f.set(bean, value.get());
-                                } else {
-                                    String result;
-                                    
-                                    try {
-                                        result = (String) resolveExpression(ctx, injectedString);
-                                    } catch (@SuppressWarnings("unused") Exception e) {
-                                        result = injectedString;
-                                    }
-                                    
-                                    f.set(bean, result);
+                                String result;
+                                
+                                try {
+                                    result = (String) resolveExpression(ctx, injectedString);
+                                } catch (@SuppressWarnings("unused") Exception e) {
+                                    result = injectedString;
                                 }
+                                
+                                f.set(bean, result);
                             } else {
                                 f.set(bean, injectedValue);
                             }

@@ -1,7 +1,5 @@
 package org.protobeans.webapp.example.controller;
 
-import javax.validation.Valid;
-
 import org.protobeans.mvc.controller.advice.RequestContextHolder;
 import org.protobeans.security.annotation.Anonymous;
 import org.protobeans.security.model.RestorePasswordForm;
@@ -13,6 +11,7 @@ import org.protobeans.webapp.example.service.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping("/restore")
 @Anonymous(mvcPattern = "/restore")
+@Validated
 public class RestorePasswordController {
     @Autowired
     private UserProfileService profileService;
@@ -42,7 +42,7 @@ public class RestorePasswordController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    String restore(@ModelAttribute("form") @Valid RestorePasswordForm form, BindingResult result) {
+    String restore(@ModelAttribute("form") @Validated RestorePasswordForm form, BindingResult result) {
         if (result.hasErrors()) return "/restore";
 
         UserProfile p = profileService.getById(form.getEmail());

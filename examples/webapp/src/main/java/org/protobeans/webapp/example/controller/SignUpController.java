@@ -1,7 +1,5 @@
 package org.protobeans.webapp.example.controller;
 
-import javax.validation.Valid;
-
 import org.protobeans.mvc.controller.advice.RequestContextHolder;
 import org.protobeans.security.annotation.Anonymous;
 import org.protobeans.webapp.example.entity.UserProfile;
@@ -12,6 +10,7 @@ import org.protobeans.webapp.example.service.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping(path = "/signup")
 @Anonymous(mvcPattern = "/signup")
+@Validated
 public class SignUpController {
     @Autowired
     private UserProfileService profileService;
@@ -39,7 +39,7 @@ public class SignUpController {
     }
     
     @PostMapping
-    String processForm(@ModelAttribute("form") @Valid MySignUpForm form, BindingResult result) {
+    String processForm(@ModelAttribute("form") @Validated MySignUpForm form, BindingResult result) {
         if (result.hasErrors()) return "/signup";
         
         UserProfile p = profileService.createAndSave(form.getEmail(), form.getPassword(), form.getUserName(), false);

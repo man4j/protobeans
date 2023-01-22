@@ -47,12 +47,6 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     
     <dependency>
@@ -60,10 +54,6 @@
       <artifactId>spring-security-test</artifactId>
       <scope>test</scope>
       <exclusions>
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-        </exclusion>
         <exclusion>
           <groupId>org.springframework</groupId>
           <artifactId>*</artifactId>
@@ -73,14 +63,7 @@
           <artifactId>*</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-                    
-    <!-- For testing spring-mvc json responses -->
-    <dependency>
-      <groupId>org.skyscreamer</groupId>
-      <artifactId>jsonassert</artifactId>
-      <scope>test</scope>
-    </dependency>
+    </dependency>                    
   </dependencies>
   
   <build>

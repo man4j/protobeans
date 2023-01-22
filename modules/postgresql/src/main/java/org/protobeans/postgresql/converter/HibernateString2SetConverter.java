@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.AttributeConverter;
+import jakarta.persistence.AttributeConverter;
 
 public class HibernateString2SetConverter implements AttributeConverter<Set<String>, String> {
     @Override

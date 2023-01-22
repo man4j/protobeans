@@ -5,11 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.servlet.Filter;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.SessionTrackingMode;
-
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
@@ -18,6 +13,11 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.context.support.ServletContextAwareProcessor;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import jakarta.servlet.Filter;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.SessionTrackingMode;
 
 public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     public static ConfigurableWebApplicationContext rootApplicationContext;
@@ -53,7 +53,7 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-        servletContext.addListener(RequestContextListener.class);//Для того, чтобы запрос был доступен в фильтрах, например в SocialAuthenticationFilter
+        servletContext.addListener(RequestContextListener.class);//Для того, чтобы запрос был доступен в фильтрах
         servletContext.setSessionTrackingModes(Collections.singleton(SessionTrackingMode.COOKIE));
         
         if (sessionCookieName != null && !sessionCookieName.isBlank()) {

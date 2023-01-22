@@ -7,9 +7,7 @@ public class MvcEntryPoint {
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
         
         ctx.register(annotatedClasses);
-        
         ctx.refresh();
-        
         ctx.registerShutdownHook();
         
         return ctx;

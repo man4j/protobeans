@@ -7,10 +7,10 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Properties;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.flywaydb.core.Flyway;
+import org.hibernate.dialect.PostgreSQLDialect;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.postgresql.annotation.EnablePostgreSql;
@@ -28,6 +28,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zaxxer.hikari.HikariDataSource;
+
+import jakarta.annotation.PostConstruct;
 
 @Configuration
 @InjectFrom(EnablePostgreSql.class)
@@ -163,7 +165,7 @@ public class PostgreSqlConfig {
                                                             put("hibernate.order_updates", true);
                                                             put("hibernate.auto_quote_keyword", true);
                                                             put("hibernate.physical_naming_strategy", ProtobeansNamingStrategy.class.getName());
-                                                            put("hibernate.dialect", "org.hibernate.dialect.PostgreSQL10Dialect");
+                                                            put("hibernate.dialect", PostgreSQLDialect.class.getName());
                                                             put("hibernate.types.jackson.object.mapper", JacksonSupplier.class.getName());
                                                             
                                                             //if connection pool already disables autocommit

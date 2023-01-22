@@ -25,7 +25,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ConfigurableWebApplicationContext;
 import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -121,14 +121,12 @@ public class MvcConfig implements WebMvcConfigurer {
         if (!resourcesPath.isEmpty() && !resourcesUrl.isEmpty()) {
             String dashedResourcesPath = PathUtils.dashedPath(resourcesPath);
             String dashedResourcesUrl = PathUtils.dashedPath(resourcesUrl);
+            
             long lastModified = FileUtils.getLastModified(dashedResourcesPath);
             
-            registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-            registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-        
-            registry.addResourceHandler(dashedResourcesUrl + lastModified + "/**")
-                    .addResourceLocations("classpath:" + dashedResourcesPath)
-                    .setCachePeriod(31556926);
+            registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/").setCachePeriod(31556926);
+            registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/").setCachePeriod(31556926);
+            registry.addResourceHandler(dashedResourcesUrl + lastModified + "/**").addResourceLocations("classpath:" + dashedResourcesPath).setCachePeriod(31556926);
         }
     }
     
@@ -153,10 +151,8 @@ public class MvcConfig implements WebMvcConfigurer {
     } 
     
     @Bean
-    public MultipartResolver multipartResolver(){
-        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-        resolver.setDefaultEncoding("UTF-8");
-        return resolver;
+    public MultipartResolver multipartResolver() {
+        return new StandardServletMultipartResolver();
     }
 }
 

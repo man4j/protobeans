@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.persistence.AttributeConverter;
+import jakarta.persistence.AttributeConverter;
 
 public class HibernateString2ListConverter implements AttributeConverter<List<String>, String> {
     @Override

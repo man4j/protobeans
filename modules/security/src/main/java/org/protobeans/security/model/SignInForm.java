@@ -1,8 +1,8 @@
 package org.protobeans.security.model;
 
-import javax.validation.constraints.NotBlank;
-
 import org.protobeans.security.validation.SignIn;
+
+import jakarta.validation.constraints.NotBlank;
 
 @SignIn
 public class SignInForm {

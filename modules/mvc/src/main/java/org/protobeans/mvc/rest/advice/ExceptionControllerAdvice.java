@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolationException;
-
 import org.protobeans.mvc.rest.exception.BusinessException;
 import org.protobeans.mvc.rest.exception.NotFoundException;
 import org.protobeans.mvc.rest.model.ProtobeansFieldError;
@@ -17,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -27,6 +26,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 
 @ControllerAdvice
 public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
@@ -71,7 +73,7 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     }
     
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         List<ProtobeansFieldError> fieldErrors = new ArrayList<>();
         List<String> globalErrors = new ArrayList<>();
         
@@ -97,7 +99,7 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     }
     
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
         logger.warn(ex.getMessage());
         
         return ResponseEntity.badRequest().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(ex.getMessage()));

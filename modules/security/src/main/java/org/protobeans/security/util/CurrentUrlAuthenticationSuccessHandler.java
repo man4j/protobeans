@@ -1,9 +1,9 @@
 package org.protobeans.security.util;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class CurrentUrlAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     @Override

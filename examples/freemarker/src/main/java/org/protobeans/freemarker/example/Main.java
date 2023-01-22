@@ -29,6 +29,7 @@ public class Main {
         System.out.println(writer.toString());
     }
     
+    @SuppressWarnings("resource")
     public static void main(String[] args) {
         EntryPoint.run(Main.class);
     }

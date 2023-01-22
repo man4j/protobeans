@@ -3,7 +3,7 @@ package org.protobeans.mvc.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.Filter;
+import jakarta.servlet.Filter;
 
 public class FilterBean {
     private List<Filter> filters = new ArrayList<>();

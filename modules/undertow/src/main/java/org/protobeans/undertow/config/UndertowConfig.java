@@ -8,11 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.HandlesTypes;
-
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.undertow.annotation.EnableUndertow;
 import org.protobeans.undertow.annotation.Initializer;
@@ -39,6 +34,10 @@ import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.DeploymentInfo;
 import io.undertow.servlet.api.DeploymentManager;
 import io.undertow.servlet.api.ServletContainerInitializerInfo;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.HandlesTypes;
 
 @Configuration
 @InjectFrom(EnableUndertow.class)

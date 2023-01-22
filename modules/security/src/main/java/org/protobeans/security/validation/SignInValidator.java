@@ -1,20 +1,19 @@
 package org.protobeans.security.validation;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
 import org.protobeans.security.model.AbstractProfile;
 import org.protobeans.security.model.SignInForm;
 import org.protobeans.security.service.ProfileService;
 import org.protobeans.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
 
-@Component
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
 public class SignInValidator implements ConstraintValidator<SignIn, SignInForm> {
     @Autowired
     private ProfileService profileService;
@@ -23,6 +22,7 @@ public class SignInValidator implements ConstraintValidator<SignIn, SignInForm> 
     private SecurityService securityService;
     
     @Autowired
+    @Lazy
     private AuthenticationManager authenticationManager;
     
     @Override

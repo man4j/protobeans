@@ -50,8 +50,6 @@
               <div class="row">
                 <div class="form-group col-xs-4 col-lg-offset-9">
                   <a href="<@f.url '/signin' />"><@f.i18n 'page.signin.title' 'SignIn page'/></a>
-                  <span style="color:grey;">&nbsp;|&nbsp;</span>
-                  <a href="#"><@f.i18n 'help' 'Help'/></a>
                 </div>
               </div>
             </@f.form>

@@ -7,6 +7,7 @@ import org.protobeans.security.service.SecurityService;
 import org.protobeans.webapp.example.entity.UserProfile;
 import org.protobeans.webapp.example.service.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,20 +27,19 @@ public class EmailSigninController {
     private SecurityService securityService;
     
     @Autowired
+    @Lazy
     private AuthenticationManager authenticationManager;
-
+    
     @GetMapping
     String signin(@RequestParam String uuid, @RequestParam String email) {
         UserProfile profile = profileService.getById(email);
         
         try {
             if (profile == null) throw new BadCredentialsException("");
-            
             SecurityContextHolder.getContext().setAuthentication(authenticationManager.authenticate(securityService.createUuidAuthenticationToken(profile, uuid)));
-            
+                        
             profile.setConfirmUuid(UUID.randomUUID().toString());//Одну и ту же ссылку нельзя использовать дважды
-            profile.setConfirmed(true);
-    
+            profile.setConfirmed(true);    
             profileService.update(profile);
             
             return "redirect:/";

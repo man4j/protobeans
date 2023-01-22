@@ -2,10 +2,10 @@ package org.protobeans.security.validation;
 
 import java.lang.reflect.Field;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
 import org.springframework.util.ReflectionUtils;
+
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class FieldEqualityValidator implements ConstraintValidator<FieldEquality, Object> {
     private String fieldName1;

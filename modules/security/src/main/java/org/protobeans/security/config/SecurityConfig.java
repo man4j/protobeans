@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.mvc.util.PathUtils;
 import org.protobeans.security.advice.SecurityControllerAdvice;
@@ -14,7 +12,6 @@ import org.protobeans.security.annotation.Anonymous;
 import org.protobeans.security.annotation.DisableCsrf;
 import org.protobeans.security.annotation.EnableSecurity;
 import org.protobeans.security.annotation.PermitAll;
-import org.protobeans.security.auth.UuidAuthenticationProvider;
 import org.protobeans.security.service.SecurityService;
 import org.protobeans.security.util.CurrentUrlAuthenticationSuccessHandler;
 import org.protobeans.security.validation.CurrentPassword;
@@ -24,33 +21,30 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import org.springframework.security.access.PermissionEvaluator;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-import org.springframework.security.web.authentication.logout.ForwardLogoutSuccessHandler;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 @Configuration
-@EnableWebSecurity
 @InjectFrom(EnableSecurity.class)
 @ComponentScan(basePackageClasses={SecurityService.class, SecurityControllerAdvice.class, CurrentPassword.class})
-@Order(10)//для того, чтобы фильтры SpringSecurity инициализировались позже фильтров WebMVC
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
     private String[] ignoreUrls;
-    
-    private String loginUrl;
     
     @Autowired
     private UserDetailsService userDetailsService;
@@ -58,72 +52,60 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private ApplicationContext ctx;
     
+    @Autowired(required = false)
+    private PermissionEvaluator permissionEvaluator;
+    
     private boolean disableCsrf; 
     
     @Autowired(required = false)
-    private List<HttpSecurityConfigHelper> configHelpers = new ArrayList<>();
+    private List<AbstractHttpConfigurer<?, HttpSecurity>> securityDsl = new ArrayList<>();
     
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(Arrays.stream(ignoreUrls).map(u -> PathUtils.dashedPath(u) + "**").toArray(String[]::new));
-    }
+    @Autowired
+    private List<AuthenticationProvider> authenticationProviders = new ArrayList<>();
     
-    @Override
-    protected AuthenticationManager authenticationManager() throws Exception {
-        AuthenticationManager authenticationManager = super.authenticationManager();
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
         
-        //иногда текущие credentials нужны, например в форме изменения пароля
-        ((ProviderManager) authenticationManager).setEraseCredentialsAfterAuthentication(false);
-        
-        return authenticationManager;
-    }
+        builder.authenticationEventPublisher(new DefaultAuthenticationEventPublisher())
+               .eraseCredentials(false)
+               .userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {     
+        for (var provider : authenticationProviders) {
+            builder.authenticationProvider(provider);
+        }
+        
+        return builder.build();
+    }
+    
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {     
         String[] anonymousPatterns = ctx.getBeansWithAnnotation(Anonymous.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(Anonymous.class).mvcPattern()).toArray(String[]::new);
         String[] permitAllPatterns = ctx.getBeansWithAnnotation(PermitAll.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(PermitAll.class).mvcPattern()).toArray(String[]::new);
-        String[] disableCsrfPatterns = ctx.getBeansWithAnnotation(DisableCsrf.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(DisableCsrf.class).antPattern()).toArray(String[]::new);
+        String[] disableCsrfPatterns = ctx.getBeansWithAnnotation(DisableCsrf.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(DisableCsrf.class).mvcPattern()).toArray(String[]::new);
         
-        LoginUrlAuthenticationEntryPoint authenticationEntryPoint = new LoginUrlAuthenticationEntryPoint(loginUrl);
-        authenticationEntryPoint.setUseForward(true);
-        
-        LogoutSuccessHandler logoutSuccessHandler = new ForwardLogoutSuccessHandler(loginUrl);
-        
-        http.authenticationProvider(new UuidAuthenticationProvider())//add custom provider
-            .authorizeRequests().mvcMatchers(permitAllPatterns).permitAll()
-                                .antMatchers("/swagger-ui.html/**",
-                                            "/swagger-ui/**",
-                                             "/v3/swagger-ui.html/**",
-                                             "/v3/swagger-ui/**", 
-                                             "/swagger-resources/**", 
-                                             "/v2/api-docs/**", 
-                                             "/v3/api-docs/**", 
-                                             "/webjars/**", 
-                                             "/v3/webjars/**", 
-                                             "/csrf").permitAll()
-                                .mvcMatchers(anonymousPatterns).anonymous()
-                                .anyRequest().authenticated()            
+        http.authenticationManager(authenticationManager(http))
+            .authorizeHttpRequests().requestMatchers(permitAllPatterns).permitAll()
+                                    .requestMatchers("/favicon.ico", "/swagger-ui.html/**", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/webjars/**", "/csrf").permitAll()
+                                    .requestMatchers(anonymousPatterns).permitAll()
+                                    .requestMatchers(Arrays.stream(ignoreUrls).map(u -> PathUtils.dashedPath(u) + "**").toArray(String[]::new)).permitAll()
+                                    .anyRequest().authenticated()
             .and().rememberMe().rememberMeServices(rememberMeServices()).key("123").authenticationSuccessHandler(new CurrentUrlAuthenticationSuccessHandler())
-            .and().logout().logoutSuccessHandler(logoutSuccessHandler)
-            .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)                                      
-                                      .accessDeniedHandler((req, res, e) -> {res.setStatus(HttpServletResponse.SC_FORBIDDEN);})                                      
+            .and().securityContext().requireExplicitSave(false)
+            .and().sessionManagement().requireExplicitAuthenticationStrategy(false).sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
             .and().addFilterBefore(new CharacterEncodingFilter(StandardCharsets.UTF_8.name(), true, true), ChannelProcessingFilter.class);
         
         if (disableCsrf) {
             http.csrf().disable();
         } else {
-            http.csrf().ignoringAntMatchers(disableCsrfPatterns);
+            http.csrf().ignoringRequestMatchers(disableCsrfPatterns);
         }
         
-        for (HttpSecurityConfigHelper h : configHelpers) {
-            h.configure(http);
+        for (var configurer : securityDsl) {
+            http.apply(configurer);
         }
-    }
-    
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+        
+        return http.build();
     }
     
     @Bean
@@ -139,5 +121,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public TokenBasedRememberMeServices rememberMeServices() {
         return new TokenBasedRememberMeServices("123", userDetailsService);
+    }
+    
+    @Bean
+    public MethodSecurityExpressionHandler createExpressionHandler() {
+        DefaultMethodSecurityExpressionHandler defaultMethodExpressionHandler = new DefaultMethodSecurityExpressionHandler();
+        
+        if (permissionEvaluator != null) {
+            defaultMethodExpressionHandler.setPermissionEvaluator(permissionEvaluator);
+            defaultMethodExpressionHandler.setApplicationContext(ctx);
+        }
+        
+        return defaultMethodExpressionHandler;
     }
 }

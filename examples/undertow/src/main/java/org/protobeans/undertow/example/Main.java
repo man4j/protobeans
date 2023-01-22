@@ -4,19 +4,20 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
-import javax.servlet.ServletContainerInitializer;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.protobeans.core.EntryPoint;
 import org.protobeans.undertow.annotation.EnableUndertow;
 import org.protobeans.undertow.annotation.Initializer;
 
+import jakarta.servlet.ServletContainerInitializer;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 @EnableUndertow(initializers = @Initializer(initializer = MyServletContainerInitializer.class), resourcesPath = "static")
 public class Main {
+    @SuppressWarnings("resource")
     public static void main(String[] args) {
         EntryPoint.run(Main.class);
     }

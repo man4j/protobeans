@@ -16,6 +16,7 @@ import org.springframework.validation.beanvalidation.MethodValidationPostProcess
  */
 @Configuration
 public class MvcValidatorConfig {
+    @SuppressWarnings("resource")
     @Bean
     public MethodValidationPostProcessor methodValidationPostProcessor() {
         MethodValidationPostProcessor methodValidationPostProcessor = new MethodValidationPostProcessor();

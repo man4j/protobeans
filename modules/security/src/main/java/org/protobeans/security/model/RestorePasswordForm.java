@@ -2,9 +2,9 @@ package org.protobeans.security.model;
 
 import java.util.Locale;
 
-import javax.validation.constraints.NotBlank;
-
 import org.protobeans.security.validation.EmailExists;
+
+import jakarta.validation.constraints.NotBlank;
 
 public class RestorePasswordForm {
     @NotBlank(message = "{form.email.empty}")
