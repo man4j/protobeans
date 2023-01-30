@@ -5,13 +5,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.springdoc.core.SpringDocConfigProperties;
-import org.springdoc.core.SpringDocConfiguration;
-import org.springdoc.core.SwaggerUiConfigParameters;
-import org.springdoc.core.SwaggerUiConfigProperties;
-import org.springdoc.core.SwaggerUiOAuthProperties;
-import org.springdoc.webmvc.core.MultipleOpenApiSupportConfiguration;
-import org.springdoc.webmvc.core.SpringDocWebMvcConfiguration;
+import org.springdoc.core.configuration.SpringDocConfiguration;
+import org.springdoc.core.configuration.SpringDocNativeConfiguration;
+import org.springdoc.core.configuration.SpringDocPageableConfiguration;
+import org.springdoc.core.configuration.SpringDocSortConfiguration;
+import org.springdoc.core.properties.SpringDocConfigProperties;
+import org.springdoc.core.properties.SwaggerUiConfigParameters;
+import org.springdoc.core.properties.SwaggerUiConfigProperties;
+import org.springdoc.core.properties.SwaggerUiOAuthProperties;
+import org.springdoc.webmvc.core.configuration.MultipleOpenApiSupportConfiguration;
+import org.springdoc.webmvc.core.configuration.SpringDocWebMvcConfiguration;
 import org.springdoc.webmvc.ui.SwaggerConfig;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -23,8 +26,11 @@ import org.springframework.context.annotation.PropertySource;
 @Import({//common jar
          SpringDocConfiguration.class,
          SpringDocConfigProperties.class,
+         SpringDocNativeConfiguration.class,
+         SpringDocPageableConfiguration.class,
+         SpringDocSortConfiguration.class,
     
-         //core jar
+         //api jar
          SpringDocWebMvcConfiguration.class,
          MultipleOpenApiSupportConfiguration.class,
          

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping(path = "/signup")
-@Anonymous(mvcPattern = "/signup")
+@Anonymous("/signup")
 @Validated
 public class SignUpController {
     @Autowired

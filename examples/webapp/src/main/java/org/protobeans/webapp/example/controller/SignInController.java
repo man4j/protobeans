@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping(path = "/signin")
-@Anonymous(mvcPattern = "/signin")
+@Anonymous("/signin")
 @Validated
 public class SignInController {
     @Autowired

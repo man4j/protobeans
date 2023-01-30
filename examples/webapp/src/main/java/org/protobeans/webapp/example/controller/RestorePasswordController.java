@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping("/restore")
-@Anonymous(mvcPattern = "/restore")
+@Anonymous("/restore")
 @Validated
 public class RestorePasswordController {
     @Autowired

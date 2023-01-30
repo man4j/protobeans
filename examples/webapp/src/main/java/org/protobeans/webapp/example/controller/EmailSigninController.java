@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/email_signin")
-@Anonymous(mvcPattern = "/email_signin")
+@Anonymous("/email_signin")
 public class EmailSigninController {
     @Autowired
     private UserProfileService profileService;
