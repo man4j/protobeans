@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 import org.springdoc.core.configuration.SpringDocConfiguration;
 import org.springdoc.core.configuration.SpringDocNativeConfiguration;
 import org.springdoc.core.configuration.SpringDocPageableConfiguration;
+import org.springdoc.core.configuration.SpringDocSecurityConfiguration;
 import org.springdoc.core.configuration.SpringDocSortConfiguration;
 import org.springdoc.core.properties.SpringDocConfigProperties;
 import org.springdoc.core.properties.SwaggerUiConfigParameters;
@@ -29,6 +30,7 @@ import org.springframework.context.annotation.PropertySource;
          SpringDocNativeConfiguration.class,
          SpringDocPageableConfiguration.class,
          SpringDocSortConfiguration.class,
+         SpringDocSecurityConfiguration.class,
     
          //api jar
          SpringDocWebMvcConfiguration.class,

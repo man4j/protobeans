@@ -1,5 +1,6 @@
 package org.protobeans.webapp.example;
 
+import org.protobeans.feign.annotation.EnableFeign;
 import org.protobeans.freemarker.annotation.EnableFreeMarker;
 import org.protobeans.i18n.annotation.EnableI18n;
 import org.protobeans.mail.annotation.EnableMail;
@@ -16,6 +17,7 @@ import org.springframework.context.annotation.PropertySource;
 @EnableFreeMarker(devMode = "true")
 @EnableMvc(resourcesPath = "static", resourcesUrl = "static")
 @EnableSecurity(ignoreUrls = "static")
+@EnableFeign
 @EnableI18n(isCached = "false")
 @EnableMail(host = "smtp.sendgrid.net", user = "apikey", password = "${emailPassword}")
 @EnablePostgreSql(showSql = "false", schema = "postgres", dbHost = "${postgresIp}", dbPort = "${postgresPort}", user = "postgres", password = "postgres", basePackages = {"org.protobeans.webapp.example"}, migrationsPath = "migrations")
