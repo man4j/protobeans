@@ -5,9 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.protobeans.undertow.config.UndertowConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.protobeans.undertow.config.UndertowConfig;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -17,8 +17,6 @@ public @interface EnableUndertow {
     String host() default "0.0.0.0";
     
     String port() default "8080";
-    
-    Initializer[] initializers() default {};
     
     String resourcesPath() default "undefined";
     

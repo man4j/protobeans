@@ -3,14 +3,12 @@ package org.protobeans.undertow.config;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.undertow.annotation.EnableUndertow;
-import org.protobeans.undertow.annotation.Initializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.MimeType;
@@ -33,9 +31,12 @@ import io.undertow.server.handlers.resource.ClassPathResourceManager;
 import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.DeploymentInfo;
 import io.undertow.servlet.api.DeploymentManager;
+import io.undertow.servlet.api.MimeMapping;
 import io.undertow.servlet.api.ServletContainerInitializerInfo;
+import io.undertow.websockets.jsr.WebSocketDeploymentInfo;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import jakarta.servlet.ServletContainerInitializer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.HandlesTypes;
 
@@ -47,8 +48,6 @@ public class UndertowConfig {
     private String host;
     
     private String port;
-    
-    private Initializer[] initializers;
     
     private Undertow undertow;
     
@@ -71,6 +70,9 @@ public class UndertowConfig {
     private String ioThreads;
     
     @Autowired(required = false)
+    private List<Class<? extends ServletContainerInitializer>> initializers = new ArrayList<>();
+    
+    @Autowired(required = false)
     private List<Class<? extends WebApplicationInitializer>> springInitializers = new ArrayList<>();
     
     @SuppressWarnings("resource")
@@ -80,30 +82,31 @@ public class UndertowConfig {
                       .setClassLoader(this.getClass().getClassLoader())
                       .setDefaultSessionTimeout(sessionTimeout)
                       .addWelcomePage(welcomePage)
+                      .addMimeMapping(new MimeMapping("jsf", "application/xhtml+xml"))
                       .setResourceManager(new ClassPathResourceManager(this.getClass().getClassLoader(), resourcesPath));
         
         if (!errorPage.isEmpty()) {
             deploymentInfo.addErrorPage(Servlets.errorPage(errorPage));
         }
         
-        for (Initializer initializer : initializers) {
-        	Set<Class<?>> handlesTypes = new HashSet<>(Arrays.asList(initializer.handleTypes()));
-        	
-        	if (handlesTypes.isEmpty()) {
-        		HandlesTypes annotation = initializer.initializer().getAnnotation(HandlesTypes.class);
-        		
-        		if (annotation != null) {
-        			handlesTypes = Set.of(annotation.value());
-        		}
-        	}
-        	
-            deploymentInfo.addServletContainerInitializer(new ServletContainerInitializerInfo(initializer.initializer(), handlesTypes));
+        deploymentInfo.getServletContextAttributes().put(WebSocketDeploymentInfo.ATTRIBUTE_NAME, new WebSocketDeploymentInfo());
+        
+        for (var initializer : initializers) {
+            Set<Class<?>> handlesTypes = new HashSet<>();
+            
+            HandlesTypes annotation = initializer.getAnnotation(HandlesTypes.class);
+            
+            if (annotation != null) {
+                handlesTypes.addAll(Set.of(annotation.value()));
+            }
+            
+            deploymentInfo.addServletContainerInitializer(new ServletContainerInitializerInfo(initializer, handlesTypes));
         }
-
+                
         if (!springInitializers.isEmpty()) {
             Set<Class<?>> springInitializersSet = new HashSet<>();
             
-            for (Class<? extends WebApplicationInitializer> initializer : springInitializers) {
+            for (var initializer : springInitializers) {
                 springInitializersSet.add(initializer);
             }
             

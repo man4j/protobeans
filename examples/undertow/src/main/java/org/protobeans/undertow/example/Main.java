@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.protobeans.core.EntryPoint;
 import org.protobeans.undertow.annotation.EnableUndertow;
-import org.protobeans.undertow.annotation.Initializer;
+import org.springframework.context.annotation.Bean;
 
 import jakarta.servlet.ServletContainerInitializer;
 import jakarta.servlet.ServletContext;
@@ -15,8 +15,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@EnableUndertow(initializers = @Initializer(initializer = MyServletContainerInitializer.class), resourcesPath = "static")
+@EnableUndertow(resourcesPath = "static")
 public class Main {
+    @Bean
+    public Class<MyServletContainerInitializer> myServletContainerInitializer() {
+        return MyServletContainerInitializer.class;
+    }
+    
     @SuppressWarnings("resource")
     public static void main(String[] args) {
         EntryPoint.run(Main.class);
