@@ -33,6 +33,7 @@ import io.undertow.server.handlers.encoding.ContentEncodingRepository;
 import io.undertow.server.handlers.encoding.EncodingHandler;
 import io.undertow.server.handlers.encoding.GzipEncodingProvider;
 import io.undertow.server.handlers.proxy.LoadBalancingProxyClient;
+import io.undertow.server.handlers.proxy.ProxyClient;
 import io.undertow.server.handlers.proxy.ProxyHandler;
 import io.undertow.server.handlers.resource.ClassPathResourceManager;
 import io.undertow.servlet.Servlets;
@@ -73,6 +74,9 @@ public class UndertowConfig {
     
     @Autowired(required = false)
     private List<Class<? extends WebApplicationInitializer>> springInitializers = new ArrayList<>();
+    
+    @Autowired(required = false)
+    private ProxyClient proxyClient;
     
     @SuppressWarnings("resource")
     protected Builder configure() throws ServletException {
@@ -158,6 +162,8 @@ public class UndertowConfig {
                 throw new RuntimeException(e);
             }
             
+            firstHandler = ProxyHandler.builder().setProxyClient(proxyClient).setNext(encodingHandler).build();
+        } if (proxyClient != null) {
             firstHandler = ProxyHandler.builder().setProxyClient(proxyClient).setNext(encodingHandler).build();
         } else {
             firstHandler = encodingHandler;
