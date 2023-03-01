@@ -35,4 +35,12 @@ public @interface EnableUndertow {
     String[] ignoreProxyPathPrefix() default {};
 
     String proxyBackend() default "";
+    
+    String uploadLocation() default "/tmp"; 
+    
+    long maxFileSize() default 20_971_520; 
+    
+    long maxRequestSize() default 20_971_520;
+    
+    int fileSizeThreshold() default 1_048_576;
 }
