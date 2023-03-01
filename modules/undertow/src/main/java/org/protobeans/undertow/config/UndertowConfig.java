@@ -36,6 +36,7 @@ import io.undertow.servlet.api.ServletContainerInitializerInfo;
 import io.undertow.websockets.jsr.WebSocketDeploymentInfo;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import jakarta.servlet.MultipartConfigElement;
 import jakarta.servlet.ServletContainerInitializer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.HandlesTypes;
@@ -69,6 +70,14 @@ public class UndertowConfig {
     
     private String ioThreads;
     
+    private String uploadLocation; 
+    
+    private long maxFileSize; 
+    
+    private long maxRequestSize;
+    
+    private int fileSizeThreshold;
+    
     @Autowired(required = false)
     private List<Class<? extends ServletContainerInitializer>> initializers = new ArrayList<>();
     
@@ -83,7 +92,8 @@ public class UndertowConfig {
                       .setDefaultSessionTimeout(sessionTimeout)
                       .addWelcomePage(welcomePage)
                       .addMimeMapping(new MimeMapping("jsf", "application/xhtml+xml"))
-                      .setResourceManager(new ClassPathResourceManager(this.getClass().getClassLoader(), resourcesPath));
+                      .setResourceManager(new ClassPathResourceManager(this.getClass().getClassLoader(), resourcesPath))
+                      .setDefaultMultipartConfig(new MultipartConfigElement(uploadLocation, maxFileSize, maxRequestSize, fileSizeThreshold));
         
         if (!errorPage.isEmpty()) {
             deploymentInfo.addErrorPage(Servlets.errorPage(errorPage));
