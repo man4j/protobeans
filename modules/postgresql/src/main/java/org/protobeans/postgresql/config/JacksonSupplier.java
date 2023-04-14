@@ -1,7 +1,8 @@
 package org.protobeans.postgresql.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vladmihalcea.hibernate.type.util.ObjectMapperSupplier;
+
+import io.hypersistence.utils.hibernate.type.util.ObjectMapperSupplier;
 
 public class JacksonSupplier implements ObjectMapperSupplier {
     public static volatile ObjectMapper objectMapper;
