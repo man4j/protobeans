@@ -166,7 +166,7 @@ public class PostgreSqlConfig {
                                                             put("hibernate.auto_quote_keyword", true);
                                                             put("hibernate.physical_naming_strategy", ProtobeansNamingStrategy.class.getName());
                                                             put("hibernate.dialect", PostgreSQLDialect.class.getName());
-                                                            put("hibernate.types.jackson.object.mapper", JacksonSupplier.class.getName());
+                                                            put("hypersistence.utils.jackson.object.mapper", JacksonSupplier.class.getName());
                                                             
                                                             //if connection pool already disables autocommit
                                                             put("hibernate.connection.provider_disables_autocommit", true);
