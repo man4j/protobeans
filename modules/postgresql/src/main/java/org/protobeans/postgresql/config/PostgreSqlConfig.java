@@ -172,7 +172,7 @@ public class PostgreSqlConfig {
                                                             put("hibernate.connection.provider_disables_autocommit", true);
                                                             
                                                             //this option prevent connecting to database before flyway
-                                                            put("hibernate.temp.use_jdbc_metadata_defaults", false);
+//                                                            put("hibernate.temp.use_jdbc_metadata_defaults", false);
                                                             
                                                             if ("true".equals(enableStatistics)) {
                                                                 put("hibernate.generate_statistics", true);
