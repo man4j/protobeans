@@ -27,24 +27,28 @@ public class FileUtils {
         return cache.computeIfAbsent(resource, r -> {
             URL url = FileUtils.class.getResource(resource);
             
-            try {
-                if (url.getProtocol().equals("file")) {
-                    Path path = Paths.get(url.toURI());
+            if (url != null) {            
+                try {
+                    if (url.getProtocol().equals("file")) {
+                        Path path = Paths.get(url.toURI());
+                        
+                        return findLastModified(path);
+                    }
                     
-                    return findLastModified(path);
+                    final Map<String, String> env = new HashMap<>();
+                    final String[] array = url.toURI().toString().split("!");
+                    
+                    try (FileSystem fs = FileSystems.newFileSystem(URI.create(array[0]), env)) {
+                        final Path path = fs.getPath(array[1]);
+                        
+                        return findLastModified(path);
+                    }            
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
-                
-                final Map<String, String> env = new HashMap<>();
-                final String[] array = url.toURI().toString().split("!");
-                
-                try (FileSystem fs = FileSystems.newFileSystem(URI.create(array[0]), env)) {
-                    final Path path = fs.getPath(array[1]);
-                    
-                    return findLastModified(path);
-                }            
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }           
+            }
+            
+            return 0L;
         });
     }
 
