@@ -5,7 +5,7 @@
     
   <#assign navbar in ui>
     <li>
-      <a href="<@f.url '/' />"><@f.i18n 'page.admin.title' 'Admin page'/></a>
+      <a href="<@f.url '/' />"><@f.i18n 'page.root.title' 'Main page'/></a>
     </li>
     <li>
       <@f.form '/logout' 'logout'>

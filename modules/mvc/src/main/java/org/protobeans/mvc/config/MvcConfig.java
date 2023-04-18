@@ -49,9 +49,9 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 @Import(MvcValidatorConfig.class)
 @ComponentScan(basePackages = "org.protobeans.mvc.controller")
 public class MvcConfig implements WebMvcConfigurer {
-    private String resourcesPath;
+    private String resourcesPath = "static";
     
-    private String resourcesUrl;
+    public static final String resourcesUrl = "static";
     
     private String sessionCookieName;
         
@@ -105,29 +105,25 @@ public class MvcConfig implements WebMvcConfigurer {
     public GlobalModelAttribute globalModelAttribute() {
         String value = null;
         
-        if (!resourcesPath.isEmpty() && !resourcesUrl.isEmpty()) {
-            String dashedResourcesPath = PathUtils.dashedPath(resourcesPath);
-            String dashedResourcesUrl = PathUtils.dashedPath(resourcesUrl);
-            long lastModified = FileUtils.getLastModified(dashedResourcesPath);
-            
-            value = dashedResourcesUrl + lastModified;
-        }
+        String dashedResourcesPath = PathUtils.dashedPath(resourcesPath);
+        String dashedResourcesUrl = PathUtils.dashedPath(resourcesUrl);
+        long lastModified = FileUtils.getLastModified(dashedResourcesPath);
+        
+        value = dashedResourcesUrl + lastModified;
         
         return new GlobalModelAttribute("resourcesPrefix", value);
     }
     
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        if (!resourcesPath.isEmpty() && !resourcesUrl.isEmpty()) {
-            String dashedResourcesPath = PathUtils.dashedPath(resourcesPath);
-            String dashedResourcesUrl = PathUtils.dashedPath(resourcesUrl);
-            
-            long lastModified = FileUtils.getLastModified(dashedResourcesPath);
-            
-            registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/").setCachePeriod(31556926);
-            registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/").setCachePeriod(31556926);
-            registry.addResourceHandler(dashedResourcesUrl + lastModified + "/**").addResourceLocations("classpath:" + dashedResourcesPath).setCachePeriod(31556926);
-        }
+        String dashedResourcesPath = PathUtils.dashedPath(resourcesPath);
+        String dashedResourcesUrl = PathUtils.dashedPath(resourcesUrl);
+        
+        long lastModified = FileUtils.getLastModified(dashedResourcesPath);
+        
+        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/").setCachePeriod(31556926);
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/").setCachePeriod(31556926);
+        registry.addResourceHandler(dashedResourcesUrl + lastModified + "/**").addResourceLocations("classpath:" + dashedResourcesPath).setCachePeriod(31556926);
     }
     
     @Override

@@ -31,12 +31,7 @@
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-mail</artifactId>
     </dependency>
-    
-    <dependency>
-      <groupId>org.protobeans</groupId>
-      <artifactId>protobeans-i18n</artifactId>
-    </dependency>
-    
+        
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-undertow</artifactId>

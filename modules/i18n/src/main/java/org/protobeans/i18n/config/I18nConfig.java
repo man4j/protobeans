@@ -1,11 +1,11 @@
 package org.protobeans.i18n.config;
 
+import org.protobeans.core.annotation.InjectFrom;
+import org.protobeans.i18n.annotation.EnableI18n;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.protobeans.core.annotation.InjectFrom;
-import org.protobeans.i18n.annotation.EnableI18n;
 
 @Configuration
 @InjectFrom(EnableI18n.class)

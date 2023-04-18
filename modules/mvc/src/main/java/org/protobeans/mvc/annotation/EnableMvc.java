@@ -13,10 +13,6 @@ import org.springframework.context.annotation.Import;
 @Target(ElementType.TYPE)
 @Import(MvcConfig.class)
 @Configuration
-public @interface EnableMvc {
-    String resourcesPath() default "";
-    
-    String resourcesUrl() default "";
-    
+public @interface EnableMvc {    
     String sessionCookieName() default "";
 }
