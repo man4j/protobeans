@@ -9,18 +9,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanExpressionContext;
 import org.springframework.beans.factory.config.BeanExpressionResolver;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.util.ReflectionUtils;
 
-public class InjectFromAnnotationBeanPostProcessor implements BeanPostProcessor {
+public class InjectFromAnnotationBeanPostProcessor implements BeanPostProcessor, PriorityOrdered, ApplicationContextAware {
     private static final Logger logger = LoggerFactory.getLogger(InjectFromAnnotationBeanPostProcessor.class);
     
-    @Autowired
     private ApplicationContext ctx;
     
     public InjectFromAnnotationBeanPostProcessor() {
@@ -96,5 +96,15 @@ public class InjectFromAnnotationBeanPostProcessor implements BeanPostProcessor 
         BeanExpressionResolver expressionResolver = bf.getBeanExpressionResolver();
         
         return expressionResolver.evaluate(placeholdersResolved, new BeanExpressionContext(bf, null));
+    }
+
+    @Override
+    public int getOrder() {
+        return 0;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.ctx = applicationContext;
     }
 }
