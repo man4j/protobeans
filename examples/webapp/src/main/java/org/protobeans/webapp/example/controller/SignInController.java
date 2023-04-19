@@ -1,6 +1,6 @@
 package org.protobeans.webapp.example.controller;
 
-import org.protobeans.security.annotation.Anonymous;
+import org.protobeans.security.annotation.PermitAll;
 import org.protobeans.security.model.SignInForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping(path = "/signin")
-@Anonymous("/signin")
+@PermitAll("/signin")
 @Validated
 public class SignInController {
     @Autowired
