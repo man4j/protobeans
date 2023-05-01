@@ -37,7 +37,7 @@
       <artifactId>sneakythrow</artifactId>
       <version>1.2.0</version>
     </dependency>
-    
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -93,7 +93,7 @@
         <artifactId>protobeans-mvc</artifactId>
         <version>${project.version}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.protobeans</groupId>
         <artifactId>protobeans-undertow</artifactId>
@@ -106,7 +106,7 @@
         <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         <version>2.0.2</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-autoconfigure</artifactId>
@@ -209,7 +209,7 @@
         <artifactId>commons-text</artifactId>
         <version>1.10.0</version>
       </dependency>
-
+      
       <!-- Hibernate -->
       <dependency>
         <groupId>org.hibernate</groupId>
