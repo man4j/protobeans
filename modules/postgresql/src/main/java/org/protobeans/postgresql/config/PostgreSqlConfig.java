@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 
 import org.flywaydb.core.Flyway;
 import org.hibernate.dialect.PostgreSQLDialect;
+import org.hibernate.type.format.jackson.JacksonJsonFormatMapper;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.postgresql.annotation.EnablePostgreSql;
@@ -156,17 +157,16 @@ public class PostgreSqlConfig {
        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
        jpaVendorAdapter.setShowSql("true".equals(showSql));
        
-       JacksonSupplier.objectMapper = mapper;
-       
        em.setJpaPropertyMap(new HashMap<String, Object>() {{put("hibernate.id.new_generator_mappings", true);
                                                             put("hibernate.format_sql", true);
                                                             put("hibernate.jdbc.batch_size", batchSize);
                                                             put("hibernate.order_inserts", true);
                                                             put("hibernate.order_updates", true);
+                                                            put("hibernate.globally_quoted_identifiers", true);
                                                             put("hibernate.auto_quote_keyword", true);
                                                             put("hibernate.physical_naming_strategy", ProtobeansNamingStrategy.class.getName());
                                                             put("hibernate.dialect", PostgreSQLDialect.class.getName());
-                                                            put("hypersistence.utils.jackson.object.mapper", JacksonSupplier.class.getName());
+                                                            put("hibernate.type.json_format_mapper", new JacksonJsonFormatMapper(mapper));
                                                             
                                                             //if connection pool already disables autocommit
                                                             put("hibernate.connection.provider_disables_autocommit", true);
