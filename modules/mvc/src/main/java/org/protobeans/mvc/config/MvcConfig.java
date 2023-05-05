@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
@@ -88,7 +89,9 @@ public class MvcConfig implements WebMvcConfigurer {
     
     @Bean
     HttpMessageConverter<?> jacksonMessageConverter() {
-        return new MappingJackson2HttpMessageConverter(mapper());
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(mapper());
+        converter.setSupportedMediaTypes(List.of(new MediaType("application", "octet-stream"), MediaType.APPLICATION_JSON, new MediaType("application", "*+json")));
+        return converter;
     }
     
     @Bean
@@ -128,8 +131,8 @@ public class MvcConfig implements WebMvcConfigurer {
     
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> defaultConverters) {
-        defaultConverters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
-        defaultConverters.add(new MappingJackson2HttpMessageConverter(mapper()));
+        defaultConverters.add(stringMessageConverter());
+        defaultConverters.add(jacksonMessageConverter());
         defaultConverters.add(new ByteArrayHttpMessageConverter());
         defaultConverters.add(new ResourceHttpMessageConverter());
     }

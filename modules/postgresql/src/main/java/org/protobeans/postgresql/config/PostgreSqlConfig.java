@@ -153,6 +153,7 @@ public class PostgreSqlConfig {
     public LocalContainerEntityManagerFactoryBean pgEntityManager() throws Exception {
        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
        
+       em.setDataSource(pgDataSource());
        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
        jpaVendorAdapter.setShowSql("true".equals(showSql));
        
@@ -178,8 +179,8 @@ public class PostgreSqlConfig {
                                                             }
                                                           }});
        
-       em.setDataSource(pgDataSource());
        em.setJpaVendorAdapter(jpaVendorAdapter);
+       
        em.setPackagesToScan(basePackages);
        
        return em;
