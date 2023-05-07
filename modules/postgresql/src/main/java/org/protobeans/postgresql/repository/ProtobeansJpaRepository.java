@@ -12,5 +12,5 @@ public interface ProtobeansJpaRepository<T, ID> extends JpaRepository<T, ID> {
      * This method generate SQL SELECT for fetch and compare detached object with persistent state and generate 
      * SQL update if detached object not equals persistent state.
      */
-    T checkAndUpdate(T detachedEntity);
+    <S extends T> S checkAndUpdate(S detachedEntity);
 }
