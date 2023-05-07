@@ -24,7 +24,7 @@ public class ProtobeansJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, I
      * SQL update if detached object not equals persistent state.
      */
     @Override
-    public T checkAndUpdate(T detachedEntity) {
+    public <S extends T> S checkAndUpdate(S detachedEntity) {
         return entityManager.merge(detachedEntity);
     }
 }
