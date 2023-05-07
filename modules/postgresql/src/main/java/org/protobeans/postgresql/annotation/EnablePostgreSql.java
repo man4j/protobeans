@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -20,6 +21,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
                        entityManagerFactoryRef = "pgEntityManager", 
                        transactionManagerRef = "pgTransactionManager",
                        repositoryBaseClass = ProtobeansJpaRepositoryImpl.class)
+@EnableSpringDataWebSupport
 @Configuration
 public @interface EnablePostgreSql {
     String dbHost();
