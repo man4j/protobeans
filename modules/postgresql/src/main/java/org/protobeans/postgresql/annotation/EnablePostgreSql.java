@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.protobeans.postgresql.config.PostgreSqlConfig;
+import org.protobeans.postgresql.repository.ProtobeansJpaRepositoryImpl;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
@@ -14,7 +15,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Import(PostgreSqlConfig.class)
-@EnableJpaRepositories(considerNestedRepositories = true, enableDefaultTransactions = false, entityManagerFactoryRef = "pgEntityManager", transactionManagerRef = "pgTransactionManager")
+@EnableJpaRepositories(considerNestedRepositories = true, 
+                       enableDefaultTransactions = false, 
+                       entityManagerFactoryRef = "pgEntityManager", 
+                       transactionManagerRef = "pgTransactionManager",
+                       repositoryBaseClass = ProtobeansJpaRepositoryImpl.class)
 @Configuration
 public @interface EnablePostgreSql {
     String dbHost();
