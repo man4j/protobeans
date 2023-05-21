@@ -32,7 +32,7 @@ public class EmailSigninController {
     
     @GetMapping
     String signin(@RequestParam String uuid, @RequestParam String email) {
-        UserProfile profile = profileService.getById(email);
+        UserProfile profile = profileService.getByLogin(email);
         
         try {
             if (profile == null) throw new BadCredentialsException("");

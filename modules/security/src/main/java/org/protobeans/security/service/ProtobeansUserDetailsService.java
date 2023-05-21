@@ -1,12 +1,8 @@
 package org.protobeans.security.service;
 
-import java.util.stream.Collectors;
-
 import org.protobeans.security.model.AbstractProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,13 +15,13 @@ public class ProtobeansUserDetailsService implements UserDetailsService {
     private ProfileService profileService;
     
     @Override
-    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-        AbstractProfile profile = profileService.getById(id);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        AbstractProfile profile = profileService.getByLogin(username);
 
         if (profile == null) {
-            throw new UsernameNotFoundException(id);
+            throw new UsernameNotFoundException(username);
         }
 
-        return new User(id, profile.getPassword(), profile.isConfirmed(), true, true, true, profile.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+        return profile;
     }
 }

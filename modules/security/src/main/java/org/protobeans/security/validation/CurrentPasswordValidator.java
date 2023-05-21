@@ -2,7 +2,6 @@ package org.protobeans.security.validation;
 
 import org.protobeans.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import jakarta.validation.ConstraintValidator;
@@ -24,8 +23,6 @@ public class CurrentPasswordValidator implements ConstraintValidator<CurrentPass
     public boolean isValid(String password, ConstraintValidatorContext context) {
         if (password == null || password.trim().isEmpty()) return true;
         
-        User currentUser = securityService.getCurrentUser();
-        
-        return passwordEncoder.matches(password, currentUser.getPassword());
+        return passwordEncoder.matches(password, securityService.getCurrentUser().getPassword());
     }
 }

@@ -32,12 +32,12 @@ public class SignInValidator implements ConstraintValidator<SignIn, SignInForm> 
 
     @Override
     public boolean isValid(SignInForm form, ConstraintValidatorContext context) {
-        if (form.getId() == null || form.getId().trim().isEmpty()) return true;
+        if (form.getLogin() == null || form.getLogin().trim().isEmpty()) return true;
         if (form.getPassword() == null || form.getPassword().trim().isEmpty()) return true;
         
         context.disableDefaultConstraintViolation();
 
-        AbstractProfile profile = profileService.getById(form.getId());
+        AbstractProfile profile = profileService.getByLogin(form.getLogin());
         
         try {
             if (profile == null) throw new UsernameNotFoundException("");
@@ -50,7 +50,7 @@ public class SignInValidator implements ConstraintValidator<SignIn, SignInForm> 
         
             SecurityContextHolder.getContext().setAuthentication(authenticationManager.authenticate(securityService.createUsernamePasswordAuthenticationToken(profile, form.getPassword())));
         } catch (@SuppressWarnings("unused") UsernameNotFoundException | BadCredentialsException e) {
-            context.buildConstraintViolationWithTemplate("{SignInValidator.incorrectIdOrPassword}").addPropertyNode("id").addConstraintViolation();
+            context.buildConstraintViolationWithTemplate("{SignInValidator.incorrectLoginOrPassword}").addPropertyNode("login").addConstraintViolation();
             context.buildConstraintViolationWithTemplate("").addPropertyNode("password").addConstraintViolation();
             
             return false;

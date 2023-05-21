@@ -22,8 +22,8 @@ public class UserProfileService implements ProfileService {
     
     @WithTransaction(readOnly=true)
     @Override
-    public UserProfile getById(String id) {
-        return userProfileRepository.findByEmail(id);
+    public UserProfile getByLogin(String login) {
+        return userProfileRepository.findByEmail(login);
     }
 
     @WithTransaction
@@ -33,16 +33,16 @@ public class UserProfileService implements ProfileService {
     }
     
     @WithTransaction
-    public void updatePassword(String email, String newPassword) {
-        UserProfile p = userProfileRepository.findByEmail(email);
+    public void updatePassword(String login, String newPassword) {
+        UserProfile p = userProfileRepository.findByEmail(login);
         p.setPassword(passwordEncoder.encode(newPassword));
     }
 
     @WithTransaction
-    public UserProfile createAndSave(String email, String password, String userName, boolean isConfirmed, String... roles) {
+    public UserProfile createAndSave(String login, String password, String userName, boolean isConfirmed, String... roles) {
         UserProfile p = new UserProfile();
         
-        p.setEmail(email);
+        p.setEmail(login);
         p.setPassword(passwordEncoder.encode(password));
         p.setUserName(userName);
         p.setConfirmUuid(UUID.randomUUID().toString());

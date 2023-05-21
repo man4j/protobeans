@@ -1,6 +1,6 @@
 package org.protobeans.webapp.example.security;
 
-import org.protobeans.security.model.UserWithUuid;
+import org.protobeans.security.model.AbstractProfile;
 import org.protobeans.security.model.UuidAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,7 +15,7 @@ public class UuidAuthenticationProvider implements AuthenticationProvider {
         UuidAuthenticationToken token = (UuidAuthenticationToken) authentication;
         
         String requestedUuid = (String) token.getCredentials();
-        String savedUuid = ((UserWithUuid) token.getPrincipal()).getUuid();
+        String savedUuid = ((AbstractProfile) token.getPrincipal()).getConfirmUuid();
         
         if (!savedUuid.equals(requestedUuid)) {
             throw new BadCredentialsException("Uuids not equals");

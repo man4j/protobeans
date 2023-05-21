@@ -45,13 +45,13 @@ public class RestorePasswordController {
     String restore(@ModelAttribute("form") @Validated RestorePasswordForm form, BindingResult result) {
         if (result.hasErrors()) return "/restore";
 
-        UserProfile p = profileService.getById(form.getEmail());
+        UserProfile p = profileService.getByLogin(form.getLogin());
         
         String newDecryptedPassword = securityService.generatePassword();
 
-        profileService.updatePassword(p.getEmail(), newDecryptedPassword);
+        profileService.updatePassword(p.getLogin(), newDecryptedPassword);
 
-        emailService.sendMessage(form.getEmail(), "Restore password", messageGenerator.generateEmailSignInMessage(newDecryptedPassword, p.getConfirmUuid(), p.getEmail(), requestContextHolder.getRequestContext()));
+        emailService.sendMessage(form.getLogin(), "Restore password", messageGenerator.generateEmailSignInMessage(newDecryptedPassword, p.getConfirmUuid(), p.getLogin(), requestContextHolder.getRequestContext()));
 
         return "/check_email";
     }

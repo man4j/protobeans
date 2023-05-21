@@ -6,20 +6,20 @@ import jakarta.validation.constraints.NotBlank;
 
 @SignIn
 public class SignInForm {
-    @NotBlank(message = "{form.id.empty}")
-    private String id;
+    @NotBlank(message = "{form.login.empty}")
+    private String login;
 
     @NotBlank(message = "{form.password.empty}")
     private String password;
 
     private boolean rememberMe;
 
-    public String getId() {
-        return id;
+    public String getLogin() {
+        return login;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getPassword() {

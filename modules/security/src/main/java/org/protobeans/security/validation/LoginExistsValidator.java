@@ -6,19 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class EmailExistsValidator implements ConstraintValidator<EmailExists, String> {
+public class LoginExistsValidator implements ConstraintValidator<LoginExists, String> {
     @Autowired
     private ProfileService profileService;
     
     @Override
-    public void initialize(EmailExists constraintAnnotation) {
+    public void initialize(LoginExists constraintAnnotation) {
         //empty
     }
 
     @Override
-    public boolean isValid(String email, ConstraintValidatorContext context) {
-        if (email == null || email.trim().isEmpty()) return true;
+    public boolean isValid(String login, ConstraintValidatorContext context) {
+        if (login == null || login.trim().isEmpty()) return true;
         
-        return profileService.getById(email) != null;
+        return profileService.getByLogin(login) != null;
     }
 }

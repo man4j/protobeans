@@ -42,9 +42,9 @@ public class SignUpController {
     String processForm(@ModelAttribute("form") @Validated MySignUpForm form, BindingResult result) {
         if (result.hasErrors()) return "/signup";
         
-        UserProfile p = profileService.createAndSave(form.getEmail(), form.getPassword(), form.getUserName(), false);
+        UserProfile p = profileService.createAndSave(form.getLogin(), form.getPassword(), form.getUserName(), false);
         
-        emailService.sendMessage(form.getEmail(), "Sign Up", messageGenerator.generateEmailSignInMessage(form.getPassword(), p.getConfirmUuid(), p.getEmail(), requestContextHolder.getRequestContext()));
+        emailService.sendMessage(form.getLogin(), "Sign Up", messageGenerator.generateEmailSignInMessage(form.getPassword(), p.getConfirmUuid(), p.getLogin(), requestContextHolder.getRequestContext()));
 
         return "/check_email";
     }

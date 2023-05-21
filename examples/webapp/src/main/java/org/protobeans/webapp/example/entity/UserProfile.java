@@ -44,12 +44,12 @@ public class UserProfile implements AbstractProfile {
     private String userName;
 
     @Override
-    public String getId() {
+    public String getLogin() {
         return email;
     }
-    
+
     @Override
-    public boolean isLocked() {
-        return false;
+    public String getId() {
+        return email;
     }
 }

@@ -62,7 +62,7 @@ public class SecurityConfig {
     @Autowired(required = false)
     private List<AbstractHttpConfigurer<?, HttpSecurity>> securityDsl = new ArrayList<>();
     
-    @Autowired
+    @Autowired(required = false)
     private List<AuthenticationProvider> authenticationProviders = new ArrayList<>();
     
     @Bean

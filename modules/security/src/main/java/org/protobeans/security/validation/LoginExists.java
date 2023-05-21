@@ -11,9 +11,9 @@ import jakarta.validation.Payload;
 
 @Target(FIELD)
 @Retention(RUNTIME)
-@Constraint(validatedBy = EmailExistsValidator.class)
-public @interface EmailExists {
-    String message() default "{EmailExistsValidator.emailNotExists}";
+@Constraint(validatedBy = LoginExistsValidator.class)
+public @interface LoginExists {
+    String message() default "{LoginExistsValidator.loginNotExists}";
 
     Class<?>[] groups() default {};
 
