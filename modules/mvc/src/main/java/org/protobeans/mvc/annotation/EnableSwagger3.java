@@ -6,10 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.springdoc.core.configuration.SpringDocConfiguration;
-import org.springdoc.core.configuration.SpringDocNativeConfiguration;
 import org.springdoc.core.configuration.SpringDocPageableConfiguration;
 import org.springdoc.core.configuration.SpringDocSecurityConfiguration;
 import org.springdoc.core.configuration.SpringDocSortConfiguration;
+import org.springdoc.core.configuration.SpringDocUIConfiguration;
 import org.springdoc.core.properties.SpringDocConfigProperties;
 import org.springdoc.core.properties.SwaggerUiConfigParameters;
 import org.springdoc.core.properties.SwaggerUiConfigProperties;
@@ -27,10 +27,9 @@ import org.springframework.context.annotation.PropertySource;
 @Import({//common jar
          SpringDocConfiguration.class,
          SpringDocConfigProperties.class,
-         SpringDocNativeConfiguration.class,
+         SpringDocSecurityConfiguration.class,
          SpringDocPageableConfiguration.class,
          SpringDocSortConfiguration.class,
-         SpringDocSecurityConfiguration.class,
     
          //api jar
          SpringDocWebMvcConfiguration.class,
@@ -38,9 +37,10 @@ import org.springframework.context.annotation.PropertySource;
          
          //ui jar
          SwaggerConfig.class,
-         SwaggerUiConfigParameters.class,
          SwaggerUiConfigProperties.class,
-         SwaggerUiOAuthProperties.class
+         SwaggerUiConfigParameters.class,
+         SwaggerUiOAuthProperties.class,
+         SpringDocUIConfiguration.class
          })
 @Configuration
 @EnableConfigurationProperties

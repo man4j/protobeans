@@ -137,9 +137,9 @@ public class MvcConfig implements WebMvcConfigurer {
     
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> defaultConverters) {
+        defaultConverters.add(new ByteArrayHttpMessageConverter());
         defaultConverters.add(stringMessageConverter());
         defaultConverters.add(jacksonMessageConverter());
-        defaultConverters.add(new ByteArrayHttpMessageConverter());
         defaultConverters.add(new ResourceHttpMessageConverter());
     }
         

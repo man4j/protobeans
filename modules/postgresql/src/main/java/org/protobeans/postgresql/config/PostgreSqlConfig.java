@@ -159,6 +159,8 @@ public class PostgreSqlConfig {
        
        JacksonSupplier.objectMapper = mapper;
        
+       System.setProperty("hypersistence.utils.jackson.object.mapper", JacksonSupplier.class.getName());
+       
        em.setJpaPropertyMap(new HashMap<String, Object>() {{put("hibernate.id.new_generator_mappings", true);
                                                             put("hibernate.format_sql", true);
                                                             put("hibernate.jdbc.batch_size", batchSize);
@@ -168,7 +170,6 @@ public class PostgreSqlConfig {
                                                             put("hibernate.auto_quote_keyword", true);
                                                             put("hibernate.physical_naming_strategy", ProtobeansNamingStrategy.class.getName());
                                                             put("hibernate.dialect", PostgreSQLDialect.class.getName());
-                                                            put("hibernate.types.jackson.object.mapper", JacksonSupplier.class.getName());
                                                             put("hibernate.type.json_format_mapper", new JacksonJsonFormatMapper(mapper));
                                                             
                                                             //if connection pool already disables autocommit
