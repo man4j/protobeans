@@ -190,6 +190,7 @@ public class PostgreSqlConfig {
        return em;
     }
     
+    @SuppressWarnings("resource")
     @Bean
     public PlatformTransactionManager pgTransactionManager() throws Exception {
         return new JpaTransactionManager(pgEntityManager().getObject());

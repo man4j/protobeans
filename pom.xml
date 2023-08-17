@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-parent</artifactId>
-  <version>2.14</version>
+  <version>2.15</version>
   <packaging>pom</packaging>
 
   <properties>
@@ -146,6 +146,13 @@
         <artifactId>logstash-logback-encoder</artifactId>
         <version>7.4</version>
       </dependency>
+      
+      <!-- Guava -->
+      <dependency>
+    	<groupId>com.google.guava</groupId>
+    	<artifactId>guava</artifactId>
+    	<version>32.1.2-jre</version>
+	  </dependency>
 
       <!-- Mail -->
       <dependency>
@@ -203,6 +210,13 @@
         <artifactId>jakarta.annotation-api</artifactId>
         <version>2.1.1</version>
       </dependency>
+      
+      <!-- AspectJ API -->
+      <dependency>
+    	<groupId>org.aspectj</groupId>
+    	<artifactId>aspectjrt</artifactId>
+    	<version>1.9.19</version>
+	  </dependency>
 
       <!-- Freemarker -->
       <dependency>
