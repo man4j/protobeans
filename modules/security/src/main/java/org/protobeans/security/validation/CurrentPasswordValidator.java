@@ -8,11 +8,9 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class CurrentPasswordValidator implements ConstraintValidator<CurrentPassword, String> {
-    @Autowired
-    private SecurityService securityService;
+    @Autowired SecurityService securityService;
     
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    @Autowired PasswordEncoder passwordEncoder;
     
     @Override
     public void initialize(CurrentPassword constraintAnnotation) {

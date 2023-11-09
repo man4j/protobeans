@@ -14,14 +14,11 @@ import jakarta.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping(path = "/logout")
 public class SignOutController {
-    @Autowired
-    private HttpServletRequest servletRequest;
+    @Autowired HttpServletRequest servletRequest;
     
-    @Autowired
-    private HttpServletResponse servletResponse;
+    @Autowired HttpServletResponse servletResponse;
     
-    @Autowired
-    private TokenBasedRememberMeServices rememberMeServices;
+    @Autowired TokenBasedRememberMeServices rememberMeServices;
 
     @GetMapping
     String logout() {

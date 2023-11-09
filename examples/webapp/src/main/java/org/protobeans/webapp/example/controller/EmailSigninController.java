@@ -20,11 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/email_signin")
 @Anonymous("/email_signin")
 public class EmailSigninController {
-    @Autowired
-    private UserProfileService profileService;
+    @Autowired UserProfileService profileService;
 
-    @Autowired
-    private SecurityService securityService;
+    @Autowired SecurityService securityService;
     
     @Autowired
     @Lazy

@@ -15,15 +15,11 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class SignInValidator implements ConstraintValidator<SignIn, SignInForm> {
-    @Autowired
-    private ProfileService profileService;
+    @Autowired ProfileService profileService;
     
-    @Autowired
-    private SecurityService securityService;
+    @Autowired SecurityService securityService;
     
-    @Autowired
-    @Lazy
-    private AuthenticationManager authenticationManager;
+    @Autowired @Lazy AuthenticationManager authenticationManager;
     
     @Override
     public void initialize(SignIn constraintAnnotation) {

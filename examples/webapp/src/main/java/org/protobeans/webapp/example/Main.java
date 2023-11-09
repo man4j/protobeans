@@ -18,7 +18,7 @@ import org.springframework.context.annotation.PropertySource;
 @EnableSecurity
 @EnableFeign
 @EnableMail(host = "smtp.sendgrid.net", user = "apikey", password = "${emailPassword}")
-@EnablePostgreSql(showSql = "false", schema = "postgres", dbHost = "${postgresIp}", dbPort = "${postgresPort}", user = "postgres", password = "PassWord111", basePackages = {"org.protobeans.webapp.example"}, migrationsPath = "migrations")
+@EnablePostgreSql(showSql = "false", schema = "demo", dbHost = "${postgresIp}", dbPort = "${postgresPort}", user = "postgres", password = "PassWord111", basePackages = {"org.protobeans.webapp.example"}, migrationsPath = "migrations")
 @ComponentScan(basePackages = "org.protobeans.webapp.example")
 @EnableSwagger3
 @PropertySource("classpath:application.properties")

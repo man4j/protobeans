@@ -10,7 +10,6 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.flywaydb.core.Flyway;
-import org.hibernate.dialect.PostgreSQLDialect;
 import org.hibernate.type.format.jackson.JacksonJsonFormatMapper;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.protobeans.core.annotation.InjectFrom;
@@ -169,7 +168,6 @@ public class PostgreSqlConfig {
                                                             put("hibernate.globally_quoted_identifiers", true);
                                                             put("hibernate.auto_quote_keyword", true);
                                                             put("hibernate.physical_naming_strategy", ProtobeansNamingStrategy.class.getName());
-                                                            put("hibernate.dialect", PostgreSQLDialect.class.getName());
                                                             put("hibernate.type.json_format_mapper", new JacksonJsonFormatMapper(mapper));
                                                             
                                                             //if connection pool already disables autocommit

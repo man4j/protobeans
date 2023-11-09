@@ -85,17 +85,43 @@ public class SecurityConfig {
         String[] anonymousPatterns = ctx.getBeansWithAnnotation(Anonymous.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(Anonymous.class).value()).toArray(String[]::new);
         String[] permitAllPatterns = ctx.getBeansWithAnnotation(PermitAll.class).values().stream().map(o -> AopUtils.getTargetClass(o).getAnnotation(PermitAll.class).value()).toArray(String[]::new);
         
-        http.authenticationManager(authenticationManager(http))
-            .authorizeHttpRequests().requestMatchers(permitAllPatterns).permitAll()
-                                    .requestMatchers("/favicon.ico", "/swagger-ui.html/**", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/webjars/**", "/csrf").permitAll()
-                                    .requestMatchers(anonymousPatterns).anonymous()
-                                    .requestMatchers(Arrays.stream(ignoreUrls).map(u -> PathUtils.dashedPath(u) + "**").toArray(String[]::new)).permitAll()
-                                    .anyRequest().authenticated()
-            .and().rememberMe().rememberMeServices(rememberMeServices()).key("123").authenticationSuccessHandler(new CurrentUrlAuthenticationSuccessHandler())
-            .and().securityContext().requireExplicitSave(false)
-            .and().sessionManagement().requireExplicitAuthenticationStrategy(false).sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-            .and().addFilterBefore(new CharacterEncodingFilter(StandardCharsets.UTF_8.name(), true, true), ChannelProcessingFilter.class);
-        
+        http.authorizeHttpRequests(c -> {
+            c.requestMatchers(permitAllPatterns).permitAll()
+             .requestMatchers("/favicon.ico", "/swagger-ui.html/**", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/webjars/**", "/csrf").permitAll()
+             .requestMatchers(anonymousPatterns).anonymous()
+             .requestMatchers(Arrays.stream(ignoreUrls).map(u -> PathUtils.dashedPath(u) + "**").toArray(String[]::new)).permitAll()
+             .anyRequest().authenticated();
+        }).rememberMe(c -> {
+            c.rememberMeServices(rememberMeServices()).key("123").authenticationSuccessHandler(new CurrentUrlAuthenticationSuccessHandler());
+        }).securityContext(c -> {
+            c.requireExplicitSave(false);
+        }).sessionManagement(c -> {
+            c.sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+        }).addFilterBefore(new CharacterEncodingFilter(StandardCharsets.UTF_8.name(), true, true), ChannelProcessingFilter.class)
+        .authenticationManager(authenticationManager(http));
+
+//        .httpBasic(c -> {
+//            c.authenticationDetailsSource(null)
+//             .authenticationEntryPoint(null)
+//             .realmName(null);
+//        }).exceptionHandling(c -> {
+//            c.accessDeniedHandler(null)
+//             .accessDeniedPage(null)
+//             .authenticationEntryPoint(null)
+//             .defaultAccessDeniedHandlerFor(null, null)
+//             .defaultAuthenticationEntryPointFor(null, null)
+//        }).logout(c -> {
+//            c.addLogoutHandler(null)
+//             .clearAuthentication(true)
+//             .deleteCookies(permitAllPatterns)
+//             .invalidateHttpSession(true)
+//             .logoutRequestMatcher(null)
+//             .logoutSuccessHandler(null)
+//             .logoutSuccessUrl(null)
+//             .logoutUrl(null)
+//             .permitAll(true);
+//        });
+
         for (var configurer : securityDsl) {
             http.apply(configurer);
         }

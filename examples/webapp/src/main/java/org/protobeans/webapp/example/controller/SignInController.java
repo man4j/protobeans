@@ -21,14 +21,11 @@ import jakarta.servlet.http.HttpServletResponse;
 @PermitAll("/signin")
 @Validated
 public class SignInController {
-    @Autowired
-    private TokenBasedRememberMeServices rememberMeServices;
+    @Autowired TokenBasedRememberMeServices rememberMeServices;
     
-    @Autowired
-    private HttpServletRequest request;
+    @Autowired HttpServletRequest request;
     
-    @Autowired
-    private HttpServletResponse response;
+    @Autowired HttpServletResponse response;
     
     @GetMapping
     String prepareForm(@SuppressWarnings("unused") @ModelAttribute("form") SignInForm form) {

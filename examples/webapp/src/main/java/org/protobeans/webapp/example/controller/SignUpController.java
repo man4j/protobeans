@@ -21,17 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Anonymous("/signup")
 @Validated
 public class SignUpController {
-    @Autowired
-    private UserProfileService profileService;
+    @Autowired UserProfileService profileService;
     
-    @Autowired
-    private EmailService emailService;
+    @Autowired EmailService emailService;
     
-    @Autowired
-    private MessageGenerator messageGenerator;
+    @Autowired MessageGenerator messageGenerator;
     
-    @Autowired
-    private RequestContextHolder requestContextHolder;
+    @Autowired RequestContextHolder requestContextHolder;
     
     @GetMapping
     String prepareForm(@SuppressWarnings("unused") @ModelAttribute("form") MySignUpForm form) {

@@ -21,20 +21,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Anonymous("/restore")
 @Validated
 public class RestorePasswordController {
-    @Autowired
-    private UserProfileService profileService;
+    @Autowired UserProfileService profileService;
 
-    @Autowired
-    private EmailService emailService;
+    @Autowired EmailService emailService;
 
-    @Autowired
-    private SecurityService securityService;
+    @Autowired SecurityService securityService;
     
-    @Autowired
-    private MessageGenerator messageGenerator;
+    @Autowired MessageGenerator messageGenerator;
     
-    @Autowired
-    private RequestContextHolder requestContextHolder;
+    @Autowired RequestContextHolder requestContextHolder;
 
     @RequestMapping(method = RequestMethod.GET)
     String get(@SuppressWarnings("unused") @ModelAttribute("form") RestorePasswordForm form) {

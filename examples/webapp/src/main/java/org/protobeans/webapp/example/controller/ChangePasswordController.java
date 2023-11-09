@@ -16,11 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(path = "/change_password")
 @Validated
 public class ChangePasswordController {
-    @Autowired
-    private SecurityService securityService;
+    @Autowired SecurityService securityService;
     
-    @Autowired
-    private UserProfileService profileService;
+    @Autowired UserProfileService profileService;
         
     @GetMapping
     String prepareForm(@SuppressWarnings("unused") @ModelAttribute("form") ChangePasswordForm form) {

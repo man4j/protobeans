@@ -12,10 +12,10 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
 
-    <protobeans.version>2.9</protobeans.version>
-    <version.spring>6.0.4</version.spring>
-    <version.spring.security>6.0.1</version.spring.security>
-    <version.jackson>2.14.1</version.jackson>
+    <protobeans.version>2.2</protobeans.version>
+    <version.spring>6.0.11</version.spring>
+    <version.spring.security>6.0.4</version.spring.security>
+    <version.jackson>2.15.2</version.jackson>
   </properties>
 
   <modules>
@@ -30,33 +30,33 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.22</version>
+      <version>1.18.30</version>
     </dependency>
 
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.4.5</version>
+      <version>1.4.8</version>
     </dependency>
 
     <dependency>
       <groupId>org.codehaus.janino</groupId>
       <artifactId>janino</artifactId>
-      <version>3.1.9</version>
+      <version>3.1.10</version>
     </dependency>
 
     <!-- JUnit -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.9.2</version>
+      <version>5.9.3</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-launcher</artifactId>
-      <version>1.9.2</version>
+      <version>1.9.3</version>
       <scope>test</scope>
     </dependency>
 

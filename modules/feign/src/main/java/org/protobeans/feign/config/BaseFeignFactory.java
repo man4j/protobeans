@@ -111,7 +111,7 @@ abstract public class BaseFeignFactory<T> {
             return "";
         }
         
-        return Sneaky.sneak(() -> IOUtils.toString(response.body().asInputStream(), StandardCharsets.UTF_8.name()));
+        return Sneaky.sneak(() -> IOUtils.toString(response.body().asInputStream(), StandardCharsets.UTF_8));
     }
     
     protected Client javaClient() {

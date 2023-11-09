@@ -31,9 +31,7 @@ import io.undertow.server.handlers.resource.ClassPathResourceManager;
 import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.DeploymentInfo;
 import io.undertow.servlet.api.DeploymentManager;
-import io.undertow.servlet.api.MimeMapping;
 import io.undertow.servlet.api.ServletContainerInitializerInfo;
-import io.undertow.websockets.jsr.WebSocketDeploymentInfo;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.servlet.MultipartConfigElement;
@@ -91,7 +89,6 @@ public class UndertowConfig {
                       .setClassLoader(this.getClass().getClassLoader())
                       .setDefaultSessionTimeout(sessionTimeout)
                       .addWelcomePage(welcomePage)
-                      .addMimeMapping(new MimeMapping("jsf", "application/xhtml+xml"))
                       .setResourceManager(new ClassPathResourceManager(this.getClass().getClassLoader(), resourcesPath))
                       .setDefaultMultipartConfig(new MultipartConfigElement(uploadLocation, maxFileSize, maxRequestSize, fileSizeThreshold));
         
@@ -99,7 +96,6 @@ public class UndertowConfig {
             deploymentInfo.addErrorPage(Servlets.errorPage(errorPage));
         }
         
-        deploymentInfo.getServletContextAttributes().put(WebSocketDeploymentInfo.ATTRIBUTE_NAME, new WebSocketDeploymentInfo());
         
         for (var initializer : initializers) {
             Set<Class<?>> handlesTypes = new HashSet<>();
@@ -127,13 +123,13 @@ public class UndertowConfig {
         
         final EncodingHandler encodingHandler = new EncodingHandler(new ContentEncodingRepository().addEncodingHandler("gzip", 
                 new GzipEncodingProvider(8), 50, Predicates.and(Predicates.requestLargerThan(1024), 
-                                                               new CompressibleMimeTypePredicate("text/html",
-                                                                                                 "text/xml",
-                                                                                                 "text/plain",
-                                                                                                 "text/css",
-                                                                                                 "text/javascript",
-                                                                                                 "application/javascript",
-                                                                                                 "application/json"))))
+                                                                new CompressibleMimeTypePredicate("text/html",
+                                                                                                  "text/xml",
+                                                                                                  "text/plain",
+                                                                                                  "text/css",
+                                                                                                  "text/javascript",
+                                                                                                  "application/javascript",
+                                                                                                  "application/json"))))
                                                            .setNext(createServletDeploymentHandler());
         
         if (!proxyBackend.isEmpty()) {

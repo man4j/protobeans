@@ -58,9 +58,7 @@ public class InjectFromAnnotationBeanPostProcessor implements BeanPostProcessor,
                             f.setAccessible(true);
                             Object injectedValue = m.invoke(annotation);
                             
-                            if (injectedValue instanceof String) {
-                                String injectedString = (String) injectedValue;
-                                
+                            if (injectedValue instanceof String injectedString) {
                                 String result;
                                 
                                 try {

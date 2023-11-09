@@ -1,6 +1,7 @@
 package org.protobeans.webapp.example.api;
 
 import org.protobeans.mvc.rest.model.RestResult;
+import org.protobeans.security.annotation.AdminRole;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @Validated
 @SecurityScheme(name = "basicAuth", type = SecuritySchemeType.HTTP, scheme = "Basic")
+@AdminRole
 public interface ApiController {
     @GetMapping(value = "/api/version", produces = "text/html")
     @Tag(name = "Configuration methods")

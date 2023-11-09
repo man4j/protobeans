@@ -7,8 +7,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class LoginExistsValidator implements ConstraintValidator<LoginExists, String> {
-    @Autowired
-    private ProfileService profileService;
+    @Autowired ProfileService profileService;
     
     @Override
     public void initialize(LoginExists constraintAnnotation) {
