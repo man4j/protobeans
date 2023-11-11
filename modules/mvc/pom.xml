@@ -41,7 +41,24 @@
       <groupId>org.hibernate.validator</groupId>
       <artifactId>hibernate-validator</artifactId>
     </dependency>
-
+    
+    <!-- Logstash logback encoder -->
+    <dependency>
+      <groupId>net.logstash.logback</groupId>
+      <artifactId>logstash-logback-encoder</artifactId>
+    </dependency>
+    
+    <!-- Jakarta annotations -->
+    <dependency>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    
     <!-- Swagger -->
     <dependency>
       <groupId>org.springdoc</groupId>
@@ -70,5 +87,7 @@
       <groupId>org.glassfish</groupId>
       <artifactId>jakarta.el</artifactId>
     </dependency>
+    
+    
   </dependencies>
 </project>
