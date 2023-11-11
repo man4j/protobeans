@@ -16,12 +16,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
+import org.springframework.http.converter.ResourceRegionHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.WebApplicationInitializer;
@@ -98,18 +99,6 @@ public class MvcConfig implements WebMvcConfigurer {
                                    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
     
-    @Bean
-    HttpMessageConverter<?> jacksonMessageConverter() {
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(mapper());
-        converter.setSupportedMediaTypes(List.of(new MediaType("application", "octet-stream"), MediaType.APPLICATION_JSON, new MediaType("application", "*+json")));
-        return converter;
-    }
-    
-    @Bean
-    HttpMessageConverter<?> stringMessageConverter() {
-        return new StringHttpMessageConverter(StandardCharsets.UTF_8);
-    }
-    
     @Override
     public Validator getValidator() {
         return localValidatorFactoryBean;
@@ -140,14 +129,32 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler(dashedResourcesUrl + lastModified + "/**").addResourceLocations("classpath:" + dashedResourcesPath).setCachePeriod(31556926);
     }
     
+    //=============================================================================
+    
+    @Bean
+    HttpMessageConverter<?> jacksonMessageConverter() {
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(mapper());
+//        converter.setSupportedMediaTypes(List.of(new MediaType("application", "octet-stream"), MediaType.APPLICATION_JSON, new MediaType("application", "*+json")));
+        return converter;
+    }
+    
+    @Bean
+    HttpMessageConverter<?> stringMessageConverter() {
+        return new StringHttpMessageConverter(StandardCharsets.UTF_8);
+    }
+    
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> defaultConverters) {
         defaultConverters.add(new ByteArrayHttpMessageConverter());
         defaultConverters.add(stringMessageConverter());
-        defaultConverters.add(jacksonMessageConverter());
         defaultConverters.add(new ResourceHttpMessageConverter());
+        defaultConverters.add(new ResourceRegionHttpMessageConverter());
+        defaultConverters.add(new AllEncompassingFormHttpMessageConverter());
+        defaultConverters.add(jacksonMessageConverter());
     }
-        
+
+    //=============================================================================
+    
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LocaleChangeInterceptor());
@@ -158,7 +165,7 @@ public class MvcConfig implements WebMvcConfigurer {
     @Bean
     public LocaleResolver localeResolver() {
         CookieLocaleResolver resolver = new CookieLocaleResolver();
-        resolver.setDefaultLocale(new Locale("ru", "RU"));
+        resolver.setDefaultLocale(Locale.of("ru", "RU"));
         return resolver;
     } 
     
