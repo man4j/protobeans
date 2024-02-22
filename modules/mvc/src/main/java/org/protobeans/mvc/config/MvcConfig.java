@@ -133,9 +133,7 @@ public class MvcConfig implements WebMvcConfigurer {
     
     @Bean
     HttpMessageConverter<?> jacksonMessageConverter() {
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(mapper());
-//        converter.setSupportedMediaTypes(List.of(new MediaType("application", "octet-stream"), MediaType.APPLICATION_JSON, new MediaType("application", "*+json")));
-        return converter;
+        return new MappingJackson2HttpMessageConverter(mapper());
     }
     
     @Bean

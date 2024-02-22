@@ -100,27 +100,6 @@ public class SecurityConfig {
         }).addFilterBefore(new CharacterEncodingFilter(StandardCharsets.UTF_8.name(), true, true), ChannelProcessingFilter.class)
         .authenticationManager(authenticationManager(http));
 
-//        .httpBasic(c -> {
-//            c.authenticationDetailsSource(null)
-//             .authenticationEntryPoint(null)
-//             .realmName(null);
-//        }).exceptionHandling(c -> {
-//            c.accessDeniedHandler(null)
-//             .accessDeniedPage(null)
-//             .authenticationEntryPoint(null)
-//             .defaultAccessDeniedHandlerFor(null, null)
-//             .defaultAuthenticationEntryPointFor(null, null)
-//        }).logout(c -> {
-//            c.addLogoutHandler(null)
-//             .clearAuthentication(true)
-//             .deleteCookies(permitAllPatterns)
-//             .invalidateHttpSession(true)
-//             .logoutRequestMatcher(null)
-//             .logoutSuccessHandler(null)
-//             .logoutSuccessUrl(null)
-//             .logoutUrl(null)
-//             .permitAll(true);
-//        });
 
         for (var configurer : securityDsl) {
             http.apply(configurer);

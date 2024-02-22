@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-parent</artifactId>
-  <version>3.1</version>
+  <version>3.2</version>
   <packaging>pom</packaging>
 
   <properties>
@@ -12,10 +12,10 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
 
-    <version.spring>6.0.13</version.spring>
-    <version.spring.security>6.1.5</version.spring.security>
-    <version.spring.data>3.1.5</version.spring.data>
-    <version.jackson>2.15.3</version.jackson>
+    <version.spring>6.1.4</version.spring>
+    <version.spring.security>6.2.2</version.spring.security>
+    <version.spring.data>3.2.3</version.spring.data>
+    <version.jackson>2.16.1</version.jackson>
   </properties>
 
   <modules>
@@ -29,6 +29,7 @@
     <module>modules/scheduler</module>
     <module>modules/security</module>
     <module>modules/feign</module>
+    <module>modules/faces</module>
   </modules>
 
   <dependencies>
@@ -41,33 +42,33 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>2.0.9</version>
+      <version>2.0.12</version>
     </dependency>
 
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.4.11</version>
+      <version>1.5.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.codehaus.janino</groupId>
       <artifactId>janino</artifactId>
-      <version>3.1.10</version>
+      <version>3.1.11</version>
     </dependency>
 
     <!-- JUnit -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.10.1</version>
+      <version>5.10.2</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-launcher</artifactId>
-      <version>1.10.1</version>
+      <version>1.10.2</version>
       <scope>test</scope>
     </dependency>
 
@@ -104,15 +105,15 @@
       <dependency>
         <groupId>org.springdoc</groupId>
         <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-        <version>2.2.0</version>
+        <version>2.3.0</version>
       </dependency>
 
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-autoconfigure</artifactId>
-        <version>3.1.5</version>
+        <version>3.2.2</version>
       </dependency>
-      
+
       <!-- Jackson -->
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
@@ -138,7 +139,7 @@
         <artifactId>hibernate-validator</artifactId>
         <version>8.0.1.Final</version>
       </dependency>
-
+      
       <!-- Logstash logback encoder -->
       <dependency>
         <groupId>net.logstash.logback</groupId>
@@ -171,21 +172,21 @@
       <dependency>
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
-        <version>42.6.0</version>
+        <version>42.7.2</version>
       </dependency>
 
       <!-- Flyway -->
       <dependency>
         <groupId>org.flywaydb</groupId>
         <artifactId>flyway-database-postgresql</artifactId>
-        <version>10.0.0</version>
+        <version>10.8.1</version>
       </dependency>
 
       <!-- Undertow -->
       <dependency>
         <groupId>io.undertow</groupId>
         <artifactId>undertow-servlet</artifactId>
-        <version>2.3.10.Final</version>
+        <version>2.3.11.Final</version>
       </dependency>
 
       <!-- Servlet API -->
@@ -206,7 +207,7 @@
       <dependency>
         <groupId>org.aspectj</groupId>
         <artifactId>aspectjrt</artifactId>
-        <version>1.9.20.1</version>
+        <version>1.9.21.1</version>
       </dependency>
 
       <!-- Freemarker -->
@@ -226,13 +227,13 @@
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-core</artifactId>
-        <version>6.2.13.Final</version>
+        <version>6.4.4.Final</version>
       </dependency>
 
       <dependency>
         <groupId>io.hypersistence</groupId>
-        <artifactId>hypersistence-utils-hibernate-62</artifactId>
-        <version>3.6.0</version>
+        <artifactId>hypersistence-utils-hibernate-63</artifactId>
+        <version>3.7.3</version>
       </dependency>
 
       <dependency>
@@ -318,28 +319,61 @@
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-openfeign-core</artifactId>
-        <version>4.0.4</version>
+        <version>4.1.0</version>
       </dependency>
 
       <dependency>
         <groupId>io.github.openfeign</groupId>
         <artifactId>feign-java11</artifactId>
-        <version>13.0</version>
+        <version>13.2.1</version>
       </dependency>
 
       <dependency>
         <groupId>io.github.openfeign</groupId>
         <artifactId>feign-slf4j</artifactId>
-        <version>13.0</version>
+        <version>13.2.1</version>
       </dependency>
 
       <dependency>
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
-        <version>2.15.0</version>
+        <version>2.15.1</version>
       </dependency>
 
-      <!-- Jakarta EL API -->
+      <!-- Primefaces -->
+      <dependency>
+        <groupId>org.primefaces</groupId>
+        <artifactId>primefaces</artifactId>
+        <version>13.0.6</version>
+        <classifier>jakarta</classifier>
+      </dependency>
+
+      <dependency>
+        <groupId>org.omnifaces</groupId>
+        <artifactId>omnifaces</artifactId>
+        <version>4.3</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.glassfish</groupId>
+        <artifactId>jakarta.faces</artifactId>
+        <version>4.0.5</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.weld.servlet</groupId>
+        <artifactId>weld-servlet-core</artifactId>
+        <version>5.1.2.Final</version>
+      </dependency>
+
+      <!-- Reflections -->
+      <dependency>
+        <groupId>org.reflections</groupId>
+        <artifactId>reflections</artifactId>
+        <version>0.10.2</version>
+      </dependency>
+
+      <!-- Jakarta EL -->
       <dependency>
         <groupId>org.glassfish</groupId>
         <artifactId>jakarta.el</artifactId>

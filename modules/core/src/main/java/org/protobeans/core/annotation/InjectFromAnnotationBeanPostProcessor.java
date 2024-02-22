@@ -81,16 +81,12 @@ public class InjectFromAnnotationBeanPostProcessor implements BeanPostProcessor,
         
         return bean;
     }
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        return bean;
-    }
     
     private Object resolveExpression(ApplicationContext ctx, String expression) {
         DefaultListableBeanFactory bf = (DefaultListableBeanFactory) ctx.getAutowireCapableBeanFactory();
 
         String placeholdersResolved = bf.resolveEmbeddedValue(expression);
+        
         BeanExpressionResolver expressionResolver = bf.getBeanExpressionResolver();
         
         return expressionResolver.evaluate(placeholdersResolved, new BeanExpressionContext(bf, null));

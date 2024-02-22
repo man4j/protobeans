@@ -10,45 +10,45 @@
 
   <artifactId>protobeans-webapp-example</artifactId>
   <packaging>jar</packaging>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-security</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-feign</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-postgresql</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-mail</artifactId>
     </dependency>
-        
+
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-undertow</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-freemarker</artifactId>
     </dependency>
-    
+
     <!-- Test -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-test</artifactId>
@@ -63,9 +63,9 @@
           <artifactId>*</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>                    
+    </dependency>
   </dependencies>
-  
+
   <build>
     <plugins>
       <!-- preserve original last modified for static resources -->

@@ -31,6 +31,7 @@ import io.undertow.server.handlers.resource.ClassPathResourceManager;
 import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.DeploymentInfo;
 import io.undertow.servlet.api.DeploymentManager;
+import io.undertow.servlet.api.MimeMapping;
 import io.undertow.servlet.api.ServletContainerInitializerInfo;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -42,96 +43,95 @@ import jakarta.servlet.annotation.HandlesTypes;
 @Configuration
 @InjectFrom(EnableUndertow.class)
 public class UndertowConfig {
-    protected DeploymentInfo deploymentInfo = Servlets.deployment();
-    
     private String host;
-    
+
     private String port;
-    
+
     private Undertow undertow;
-    
+
     private String resourcesPath;
-    
+
     private String welcomePage;
-    
+
     private String errorPage;
-    
+
     private int sessionTimeout;
 
     private String[] ignoreProxyPathPrefix;
 
     private String proxyBackend;
-    
+
     private int proxyConnectionsCount;
-    
+
     private String workerThreads;
-    
+
     private String ioThreads;
-    
-    private String uploadLocation; 
-    
-    private long maxFileSize; 
-    
+
+    private String uploadLocation;
+
+    private long maxFileSize;
+
     private long maxRequestSize;
-    
+
     private int fileSizeThreshold;
-    
+
     @Autowired(required = false)
     private List<Class<? extends ServletContainerInitializer>> initializers = new ArrayList<>();
-    
+
     @Autowired(required = false)
     private List<Class<? extends WebApplicationInitializer>> springInitializers = new ArrayList<>();
-    
+
     @SuppressWarnings("resource")
-    protected Builder configure() throws ServletException {
+    @PostConstruct
+    public void start() throws ServletException {
+        DeploymentInfo deploymentInfo = Servlets.deployment();
+        
         deploymentInfo.setContextPath("/")
                       .setDeploymentName("app.war")
                       .setClassLoader(this.getClass().getClassLoader())
                       .setDefaultSessionTimeout(sessionTimeout)
                       .addWelcomePage(welcomePage)
+                      .addMimeMapping(new MimeMapping("jsf", "application/xhtml+xml"))
                       .setResourceManager(new ClassPathResourceManager(this.getClass().getClassLoader(), resourcesPath))
                       .setDefaultMultipartConfig(new MultipartConfigElement(uploadLocation, maxFileSize, maxRequestSize, fileSizeThreshold));
-        
+
         if (!errorPage.isEmpty()) {
             deploymentInfo.addErrorPage(Servlets.errorPage(errorPage));
         }
         
-        
         for (var initializer : initializers) {
             Set<Class<?>> handlesTypes = new HashSet<>();
-            
+
             HandlesTypes annotation = initializer.getAnnotation(HandlesTypes.class);
-            
+
             if (annotation != null) {
                 handlesTypes.addAll(Set.of(annotation.value()));
             }
-            
+
             deploymentInfo.addServletContainerInitializer(new ServletContainerInitializerInfo(initializer, handlesTypes));
         }
-                
+
         if (!springInitializers.isEmpty()) {
             Set<Class<?>> springInitializersSet = new HashSet<>();
-            
+
             for (var initializer : springInitializers) {
                 springInitializersSet.add(initializer);
             }
-            
+
             deploymentInfo.addServletContainerInitializer(new ServletContainerInitializerInfo(SpringServletContainerInitializer.class, springInitializersSet));
         }
-        
+
         HttpHandler firstHandler = null;
-        
-        final EncodingHandler encodingHandler = new EncodingHandler(new ContentEncodingRepository().addEncodingHandler("gzip", 
-                new GzipEncodingProvider(8), 50, Predicates.and(Predicates.requestLargerThan(1024), 
+
+        final EncodingHandler encodingHandler = new EncodingHandler(new ContentEncodingRepository().addEncodingHandler("gzip",
+                new GzipEncodingProvider(8), 50, Predicates.and(Predicates.requestLargerThan(1024),
                                                                 new CompressibleMimeTypePredicate("text/html",
                                                                                                   "text/xml",
                                                                                                   "text/plain",
                                                                                                   "text/css",
                                                                                                   "text/javascript",
                                                                                                   "application/javascript",
-                                                                                                  "application/json"))))
-                                                           .setNext(createServletDeploymentHandler());
-        
+                                                                                                  "application/json"))));                                                           
         if (!proxyBackend.isEmpty()) {
             LoadBalancingProxyClient proxyClient = new LoadBalancingProxyClient() {
                 @Override
@@ -141,7 +141,7 @@ public class UndertowConfig {
                             return null;
                         }
                     }
-                    
+
                     if (exchange.getRequestPath().startsWith("/swagger") ||
                         exchange.getRequestPath().startsWith("/v2/api-docs") ||
                         exchange.getRequestPath().startsWith("/webjars/") || 
@@ -152,63 +152,51 @@ public class UndertowConfig {
                         exchange.getRequestPath().startsWith("/csrf")) {
                         return null;
                     }
-                    
+
                     return super.findTarget(exchange);
                 }
             };
-            
+
             System.out.println("Proxy connections per thread: " + proxyConnectionsCount);
             proxyClient.setConnectionsPerThread(proxyConnectionsCount);
-            
+
             try {
                 proxyClient.addHost(new URI(proxyBackend));
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }
-            
+
             firstHandler = ProxyHandler.builder().setProxyClient(proxyClient).setNext(encodingHandler).build();
         } else {
             firstHandler = encodingHandler;
         }
-            
-        Builder builder = Undertow.builder().addHttpListener(Integer.parseInt(port), host)
-                                            .setHandler(firstHandler);
-        
+
+        Builder builder = Undertow.builder().addHttpListener(Integer.parseInt(port), host);                                            
+
         int iWorkerThreads = Integer.parseInt(workerThreads);
         int iIoThreads = Integer.parseInt(ioThreads);
-        
+
         if (iWorkerThreads > 0) {
             System.out.println("Worker threads: " + iWorkerThreads);
             builder.setWorkerThreads(iWorkerThreads);
         }
-        
+
         if (iIoThreads > 0) {
             System.out.println("IO threads: " + iIoThreads);
             builder.setIoThreads(iIoThreads);
         }
         
-        return builder;
-    }
-    
-    private HttpHandler createServletDeploymentHandler() throws ServletException {
         DeploymentManager manager = Servlets.defaultContainer().addDeployment(deploymentInfo);
-        
-        manager.deploy();
-        
-        return manager.start();
-    }
-    
-    @PostConstruct
-    public void start() throws ServletException {
-        undertow = configure().build();
-        undertow.start();
+        manager.deploy();                
+        encodingHandler.setNext(manager.start());
+        builder.setHandler(firstHandler).build().start();
     }
     
     @PreDestroy
     public void stop() {
         undertow.stop();
     }
-    
+
     private static class CompressibleMimeTypePredicate implements Predicate {
         private final List<MimeType> mimeTypes;
 
@@ -222,7 +210,7 @@ public class UndertowConfig {
         @Override
         public boolean resolve(HttpServerExchange value) {
             String contentType = value.getResponseHeaders().getFirst("Content-Type");
-            
+
             if (contentType != null) {
                 for (MimeType mimeType : this.mimeTypes) {
                     if (mimeType.isCompatibleWith(MimeTypeUtils.parseMimeType(contentType))) {
@@ -230,7 +218,7 @@ public class UndertowConfig {
                     }
                 }
             }
-            
+
             return false;
         }
     }
