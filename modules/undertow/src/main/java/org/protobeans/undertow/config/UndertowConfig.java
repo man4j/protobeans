@@ -92,6 +92,17 @@ public class UndertowConfig {
                       .setDefaultSessionTimeout(sessionTimeout)
                       .addWelcomePage(welcomePage)
                       .addMimeMapping(new MimeMapping("jsf", "application/xhtml+xml"))
+                      .addMimeMapping(new MimeMapping("ttf", "application/font-sfnt"))
+                      .addMimeMapping(new MimeMapping("woff", "application/font-woff"))
+                      .addMimeMapping(new MimeMapping("woff2", "application/font-woff2"))
+                      .addMimeMapping(new MimeMapping("eot", "application/vnd.ms-fontobject"))
+                      .addMimeMapping(new MimeMapping("eot?#iefix", "application/vnd.ms-fontobject"))
+                      .addMimeMapping(new MimeMapping("svg", "image/svg+xml"))
+                      .addMimeMapping(new MimeMapping("svg#exosemibold", "image/svg+xml"))
+                      .addMimeMapping(new MimeMapping("svg#exobolditalic", "image/svg+xml"))
+                      .addMimeMapping(new MimeMapping("svg#exomedium", "image/svg+xml"))
+                      .addMimeMapping(new MimeMapping("svg#exoregular", "image/svg+xml"))
+                      .addMimeMapping(new MimeMapping("svg#fontawesomeregular", "image/svg+xml"))
                       .setResourceManager(new ClassPathResourceManager(this.getClass().getClassLoader(), resourcesPath))
                       .setDefaultMultipartConfig(new MultipartConfigElement(uploadLocation, maxFileSize, maxRequestSize, fileSizeThreshold));
 

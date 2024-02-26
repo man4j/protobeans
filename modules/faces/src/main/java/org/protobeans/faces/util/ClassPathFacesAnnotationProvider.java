@@ -19,7 +19,7 @@ public class ClassPathFacesAnnotationProvider extends AnnotationProvider {
         @SuppressWarnings("unchecked")
         Set<Class<? extends Annotation>> facesAnnotations = (Set<Class<? extends Annotation>>) servletContext.getAttribute(ANNOTATED_CLASSES);
 
-        Reflections reflections = new Reflections("com.equiron", "org.omnifaces");
+        Reflections reflections = new Reflections("com.equiron", "org.omnifaces", "org.primefaces");
 
         Map<Class<? extends Annotation>, Set<Class<?>>> map = new HashMap<>();
 
