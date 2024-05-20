@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-parent</artifactId>
-  <version>1.1.2</version>
+  <version>1.1.3</version>
   <packaging>pom</packaging>
 
   <properties>
@@ -12,23 +12,17 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
 
-    <version.spring>5.3.19</version.spring>
-    <version.spring.security>5.6.2</version.spring.security>
-    <version.jackson>2.13.2</version.jackson>
+    <version.spring>5.3.35</version.spring>
+    <version.spring.security>5.8.12</version.spring.security>
+    <version.jackson>2.13.5</version.jackson>
   </properties>
 
   <modules>
     <module>modules/core</module>
-    <module>modules/postgresql</module>
-    <module>modules/cockroachdb</module>
-    <module>modules/clickhouse</module>
-    <module>modules/couchdb</module>
     <module>modules/freemarker</module>
     <module>modules/i18n</module>
     <module>modules/undertow</module>
     <module>modules/mvc</module>
-    <module>modules/mail</module>
-    <module>modules/scheduler</module>
     <module>modules/security</module>
   </modules>
 
@@ -36,36 +30,13 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.11</version>
+      <version>1.5.6</version>
     </dependency>
 
     <dependency>
       <groupId>org.codehaus.janino</groupId>
       <artifactId>janino</artifactId>
-      <version>3.1.6</version>
-    </dependency>
-
-    <!-- JUnit -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.8.2</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.junit.platform</groupId>
-      <artifactId>junit-platform-launcher</artifactId>
-      <version>1.8.2</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- for Spring MVC TestFramework -->
-    <dependency>
-      <groupId>org.skyscreamer</groupId>
-      <artifactId>jsonassert</artifactId>
-      <version>1.5.0</version>
-      <scope>test</scope>
+      <version>3.1.12</version>
     </dependency>
   </dependencies>
 
@@ -94,7 +65,7 @@
       <dependency>
         <groupId>org.springdoc</groupId>
         <artifactId>springdoc-openapi-ui</artifactId>
-        <version>1.6.7</version>
+        <version>1.6.15</version>
       </dependency>
 
       <!-- Jackson -->
@@ -114,7 +85,7 @@
       <dependency>
         <groupId>org.hibernate.validator</groupId>
         <artifactId>hibernate-validator</artifactId>
-        <version>6.2.3.Final</version>
+        <version>6.2.5.Final</version>
       </dependency>
 
       <dependency>
@@ -133,14 +104,7 @@
       <dependency>
         <groupId>net.logstash.logback</groupId>
         <artifactId>logstash-logback-encoder</artifactId>
-        <version>7.1.1</version>
-      </dependency>
-
-      <!-- Mail -->
-      <dependency>
-        <groupId>com.sun.mail</groupId>
-        <artifactId>javax.mail</artifactId>
-        <version>1.6.2</version>
+        <version>7.4</version>
       </dependency>
 
       <!-- Common annotations -->
@@ -148,34 +112,6 @@
         <groupId>javax.annotation</groupId>
         <artifactId>javax.annotation-api</artifactId>
         <version>1.3.2</version>
-      </dependency>
-
-      <!-- HikariCP -->
-      <dependency>
-        <groupId>com.zaxxer</groupId>
-        <artifactId>HikariCP</artifactId>
-        <version>5.0.1</version>
-      </dependency>
-
-      <!-- PostgreSQL -->
-      <dependency>
-        <groupId>org.postgresql</groupId>
-        <artifactId>postgresql</artifactId>
-        <version>42.3.4</version>
-      </dependency>
-
-      <!-- ClickHouse -->
-      <dependency>
-        <groupId>com.clickhouse</groupId>
-        <artifactId>clickhouse-jdbc</artifactId>
-        <version>0.3.2-patch8</version>
-      </dependency>
-
-      <!-- Flyway -->
-      <dependency>
-        <groupId>org.flywaydb</groupId>
-        <artifactId>flyway-core</artifactId>
-        <version>8.5.8</version>
       </dependency>
 
       <!-- Servlet API -->
@@ -189,7 +125,7 @@
       <dependency>
         <groupId>io.undertow</groupId>
         <artifactId>undertow-servlet</artifactId>
-        <version>2.2.17.Final</version>
+        <version>2.2.32.Final</version>
       </dependency>
 
       <!-- Freemarker -->
@@ -197,45 +133,6 @@
         <groupId>org.freemarker</groupId>
         <artifactId>freemarker</artifactId>
         <version>2.3.31</version>
-      </dependency>
-
-      <!-- Fileupload -->
-      <dependency>
-        <groupId>commons-fileupload</groupId>
-        <artifactId>commons-fileupload</artifactId>
-        <version>1.4</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-text</artifactId>
-        <version>1.9</version>
-      </dependency>
-
-      <!-- CouchDB -->
-      <dependency>
-        <groupId>com.equiron</groupId>
-        <artifactId>async-couchdb-client</artifactId>
-        <version>5.1.10-3.2.0</version>
-      </dependency>
-
-      <!-- Hibernate -->
-      <dependency>
-        <groupId>org.hibernate</groupId>
-        <artifactId>hibernate-core</artifactId>
-        <version>5.5.9.Final</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.vladmihalcea</groupId>
-        <artifactId>hibernate-types-55</artifactId>
-        <version>2.16.1</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.springframework.data</groupId>
-        <artifactId>spring-data-jpa</artifactId>
-        <version>2.6.3</version>
       </dependency>
 
       <!-- Spring -->
@@ -253,37 +150,13 @@
 
       <dependency>
         <groupId>org.springframework</groupId>
-        <artifactId>spring-orm</artifactId>
-        <version>${version.spring}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-jdbc</artifactId>
-        <version>${version.spring}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
         <version>${version.spring}</version>
       </dependency>
 
       <dependency>
         <groupId>org.springframework</groupId>
-        <artifactId>spring-tx</artifactId>
-        <version>${version.spring}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.springframework</groupId>
         <artifactId>spring-web</artifactId>
-        <version>${version.spring}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-test</artifactId>
         <version>${version.spring}</version>
       </dependency>
 
@@ -305,7 +178,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-source-plugin</artifactId>
-        <version>3.2.1</version>
+        <version>3.3.1</version>
         <executions>
           <execution>
             <id>attach-sources</id>
@@ -317,16 +190,8 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M6</version>
-        <configuration>
-          <skipTests>true</skipTests>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
+        <version>3.13.0</version>
         <configuration>
           <compilerArgs>
             <arg>-parameters</arg>
