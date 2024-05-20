@@ -54,13 +54,6 @@
         <version>${project.version}</version>
       </dependency>
 
-      <!-- JAXB -->
-      <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-impl</artifactId>
-        <version>3.0.2</version>
-      </dependency>
-
       <!-- Swagger -->
       <dependency>
         <groupId>org.springdoc</groupId>
