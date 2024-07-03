@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Executors;
 
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.undertow.annotation.EnableUndertow;
@@ -104,7 +105,8 @@ public class UndertowConfig {
                       .addMimeMapping(new MimeMapping("svg#exoregular", "image/svg+xml"))
                       .addMimeMapping(new MimeMapping("svg#fontawesomeregular", "image/svg+xml"))
                       .setResourceManager(new ClassPathResourceManager(this.getClass().getClassLoader(), resourcesPath))
-                      .setDefaultMultipartConfig(new MultipartConfigElement(uploadLocation, maxFileSize, maxRequestSize, fileSizeThreshold));
+                      .setDefaultMultipartConfig(new MultipartConfigElement(uploadLocation, maxFileSize, maxRequestSize, fileSizeThreshold))
+                      .setExecutor(Executors.newVirtualThreadPerTaskExecutor());
 
         if (!errorPage.isEmpty()) {
             deploymentInfo.addErrorPage(Servlets.errorPage(errorPage));
