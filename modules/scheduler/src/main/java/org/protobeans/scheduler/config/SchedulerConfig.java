@@ -31,6 +31,7 @@ public class SchedulerConfig implements SchedulingConfigurer {
         scheduler.setRemoveOnCancelPolicy(true);
         scheduler.setWaitForTasksToCompleteOnShutdown(!interruptOnClose);
         scheduler.setThreadNamePrefix("ProtoBeansTaskScheduler-");
+        scheduler.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
         
         return scheduler;
     }
