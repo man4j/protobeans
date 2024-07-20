@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -31,6 +32,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 
 @ControllerAdvice
+@Order(100)
 public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     private static Logger logger = LoggerFactory.getLogger(ExceptionControllerAdvice.class);
     
@@ -57,8 +59,8 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     }
     
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Object> handleBusinessException(@SuppressWarnings("unused") NotFoundException ex) {
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Object> handleBusinessException(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(ex.getMessage()));
     }
     
     @ExceptionHandler(ConstraintViolationException.class)

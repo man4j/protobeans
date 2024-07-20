@@ -7,6 +7,8 @@ import java.util.Locale;
 
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.mvc.annotation.EnableMvc;
+import org.protobeans.mvc.controller.advice.ModelControllerAdvice;
+import org.protobeans.mvc.rest.advice.ExceptionControllerAdvice;
 import org.protobeans.mvc.util.FileUtils;
 import org.protobeans.mvc.util.FilterBean;
 import org.protobeans.mvc.util.GlobalModelAttribute;
@@ -54,7 +56,7 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 @Configuration
 @InjectFrom(EnableMvc.class)
 @Import(MvcValidatorConfig.class)
-@ComponentScan(basePackages = "org.protobeans.mvc.controller")
+@ComponentScan(basePackageClasses= {ModelControllerAdvice.class, ExceptionControllerAdvice.class})
 public class MvcConfig implements WebMvcConfigurer {
     private String resourcesPath = "static";
     
