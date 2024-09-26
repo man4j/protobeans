@@ -1,4 +1,4 @@
-package org.protobeans.mvc.rest.model;
+package org.protobeans.exchange.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

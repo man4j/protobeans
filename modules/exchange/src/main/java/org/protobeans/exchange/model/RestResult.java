@@ -1,4 +1,4 @@
-package org.protobeans.mvc.rest.model;
+package org.protobeans.exchange.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,5 +44,10 @@ public class RestResult {
     @JsonProperty("success")
     public boolean isSuccess() {
         return getFieldErrors().isEmpty() && getGlobalErrors().isEmpty();
+    }
+    
+    @Override
+    public String toString() {
+        return "Global errors: " + globalErrors.toString() + "\nField errors: " + fieldErrors.toString();
     }
 }

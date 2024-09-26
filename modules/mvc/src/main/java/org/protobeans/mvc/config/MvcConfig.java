@@ -1,11 +1,11 @@
 package org.protobeans.mvc.config;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import org.protobeans.core.annotation.InjectFrom;
+import org.protobeans.exchange.ProtobeansHttpInterfaceUtils;
 import org.protobeans.mvc.annotation.EnableMvc;
 import org.protobeans.mvc.controller.advice.ModelControllerAdvice;
 import org.protobeans.mvc.rest.advice.ExceptionControllerAdvice;
@@ -18,13 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.ResourceHttpMessageConverter;
-import org.springframework.http.converter.ResourceRegionHttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.WebApplicationInitializer;
@@ -40,16 +34,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.json.JsonReadFeature;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 
 
 @EnableWebMvc
@@ -85,22 +70,6 @@ public class MvcConfig implements WebMvcConfigurer {
         return MvcInitializer.class; 
     }
     
-    @Bean
-    public ObjectMapper mapper() {
-        return JsonMapper.builder().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                                   .configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS, true)
-                                   .visibility(PropertyAccessor.FIELD, Visibility.ANY)
-                                   .visibility(PropertyAccessor.GETTER, Visibility.NONE)
-                                   .visibility(PropertyAccessor.IS_GETTER, Visibility.NONE)
-                                   .visibility(PropertyAccessor.SETTER, Visibility.NONE)
-                                   .visibility(PropertyAccessor.CREATOR, Visibility.NONE)
-                                   .serializationInclusion(Include.NON_NULL)
-                                   .build()
-                                   .registerModule(new JavaTimeModule())
-                                   .registerModule(new ParameterNamesModule())
-                                   .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-    }
-    
     @Override
     public Validator getValidator() {
         return localValidatorFactoryBean;
@@ -133,26 +102,16 @@ public class MvcConfig implements WebMvcConfigurer {
     
     //=============================================================================
     
-    @Bean
-    HttpMessageConverter<?> jacksonMessageConverter() {
-        return new MappingJackson2HttpMessageConverter(mapper());
-    }
-    
-    @Bean
-    HttpMessageConverter<?> stringMessageConverter() {
-        return new StringHttpMessageConverter(StandardCharsets.UTF_8);
-    }
-    
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> defaultConverters) {
-        defaultConverters.add(new ByteArrayHttpMessageConverter());
-        defaultConverters.add(stringMessageConverter());
-        defaultConverters.add(new ResourceHttpMessageConverter());
-        defaultConverters.add(new ResourceRegionHttpMessageConverter());
-        defaultConverters.add(new AllEncompassingFormHttpMessageConverter());
-        defaultConverters.add(jacksonMessageConverter());
+        defaultConverters.addAll(ProtobeansHttpInterfaceUtils.protobeansConverters());
     }
-
+    
+    @Bean
+    public ObjectMapper mapper() {
+        return ProtobeansHttpInterfaceUtils.mapper();
+    }
+    
     //=============================================================================
     
     @Override

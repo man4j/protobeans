@@ -1,6 +1,6 @@
 package org.protobeans.security.advice;
 
-import org.protobeans.mvc.rest.model.RestResult;
+import org.protobeans.exchange.model.RestResult;
 import org.protobeans.security.model.AbstractProfile;
 import org.protobeans.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +33,11 @@ public class SecurityControllerAdvice {
     
     @ExceptionHandler(AuthorizationDeniedException.class)
     public ResponseEntity<Object> handleAuthorizationException(AuthorizationDeniedException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(ex.getMessage()));
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(ex.getMessage()));        
     }
     
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<Object> handleAuthorizationException(AuthenticationException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(ex.getMessage()));
+    public ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(ex.getMessage()));
     }
 }

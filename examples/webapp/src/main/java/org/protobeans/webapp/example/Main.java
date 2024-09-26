@@ -1,6 +1,5 @@
 package org.protobeans.webapp.example;
 
-import org.protobeans.feign.annotation.EnableFeign;
 import org.protobeans.freemarker.annotation.EnableFreeMarker;
 import org.protobeans.mail.annotation.EnableMail;
 import org.protobeans.mvc.annotation.EnableMvc;
@@ -16,9 +15,8 @@ import org.springframework.context.annotation.PropertySource;
 @EnableFreeMarker(devMode = "true")
 @EnableMvc
 @EnableSecurity
-@EnableFeign
 @EnableMail(host = "smtp.sendgrid.net", user = "apikey", password = "${emailPassword}")
-@EnablePostgreSql(showSql = "false", schema = "demo", dbHost = "127.0.0.1", dbPort = "5432", user = "postgres", password = "changeme", basePackages = {"org.protobeans.webapp.example"}, migrationsPath = "migrations")
+@EnablePostgreSql(showSql = "false", schema = "demo", dbHost = "127.0.0.1", dbPort = "25432", user = "postgres", password = "changeme", basePackages = {"org.protobeans.webapp.example"}, migrationsPath = "migrations")
 @ComponentScan(basePackages = "org.protobeans.webapp.example")
 @EnableSwagger3
 @PropertySource("classpath:application.properties")

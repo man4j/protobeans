@@ -100,7 +100,6 @@ public class SecurityConfig {
         }).addFilterBefore(new CharacterEncodingFilter(StandardCharsets.UTF_8.name(), true, true), ChannelProcessingFilter.class)
         .authenticationManager(authenticationManager(http));
 
-
         for (var configurer : securityDsl) {
             http.apply(configurer);
         }

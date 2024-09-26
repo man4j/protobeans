@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.protobeans.mvc.rest.exception.BusinessException;
-import org.protobeans.mvc.rest.exception.NotFoundException;
-import org.protobeans.mvc.rest.model.ProtobeansFieldError;
-import org.protobeans.mvc.rest.model.RestResult;
+import org.protobeans.exchange.exception.BusinessException;
+import org.protobeans.exchange.exception.NotFoundException;
+import org.protobeans.exchange.exception.RestResultException;
+import org.protobeans.exchange.model.ProtobeansFieldError;
+import org.protobeans.exchange.model.RestResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +59,19 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
                              .body(new RestResult(new ArrayList<>(), messages));
     }
     
+    @ExceptionHandler(RestResultException.class)
+    public ResponseEntity<Object> handleRestResultException(RestResultException ex) {
+        logger.warn(ex.getRestResult().getFieldErrors().toString());
+        logger.warn(ex.getRestResult().getGlobalErrors().toString());
+        
+        return ResponseEntity.status(ex.getHttpStatus())
+                             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                             .body(ex.getRestResult());
+    }
+    
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Object> handleBusinessException(NotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult(ex.getMessage()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new RestResult((ex.getMessage() == null || ex.getMessage().isBlank()) ? "Not found" : ex.getMessage()));
     }
     
     @ExceptionHandler(ConstraintViolationException.class)

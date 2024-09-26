@@ -12,9 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.protobeans.mvc.config.MvcInitializer;
 import org.protobeans.webapp.example.Main;
-import org.protobeans.webapp.example.api.ApiController;
-import org.protobeans.webapp.example.feign.AppApiFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.annotation.DirtiesContext;
@@ -26,17 +23,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import feign.auth.BasicAuthRequestInterceptor;
-
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes=Main.class)
 @WebAppConfiguration 
 @DirtiesContext
 public class SimpleControllerTest {
     private MockMvc mockMvc;
-    
-    @Autowired
-    private AppApiFactory appApiFactory;
     
     @BeforeEach
     public void initMockMvc() {
@@ -51,17 +43,11 @@ public class SimpleControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/signin")).andExpect(MockMvcResultMatchers.status().isOk());
     }
     
+    @SuppressWarnings("resource")
     @Test
     public void shouldWorkWithRest() throws InterruptedException, IOException {
         int statusCode = HttpClient.newHttpClient().send(HttpRequest.newBuilder(URI.create("http://localhost:8787/signin")).build(), BodyHandlers.discarding()).statusCode();
         
         Assertions.assertEquals(HttpStatus.OK.value(), statusCode);
-    }
-    
-    @Test
-    public void shoulWorkWithFeign() throws Exception {
-        ApiController api = appApiFactory.create("http://localhost:8787", new BasicAuthRequestInterceptor("mylonglongname@gmail.com", "123456"));
-        
-        Assertions.assertEquals("1.0", api.getVersion());
     }
 }

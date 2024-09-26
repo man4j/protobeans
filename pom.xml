@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-parent</artifactId>
-  <version>4.2</version>
+  <version>6.1</version>
   <packaging>pom</packaging>
 
   <properties>
@@ -28,7 +28,7 @@
     <module>modules/mail</module>
     <module>modules/scheduler</module>
     <module>modules/security</module>
-    <module>modules/feign</module>
+    <module>modules/exchange</module>
   </modules>
 
   <dependencies>
@@ -85,6 +85,12 @@
       <dependency>
         <groupId>org.protobeans</groupId>
         <artifactId>protobeans-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-exchange</artifactId>
         <version>${project.version}</version>
       </dependency>
 
@@ -306,6 +312,12 @@
       <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-web</artifactId>
+        <version>${version.spring.security}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-core</artifactId>
         <version>${version.spring.security}</version>
       </dependency>
 

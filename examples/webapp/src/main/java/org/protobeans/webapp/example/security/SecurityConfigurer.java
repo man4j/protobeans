@@ -2,7 +2,7 @@ package org.protobeans.webapp.example.security;
 
 import java.io.IOException;
 
-import org.protobeans.mvc.rest.model.RestResult;
+import org.protobeans.exchange.model.RestResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -60,10 +60,10 @@ public class SecurityConfigurer extends AbstractHttpConfigurer<SecurityConfigure
                 }
             };
             
-            c.defaultAccessDeniedHandlerFor(basicHandler, new AntPathRequestMatcher("/api/**"))
+            c.defaultAccessDeniedHandlerFor(basicHandler, new AntPathRequestMatcher("/api/**"))             
              .defaultAccessDeniedHandlerFor(uiHandler, new AntPathRequestMatcher("/**"))           
              .defaultAuthenticationEntryPointFor(basicAuthenticationEntryPoint, new AntPathRequestMatcher("/api/**"))
              .defaultAuthenticationEntryPointFor(uiAuthenticationEntryPoint, new AntPathRequestMatcher("/**"));
-        });
+        }).csrf(csrf -> csrf.ignoringRequestMatchers(new AntPathRequestMatcher("/**")));
     }
 }

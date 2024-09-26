@@ -9,7 +9,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.release>21</maven.compiler.release>
-    <protobeans.version>4.0</protobeans.version>
+    <protobeans.version>6.1</protobeans.version>
     <version.spring>6.1.10</version.spring>
     <version.spring.security>6.3.1</version.spring.security>
     <version.jackson>2.17.1</version.jackson>
@@ -19,6 +19,7 @@
     <module>freemarker</module>
     <module>i18n</module>
     <module>webapp</module>
+    <module>client</module>
     <module>scheduler</module>
     <module>undertow</module>
   </modules>
@@ -70,6 +71,12 @@
     <dependencies>
       <dependency>
         <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-http-client</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+      </dependency>
+    
+      <dependency>
+        <groupId>org.protobeans</groupId>
         <artifactId>protobeans-postgresql</artifactId>
         <version>${protobeans.version}</version>
       </dependency>
@@ -106,7 +113,7 @@
 
       <dependency>
         <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-feign</artifactId>
+        <artifactId>protobeans-exchange</artifactId>
         <version>${protobeans.version}</version>
       </dependency>
 

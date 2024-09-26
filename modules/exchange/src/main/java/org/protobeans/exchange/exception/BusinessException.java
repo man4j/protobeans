@@ -1,4 +1,4 @@
-package org.protobeans.mvc.rest.exception;
+package org.protobeans.exchange.exception;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
