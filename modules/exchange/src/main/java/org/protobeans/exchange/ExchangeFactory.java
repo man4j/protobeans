@@ -22,6 +22,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
@@ -47,38 +48,17 @@ public class ExchangeFactory {
         };
     
     
-    public static <T> T create(String url, Class<T> cls) {
+    public <T> T create(String url, Class<T> cls) {
         return create(url, cls, null, null);
     }
     
-    public static <T> T create(String url, Class<T> cls, String username, String password) {
+    public <T> T create(String url, Class<T> cls, String username, String password) {
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(RestClientAdapter.create(restClient(url, username, password))).build();
         return factory.createClient(cls);
     }
     
-    @SuppressWarnings("resource")
-    private static RestClient restClient(String baseUrl, String username, String password) {
-        SSLContext sslContext;
-        
-        try {
-            System.setProperty("jdk.internal.httpclient.disableHostnameVerification", "true");
-            sslContext = Sneaky.sneak(() -> SSLContext.getInstance("TLS"));
-            sslContext.init(null, trustAllCerts, new SecureRandom());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        
-        SSLParameters sslParams = new SSLParameters();
-        sslParams.setEndpointIdentificationAlgorithm("");
-        
-        HttpClient httpClient = HttpClient.newBuilder()
-                                          .connectTimeout(Duration.ofSeconds(30))
-                                          .sslContext(sslContext)
-                                          .sslParameters(sslParams)
-                                          .followRedirects(Redirect.ALWAYS)
-                                          .build();
-        
-        var errorHandler = new DefaultResponseErrorHandler() {
+    protected ResponseErrorHandler getErrorhandler() {
+        return new DefaultResponseErrorHandler() {
             @Override
             protected void handleError(ClientHttpResponse response, HttpStatusCode statusCode) throws java.io.IOException {
                 try {
@@ -102,6 +82,31 @@ public class ExchangeFactory {
                 }
             }
         };
+    }
+    
+    @SuppressWarnings("resource")
+    private RestClient restClient(String baseUrl, String username, String password) {
+        SSLContext sslContext;
+        
+        try {
+            System.setProperty("jdk.internal.httpclient.disableHostnameVerification", "true");
+            sslContext = Sneaky.sneak(() -> SSLContext.getInstance("TLS"));
+            sslContext.init(null, trustAllCerts, new SecureRandom());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        
+        SSLParameters sslParams = new SSLParameters();
+        sslParams.setEndpointIdentificationAlgorithm("");
+        
+        HttpClient httpClient = HttpClient.newBuilder()
+                                          .connectTimeout(Duration.ofSeconds(30))
+                                          .sslContext(sslContext)
+                                          .sslParameters(sslParams)
+                                          .followRedirects(Redirect.ALWAYS)
+                                          .build();
+        
+        var errorHandler = getErrorhandler();
         
         var msgConverters = ProtobeansHttpInterfaceUtils.protobeansConverters();
         

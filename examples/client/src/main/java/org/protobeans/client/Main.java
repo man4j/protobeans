@@ -10,7 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 public class Main {
     @SuppressWarnings("unused")
     public static void main(String[] args) {
-        var api = ExchangeFactory.create("http://localhost:8787", ApiExchange.class, "mylonglongname@gmail.com", "123456");
+        var api = new ExchangeFactory().create("http://localhost:8787", ApiExchange.class, "mylonglongname@gmail.com", "123456");
         
         try {
             api.saveDocument(new Document("123"));
@@ -42,7 +42,7 @@ public class Main {
             System.out.println("Авторизация не пройдена"); // просто логируем
         }
         
-        api = ExchangeFactory.create("http://localhost:8787", ApiExchange.class, "fake_name", "fake_password");
+        api = new ExchangeFactory().create("http://localhost:8787", ApiExchange.class, "fake_name", "fake_password");
         
         try {
             api.saveDocument(new Document("123"));
