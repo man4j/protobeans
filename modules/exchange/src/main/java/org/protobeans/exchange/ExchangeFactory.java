@@ -24,6 +24,7 @@ import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClient.Builder;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
@@ -49,7 +50,12 @@ public class ExchangeFactory {
     
     
     public <T> T create(String url, Class<T> cls) {
-        return create(url, cls, null, null);
+        return create(url, cls, null);
+    }
+    
+    public <T> T create(String url, Class<T> cls, String token) {
+        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(RestClientAdapter.create(restClient(url, token))).build();
+        return factory.createClient(cls);
     }
     
     public <T> T create(String url, Class<T> cls, String username, String password) {
@@ -84,8 +90,28 @@ public class ExchangeFactory {
         };
     }
     
-    @SuppressWarnings("resource")
+    private RestClient restClient(String baseUrl, String token) {
+        var builder = builder(baseUrl);
+        
+        if (token != null) {
+            builder.defaultHeader("Authorization", "Bearer " + token);
+        }
+        
+        return builder.build();
+    }
+    
     private RestClient restClient(String baseUrl, String username, String password) {
+        var builder = builder(baseUrl);
+        
+        if (username != null) {
+            builder.defaultHeader("Authorization", "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes()));
+        }
+        
+        return builder.build();
+    }
+    
+    @SuppressWarnings("resource")
+    private Builder builder(String baseUrl) {
         SSLContext sslContext;
         
         try {
@@ -120,11 +146,6 @@ public class ExchangeFactory {
                                           .requestFactory(new JdkClientHttpRequestFactory(httpClient))
                                           .defaultStatusHandler(errorHandler)
                                           .baseUrl(baseUrl);
-        
-        if (username != null) {
-            builder.defaultHeader("Authorization", "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes()));
-        }
-        
-        return builder.build();
+        return builder;
     }
 }
