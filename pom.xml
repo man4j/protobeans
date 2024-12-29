@@ -196,25 +196,8 @@
 
   <distributionManagement>
     <repository>
-      <id>myMavenRepo</id>
-      <url>${myMavenRepoWriteUrl}</url>
+      <id>protobeans</id>
+      <url>https://maven.pkg.github.com/man4j/protobeans</url>
     </repository>
   </distributionManagement>
-
-  <repositories>
-    <repository>
-      <id>myMavenRepo</id>
-      <url>https://mymavenrepo.com/repo/HUmiexLcoT08FY5Q1CPx/</url>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
-        <checksumPolicy>warn</checksumPolicy>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
-        <checksumPolicy>warn</checksumPolicy>
-      </releases>
-    </repository>
-  </repositories>
 </project>
