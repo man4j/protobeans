@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
+import org.springframework.http.converter.ResourceRegionHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.Validator;
@@ -85,17 +86,7 @@ public class MvcConfig implements WebMvcConfigurer {
                                    .serializationInclusion(Include.NON_NULL)
                                    .build();
     }
-    
-    @Bean
-    HttpMessageConverter<?> jacksonMessageConverter() {
-        return new MappingJackson2HttpMessageConverter(mapper());
-    }
-    
-    @Bean
-    HttpMessageConverter<?> stringMessageConverter() {
-        return new StringHttpMessageConverter(StandardCharsets.UTF_8);
-    }
-    
+        
     @Override
     public Validator getValidator() {
         return localValidatorFactoryBean;
@@ -132,12 +123,23 @@ public class MvcConfig implements WebMvcConfigurer {
         }
     }
     
+    @Bean
+    HttpMessageConverter<?> jacksonMessageConverter() {
+        return new MappingJackson2HttpMessageConverter(mapper());
+    }
+    
+    @Bean
+    HttpMessageConverter<?> stringMessageConverter() {
+        return new StringHttpMessageConverter(StandardCharsets.UTF_8);
+    }
+    
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> defaultConverters) {
-        defaultConverters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
-        defaultConverters.add(new MappingJackson2HttpMessageConverter(mapper()));
         defaultConverters.add(new ByteArrayHttpMessageConverter());
+        defaultConverters.add(stringMessageConverter());
         defaultConverters.add(new ResourceHttpMessageConverter());
+        defaultConverters.add(new ResourceRegionHttpMessageConverter());
+        defaultConverters.add(jacksonMessageConverter());        
     }
         
     @Override
