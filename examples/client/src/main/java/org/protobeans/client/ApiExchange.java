@@ -23,9 +23,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 
 // @RestController <----------- обратите внимание эта аннотация больше не нужна
-@Validated
-@OpenAPIDefinition(info = @Info(title = "API", version = "1.0"), security = @SecurityRequirement(name = "basicAuth"))
 @SecurityScheme(name = "basicAuth", type = SecuritySchemeType.HTTP, scheme = "Basic")
+@Validated
+@OpenAPIDefinition(info = @Info(title = "API", version = "1.0"))
+@SecurityRequirement(name = "basicAuth")
 @Tag(name = "Documents API")
 @ApiResponse(responseCode = "200", description = "Successful")
 @ApiResponse(responseCode = "401", description = "Unauthrorized", content = @Content(schema = @Schema(implementation = RestResult.class)))

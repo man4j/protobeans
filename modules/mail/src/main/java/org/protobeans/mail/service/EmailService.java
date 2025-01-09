@@ -5,7 +5,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 public class EmailService {
-    @Autowired
+    @Autowired(required = false)
     private JavaMailSender mailSender;
     
     public void sendMessage(String email, String subject, String text, String emailSendFrom, String emailSendFromTitle) {

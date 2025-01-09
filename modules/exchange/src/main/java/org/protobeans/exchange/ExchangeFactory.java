@@ -1,5 +1,7 @@
 package org.protobeans.exchange;
 
+import java.io.IOException;
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpClient.Redirect;
 import java.security.SecureRandom;
@@ -14,6 +16,7 @@ import javax.net.ssl.X509TrustManager;
 import org.protobeans.exchange.exception.NotFoundException;
 import org.protobeans.exchange.exception.RestResultException;
 import org.protobeans.exchange.model.RestResult;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.client.ClientHttpResponse;
@@ -66,9 +69,9 @@ public class ExchangeFactory {
     protected ResponseErrorHandler getErrorhandler() {
         return new DefaultResponseErrorHandler() {
             @Override
-            protected void handleError(ClientHttpResponse response, HttpStatusCode statusCode) throws java.io.IOException {
+            protected void handleError(ClientHttpResponse response, HttpStatusCode statusCode, URI url, HttpMethod method) throws IOException {
                 try {
-                    super.handleError(response, statusCode);
+                    super.handleError(response);
                 } catch (HttpStatusCodeException ex) {
                     if (statusCode == HttpStatus.FORBIDDEN) {
                         throw new AccessDeniedException(response.getStatusText());

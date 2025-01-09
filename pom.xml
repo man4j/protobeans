@@ -2,20 +2,17 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.protobeans</groupId>
   <artifactId>protobeans-parent</artifactId>
-  <version>6.1.14.sp2</version>
+  <version>6.2.1</version>
   <packaging>pom</packaging>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-    <maven.compiler.source>21</maven.compiler.source>
-    <maven.compiler.target>21</maven.compiler.target>
-
-    <version.spring>6.1.14</version.spring>
-    <version.spring.security>6.3.4</version.spring.security>
-    <version.spring.data>3.3.5</version.spring.data>
-    <version.jackson>2.18.1</version.jackson>
+    <maven.compiler.release>21</maven.compiler.release>
+    <version.spring>6.2.1</version.spring>
+    <version.spring.security>6.4.2</version.spring.security>
+    <version.spring.data>3.4.1</version.spring.data>
+    <version.jackson>2.18.2</version.jackson>
   </properties>
 
   <modules>
@@ -47,7 +44,7 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.5.12</version>
+      <version>1.5.16</version>
     </dependency>
 
     <dependency>
@@ -60,14 +57,14 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.11.3</version>
+      <version>5.11.4</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-launcher</artifactId>
-      <version>1.11.3</version>
+      <version>1.11.4</version>
       <scope>test</scope>
     </dependency>
 
@@ -110,13 +107,13 @@
       <dependency>
         <groupId>org.springdoc</groupId>
         <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-        <version>2.6.0</version>
+        <version>2.8.1</version>
       </dependency>
 
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-autoconfigure</artifactId>
-        <version>3.3.5</version>
+        <version>3.4.1</version>
       </dependency>
 
       <!-- Jackson -->
@@ -142,7 +139,7 @@
       <dependency>
         <groupId>org.hibernate.validator</groupId>
         <artifactId>hibernate-validator</artifactId>
-        <version>8.0.1.Final</version>
+        <version>8.0.2.Final</version>
       </dependency>
       
       <!-- for ResourceBundleMessageInterpolator -->
@@ -156,14 +153,14 @@
       <dependency>
         <groupId>net.logstash.logback</groupId>
         <artifactId>logstash-logback-encoder</artifactId>
-        <version>7.4</version>
+        <version>8.0</version>
       </dependency>
 
       <!-- Guava -->
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
-        <version>33.3.1-jre</version>
+        <version>33.4.0-jre</version>
       </dependency>
 
       <!-- Mail -->
@@ -177,7 +174,7 @@
       <dependency>
         <groupId>com.zaxxer</groupId>
         <artifactId>HikariCP</artifactId>
-        <version>6.1.0</version>
+        <version>6.2.1</version>
       </dependency>
 
       <!-- PostgreSQL -->
@@ -191,7 +188,7 @@
       <dependency>
         <groupId>org.flywaydb</groupId>
         <artifactId>flyway-database-postgresql</artifactId>
-        <version>10.21.0</version>
+        <version>11.1.1</version>
       </dependency>
 
       <!-- Undertow -->
@@ -226,20 +223,20 @@
       <dependency>
         <groupId>org.freemarker</groupId>
         <artifactId>freemarker</artifactId>
-        <version>2.3.33</version>
+        <version>2.3.34</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-text</artifactId>
-        <version>1.12.0</version>
+        <version>1.13.0</version>
       </dependency>
 
       <!-- Hibernate -->
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-core</artifactId>
-        <version>6.6.2.Final</version>
+        <version>6.6.4.Final</version>
       </dependency>
 
       <dependency>
