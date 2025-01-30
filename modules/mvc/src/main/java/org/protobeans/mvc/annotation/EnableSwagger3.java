@@ -20,7 +20,6 @@ import org.springdoc.webmvc.ui.SwaggerConfig;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -44,7 +43,6 @@ import org.springframework.context.annotation.PropertySource;
          })
 @Configuration
 @EnableConfigurationProperties
-@PropertySource("classpath:swagger.properties")
 public @interface EnableSwagger3 {
     //empty
 }

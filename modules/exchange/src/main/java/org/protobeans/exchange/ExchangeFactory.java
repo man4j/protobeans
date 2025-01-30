@@ -71,7 +71,7 @@ public class ExchangeFactory {
             @Override
             protected void handleError(ClientHttpResponse response, HttpStatusCode statusCode, URI url, HttpMethod method) throws IOException {
                 try {
-                    super.handleError(response);
+                    super.handleError(response, statusCode, url, method);
                 } catch (HttpStatusCodeException ex) {
                     if (statusCode == HttpStatus.FORBIDDEN) {
                         throw new AccessDeniedException(response.getStatusText());
