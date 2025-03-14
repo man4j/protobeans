@@ -3,24 +3,18 @@
 
   <parent>
     <groupId>org.protobeans</groupId>
-    <artifactId>protobeans-parent</artifactId>
-    <version>6.2.1.SP1</version>
-    <relativePath>../../pom.xml</relativePath>
+    <artifactId>examples-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>protobeans-scheduler</artifactId>
+  <artifactId>protobeans-kafka-example</artifactId>
   <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
       <groupId>org.protobeans</groupId>
-      <artifactId>protobeans-core</artifactId>
-    </dependency>
-    
-    <!-- Jakarta annotations -->
-    <dependency>
-      <groupId>jakarta.annotation</groupId>
-      <artifactId>jakarta.annotation-api</artifactId>
+      <artifactId>protobeans-kafka</artifactId>
     </dependency>
   </dependencies>
 </project>

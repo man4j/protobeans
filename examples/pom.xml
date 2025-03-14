@@ -22,6 +22,7 @@
     <module>client</module>
     <module>scheduler</module>
     <module>undertow</module>
+    <module>kafka</module>
   </modules>
 
   <dependencies>
@@ -74,7 +75,7 @@
         <artifactId>protobeans-http-client</artifactId>
         <version>0.0.1-SNAPSHOT</version>
       </dependency>
-    
+
       <dependency>
         <groupId>org.protobeans</groupId>
         <artifactId>protobeans-postgresql</artifactId>
@@ -90,6 +91,12 @@
       <dependency>
         <groupId>org.protobeans</groupId>
         <artifactId>protobeans-mail</artifactId>
+        <version>${protobeans.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-kafka</artifactId>
         <version>${protobeans.version}</version>
       </dependency>
 
@@ -122,13 +129,13 @@
         <artifactId>protobeans-scheduler</artifactId>
         <version>${protobeans.version}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>jakarta.validation</groupId>
         <artifactId>jakarta.validation-api</artifactId>
         <version>3.1.0</version>
       </dependency>
-    
+
       <dependency>
         <groupId>io.swagger.core.v3</groupId>
         <artifactId>swagger-annotations-jakarta</artifactId>

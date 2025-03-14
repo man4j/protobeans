@@ -26,6 +26,7 @@
     <module>modules/scheduler</module>
     <module>modules/security</module>
     <module>modules/exchange</module>
+    <module>modules/kafka</module>
   </modules>
 
   <dependencies>
@@ -291,6 +292,18 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-tx</artifactId>
+        <version>${version.spring}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.springframework.kafka</groupId>
+        <artifactId>spring-kafka</artifactId>
+        <version>3.3.2</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-messaging</artifactId>
         <version>${version.spring}</version>
       </dependency>
 
