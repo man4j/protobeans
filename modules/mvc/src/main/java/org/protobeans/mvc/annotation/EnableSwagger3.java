@@ -9,7 +9,6 @@ import org.springdoc.core.configuration.SpringDocConfiguration;
 import org.springdoc.core.configuration.SpringDocPageableConfiguration;
 import org.springdoc.core.configuration.SpringDocSecurityConfiguration;
 import org.springdoc.core.configuration.SpringDocSortConfiguration;
-import org.springdoc.core.configuration.SpringDocUIConfiguration;
 import org.springdoc.core.properties.SpringDocConfigProperties;
 import org.springdoc.core.properties.SwaggerUiConfigParameters;
 import org.springdoc.core.properties.SwaggerUiConfigProperties;
@@ -38,8 +37,7 @@ import org.springframework.context.annotation.Import;
          SwaggerConfig.class,
          SwaggerUiConfigProperties.class,
          SwaggerUiConfigParameters.class,
-         SwaggerUiOAuthProperties.class,
-         SpringDocUIConfiguration.class
+         SwaggerUiOAuthProperties.class
          })
 @Configuration
 @EnableConfigurationProperties

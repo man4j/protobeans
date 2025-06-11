@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.protobeans</groupId>
     <artifactId>protobeans-parent</artifactId>
-    <version>6.2.1.SP1</version>
+    <version>6.2.7.SP1</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
@@ -16,7 +16,7 @@
       <groupId>org.protobeans</groupId>
       <artifactId>protobeans-core</artifactId>
     </dependency>
-    
+
     <!-- Jakarta annotations -->
     <dependency>
       <groupId>jakarta.annotation</groupId>

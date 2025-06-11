@@ -1,0 +1,95 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.protobeans</groupId>
+    <artifactId>protobeans-parent</artifactId>
+    <version>6.2.7</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>protobeans-crypto</artifactId>
+  <packaging>jar</packaging>
+  
+  <properties>
+    <version.ru.crypto>2.0.45042-A</version.ru.crypto>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.protobeans</groupId>
+      <artifactId>protobeans-core</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcpkix-jdk15on</artifactId>
+      <version>1.60</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk15on</artifactId>
+      <version>1.60</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>ru.crypto</groupId>
+      <artifactId>cades</artifactId>
+      <version>${version.ru.crypto}</version>
+    </dependency>
+        
+    <dependency>
+      <groupId>ru.crypto</groupId>
+      <artifactId>ades-core</artifactId>
+      <version>${version.ru.crypto}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ru.crypto</groupId>
+      <artifactId>jcp</artifactId>
+      <version>${version.ru.crypto}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ru.crypto</groupId>
+      <artifactId>asn1p</artifactId>
+      <version>${version.ru.crypto}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ru.crypto</groupId>
+      <artifactId>asn1rt</artifactId>
+      <version>${version.ru.crypto}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ru.crypto</groupId>
+      <artifactId>jcprevcheck</artifactId>
+      <version>${version.ru.crypto}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ru.crypto</groupId>
+      <artifactId>jcprevtools</artifactId>
+      <version>${version.ru.crypto}</version>
+    </dependency>
+  </dependencies>
+  
+  <repositories>
+    <repository>
+      <id>crypto</id>
+      <url>https://maven.pkg.github.com/man4j/crypto</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </releases>
+    </repository>
+  </repositories>
+</project>

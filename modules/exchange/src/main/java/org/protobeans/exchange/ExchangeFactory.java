@@ -93,7 +93,7 @@ public class ExchangeFactory {
         };
     }
     
-    private RestClient restClient(String baseUrl, String token) {
+    protected RestClient restClient(String baseUrl, String token) {
         var builder = builder(baseUrl);
         
         if (token != null) {
@@ -103,7 +103,7 @@ public class ExchangeFactory {
         return builder.build();
     }
     
-    private RestClient restClient(String baseUrl, String username, String password) {
+    protected RestClient restClient(String baseUrl, String username, String password) {
         var builder = builder(baseUrl);
         
         if (username != null) {
@@ -114,7 +114,7 @@ public class ExchangeFactory {
     }
     
     @SuppressWarnings("resource")
-    private Builder builder(String baseUrl) {
+    protected Builder builder(String baseUrl) {
         SSLContext sslContext;
         
         try {
