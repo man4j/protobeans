@@ -19,7 +19,9 @@ public class SignatureInfo {
     
     private String signedData;
     
-    public SignatureInfo(String serial, String subject, String inn, long expiredDate, long date, String email, String fio, boolean legal, String signedData) {
+    private boolean testCert;
+    
+    public SignatureInfo(String serial, String subject, String inn, long expiredDate, long date, String email, String fio, boolean legal, String signedData, boolean testCert) {
         this.serial = serial;
         this.subject = subject;
         this.inn = inn;
@@ -29,6 +31,7 @@ public class SignatureInfo {
         this.fio = fio;
         this.legal = legal;
         this.signedData = signedData;
+        this.testCert = testCert;
     }
 
     public String getSerial() {
@@ -101,6 +104,10 @@ public class SignatureInfo {
 
     public void setSignedData(String signedData) {
         this.signedData = signedData;
+    }
+    
+    public boolean isTestCert() {
+        return testCert;
     }
 }
 

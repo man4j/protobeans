@@ -38,7 +38,9 @@ public class SignatureHelper {
                 long date = certificateHolder.getNotBefore().toInstant().getEpochSecond();
                 X500Name subject = certificateHolder.getSubject();
                 var signedContent = new String((byte[]) cms.getSignedContent().getContent());
-                return new SignatureInfo(serial, getCn(subject), getInn(subject), expiredDate, date, getEmail(subject), getFio(subject), isLegal(subject), signedContent);
+                String issuer = certificateHolder.getIssuer().toString();
+                boolean isTestCert = issuer.toLowerCase().contains("тестовый");
+                return new SignatureInfo(serial, getCn(subject), getInn(subject), expiredDate, date, getEmail(subject), getFio(subject), isLegal(subject), signedContent, isTestCert);
             }
         }
         
