@@ -2,6 +2,7 @@ package org.protobeans.webapp.example.controller;
 
 import org.protobeans.security.annotation.PermitAll;
 import org.protobeans.security.model.SignInForm;
+import org.protobeans.webapp.example.service.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
@@ -27,6 +28,8 @@ public class SignInController {
     
     @Autowired HttpServletResponse response;
     
+    @Autowired UserProfileService profileService;
+    
     @GetMapping
     String prepareForm(@SuppressWarnings("unused") @ModelAttribute("form") SignInForm form) {
         return "/signin";
@@ -34,10 +37,12 @@ public class SignInController {
     
     @PostMapping
     String processForm(@ModelAttribute("form") @Validated SignInForm form, BindingResult result) {
-        if (!result.hasErrors()) {        
+        if (!result.hasErrors()) {
             if (form.isRememberMe()) {
                 rememberMeServices.onLoginSuccess(request, response, SecurityContextHolder.getContext().getAuthentication());
             }
+            
+            System.out.println("OTT: " + profileService.getByLogin(form.getLogin()).getConfirmUuid());
             
             return "redirect:/";
         }

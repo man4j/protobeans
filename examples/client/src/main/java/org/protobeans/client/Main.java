@@ -15,7 +15,7 @@ public class Main {
         try {
             api.saveDocument(new Document("123"));
         } catch (RestResultException e) {
-            // данное исключение должно быть проброшено выше для обработки в ExceptionControllerAdvice
+            // данное исключение должно быть проброшено выше для обработки в RestResultControllerAdvice
             // ExceptionControllerAdvice превращает это исключение в json-объект RestResult,
             // таким образом данное исключение будет корректно прокинуто через несколько микросервисов до конечного
             // UI-контроллера и далее пользователю            
@@ -23,9 +23,9 @@ public class Main {
         }
         
         try {
-            api.getDocument("1");
+            api.getDocument("123");
         } catch (NotFoundException e) {
-            // обработка данного исключения имеет смысл в бизнес логике, также оно автоматически обрабатывается в ExceptionControllerAdvice
+            // обработка данного исключения имеет смысл в бизнес логике, также оно автоматически обрабатывается в RestResultControllerAdvice
             // ExceptionControllerAdvice превращает это исключение в json-объект RestResult,
             // таким образом данное исключение будет корректно прокинуто через несколько микросервисов до конечного
             // UI-контроллера и далее пользователю
@@ -35,7 +35,7 @@ public class Main {
         try {
             api.superSecuredMethod();
         } catch (AccessDeniedException e) {
-            // данное исключение должно быть проброшено выше для обработки в SecurityControllerAdvice
+            // данное исключение должно быть проброшено выше для обработки в SecurityRestResultControllerAdvice
             // SecurityControllerAdvice превращает это исключение в json-объект RestResult,
             // таким образом данное исключение будет корректно прокинуто через несколько микросервисов до конечного
             // UI-контроллера и далее пользователю
@@ -47,7 +47,7 @@ public class Main {
         try {
             api.saveDocument(new Document("123"));
         } catch (AuthenticationException e) {
-            // данное исключение должно быть проброшено выше для обработки в SecurityControllerAdvice
+            // данное исключение должно быть проброшено выше для обработки в SecurityRestResultControllerAdvice
             // SecurityControllerAdvice превращает это исключение в json-объект RestResult,
             // таким образом данное исключение будет корректно прокинуто через несколько микросервисов до конечного
             // UI-контроллера и далее пользователю

@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.protobeans</groupId>
     <artifactId>protobeans-parent</artifactId>
-    <version>6.2.7.SP3</version>
+    <version>7.0.1</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
@@ -17,14 +17,16 @@
       <artifactId>protobeans-core</artifactId>
     </dependency>
 
+    <!-- Hibernate -->
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
     </dependency>
 
+    <!-- Spring -->
     <dependency>
-      <groupId>io.hypersistence</groupId>
-      <artifactId>hypersistence-utils-hibernate-63</artifactId>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
     </dependency>
 
     <dependency>
@@ -37,17 +39,17 @@
         </exclusion>
       </exclusions>
     </dependency>
+    
+    <!-- AspectJ API -->
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjrt</artifactId>
+    </dependency>
 
     <!-- Logstash logback encoder -->
     <dependency>
       <groupId>net.logstash.logback</groupId>
       <artifactId>logstash-logback-encoder</artifactId>
-    </dependency>
-
-    <!-- AspectJ API -->
-    <dependency>
-      <groupId>org.aspectj</groupId>
-      <artifactId>aspectjrt</artifactId>
     </dependency>
 
     <!-- Guava -->
@@ -58,30 +60,23 @@
 
     <!-- for JSON type -->
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
+      <groupId>tools.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>com.fasterxml.jackson.datatype</groupId>
-      <artifactId>jackson-datatype-jsr310</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-orm</artifactId>
-    </dependency>
-
+    <!-- Pool -->
     <dependency>
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
     </dependency>
 
+    <!-- Postgres -->
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
     </dependency>
 
+    <!-- FW -->
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-database-postgresql</artifactId>

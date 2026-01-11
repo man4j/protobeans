@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpClient.Redirect;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.Base64;
@@ -21,6 +22,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.client.DefaultResponseErrorHandler;
@@ -31,7 +34,7 @@ import org.springframework.web.client.RestClient.Builder;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
-import com.rainerhahnekamp.sneakythrow.Sneaky;
+import lombok.SneakyThrows;
 
 public class ExchangeFactory {
     private static TrustManager[] trustAllCerts = new TrustManager[] {
@@ -67,6 +70,8 @@ public class ExchangeFactory {
     }
     
     protected ResponseErrorHandler getErrorhandler() {
+        var mapper = ProtobeansHttpInterfaceUtils.mapper();
+        
         return new DefaultResponseErrorHandler() {
             @Override
             protected void handleError(ClientHttpResponse response, HttpStatusCode statusCode, URI url, HttpMethod method) throws IOException {
@@ -81,7 +86,7 @@ public class ExchangeFactory {
                         throw new BadCredentialsException(response.getStatusText());
                     }
                     
-                    var rr = ex.getResponseBodyAs(RestResult.class);
+                    var rr = mapper.readValue(ex.getResponseBodyAsString(), RestResult.class);
                     
                     if (statusCode == HttpStatus.NOT_FOUND) {
                         throw new NotFoundException(rr.getGlobalErrors().get(0));
@@ -113,19 +118,15 @@ public class ExchangeFactory {
         return builder.build();
     }
     
+    @SneakyThrows
     @SuppressWarnings("resource")
     protected Builder builder(String baseUrl) {
-        SSLContext sslContext;
+        System.setProperty("jdk.internal.httpclient.disableHostnameVerification", "true");
         
-        try {
-            System.setProperty("jdk.internal.httpclient.disableHostnameVerification", "true");
-            sslContext = Sneaky.sneak(() -> SSLContext.getInstance("TLS"));
-            sslContext.init(null, trustAllCerts, new SecureRandom());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        var sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(null, trustAllCerts, new SecureRandom());
         
-        SSLParameters sslParams = new SSLParameters();
+        var sslParams = new SSLParameters();
         sslParams.setEndpointIdentificationAlgorithm("");
         
         HttpClient httpClient = HttpClient.newBuilder()
@@ -137,15 +138,11 @@ public class ExchangeFactory {
         
         var errorHandler = getErrorhandler();
         
-        var msgConverters = ProtobeansHttpInterfaceUtils.protobeansConverters();
-        
-        Sneaky.sneaked(() -> {
-            var field = DefaultResponseErrorHandler.class.getDeclaredField("messageConverters");
-            field.setAccessible(true);
-            field.set(errorHandler, msgConverters);
-        }).run();
-        
-        var builder = RestClient.builder().messageConverters(converters -> {converters.clear(); converters.addAll(msgConverters);})
+        var builder = RestClient.builder().configureMessageConverters(c -> {
+                                              c.registerDefaults()
+                                               .withStringConverter(new StringHttpMessageConverter(StandardCharsets.UTF_8))
+                                               .withJsonConverter(new JacksonJsonHttpMessageConverter(ProtobeansHttpInterfaceUtils.mapper())).build();
+                                          })
                                           .requestFactory(new JdkClientHttpRequestFactory(httpClient))
                                           .defaultStatusHandler(errorHandler)
                                           .baseUrl(baseUrl);

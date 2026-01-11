@@ -6,7 +6,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import com.rainerhahnekamp.sneakythrow.Sneaky;
+import lombok.SneakyThrows;
 
 public class SslUtils {
     public static TrustManager[] trustAllCerts = new TrustManager[] {
@@ -26,9 +26,10 @@ public class SslUtils {
         }
     };
     
+    @SneakyThrows
     public static SSLContext getSslContext() { 
         System.setProperty("jdk.internal.httpclient.disableHostnameVerification", "true");
-        SSLContext sslContext = Sneaky.sneak(() -> SSLContext.getInstance("TLS"));
+        var sslContext = SSLContext.getInstance("TLS");
         try {
             sslContext.init(null, SslUtils.trustAllCerts, new SecureRandom());
         } catch (Exception e) {

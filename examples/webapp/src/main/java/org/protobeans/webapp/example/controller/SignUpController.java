@@ -2,7 +2,6 @@ package org.protobeans.webapp.example.controller;
 
 import org.protobeans.mvc.controller.advice.RequestContextHolder;
 import org.protobeans.security.annotation.Anonymous;
-import org.protobeans.webapp.example.entity.UserProfile;
 import org.protobeans.webapp.example.model.MySignUpForm;
 import org.protobeans.webapp.example.service.EmailService;
 import org.protobeans.webapp.example.service.MessageGenerator;
@@ -38,7 +37,7 @@ public class SignUpController {
     String processForm(@ModelAttribute("form") @Validated MySignUpForm form, BindingResult result) {
         if (result.hasErrors()) return "/signup";
         
-        UserProfile p = profileService.createAndSave(form.getLogin(), form.getPassword(), form.getUserName(), false);
+        var p = profileService.createAndSave(form.getLogin(), form.getPassword(), form.getUserName(), false);
         
         emailService.sendMessage(form.getLogin(), "Sign Up", messageGenerator.generateEmailSignInMessage(form.getPassword(), p.getConfirmUuid(), p.getLogin(), requestContextHolder.getRequestContext()));
 

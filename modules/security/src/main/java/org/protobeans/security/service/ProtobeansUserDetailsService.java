@@ -1,19 +1,17 @@
 package org.protobeans.security.service;
 
 import org.protobeans.security.model.AbstractProfile;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
-@Service
 public class ProtobeansUserDetailsService implements UserDetailsService {
-    @Autowired
-    @Lazy
     private ProfileService profileService;
     
+    public ProtobeansUserDetailsService(ProfileService profileService) {
+        this.profileService = profileService;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AbstractProfile profile = profileService.getByLogin(username);

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Конфигурация
-version=2.0.45042-A
+version=5.0.47527-A
 repository_url="https://maven.pkg.github.com/man4j/crypto"
 repository_id="crypto"
 
@@ -17,17 +17,17 @@ function deploy {
   local jar_name=$1
   local original_artifact_id=$jar_name
   local normalized_artifact_id=$(normalize_artifact_id "$original_artifact_id")
-  
+
   echo "Деплой файла: ${jar_name}.jar"
   echo "  Оригинальное имя артефакта: ${original_artifact_id}"
   echo "  Нормализованное имя артефакта: ${normalized_artifact_id}"
-  
+
   # Проверяем существование файла
   if [ ! -f "./${jar_name}.jar" ]; then
     echo "✗ Файл не найден: ${jar_name}.jar"
     return 1
   fi
-  
+
   mvn deploy:deploy-file \
     -DgroupId=ru.crypto \
     -DartifactId=${normalized_artifact_id} \
@@ -38,7 +38,7 @@ function deploy {
     -Durl=${repository_url} \
     -DgeneratePom=true \
     -DupdateReleaseInfo=true
-  
+
   exit_code=$?
   if [ $exit_code -eq 0 ]; then
     echo "✓ Успешно задеплоен: ${normalized_artifact_id}"

@@ -5,14 +5,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.protobeans.freemarker.config.FreeMarkerConfig;
+import org.springframework.context.annotation.Import;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Import(FreeMarkerConfig.class)
-@Configuration
 public @interface EnableFreeMarker {
     String devMode();
 }

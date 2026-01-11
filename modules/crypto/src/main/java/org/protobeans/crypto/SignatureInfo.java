@@ -1,5 +1,14 @@
 package org.protobeans.crypto;
 
+import java.util.regex.Pattern;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@AllArgsConstructor
+@Getter
+@Setter
 public class SignatureInfo {
     private String serial;
     
@@ -7,13 +16,19 @@ public class SignatureInfo {
     
     private String inn;
     
+    private String ogrn;
+    
+    private String snils;
+    
     private long expiredDate;
     
     private long date;
     
     private String email;
     
-    private String fio;
+    private String surname;
+    
+    private String nameMiddleName;
     
     private boolean legal;
     
@@ -21,93 +36,28 @@ public class SignatureInfo {
     
     private boolean testCert;
     
-    public SignatureInfo(String serial, String subject, String inn, long expiredDate, long date, String email, String fio, boolean legal, String signedData, boolean testCert) {
-        this.serial = serial;
-        this.subject = subject;
-        this.inn = inn;
-        this.expiredDate = expiredDate;
-        this.date = date;
-        this.email = email;
-        this.fio = fio;
-        this.legal = legal;
-        this.signedData = signedData;
-        this.testCert = testCert;
-    }
-
-    public String getSerial() {
-        return serial;
-    }
-
-    public void setSerial(String serial) {
-        this.serial = serial;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getInn() {
-        return inn;
-    }
-
-    public void setInn(String inn) {
-        this.inn = inn;
-    }
-
-    public long getExpiredDate() {
-        return expiredDate;
-    }
-
-    public void setExpiredDate(long expiredDate) {
-        this.expiredDate = expiredDate;
-    }
-
-    public long getDate() {
-        return date;
-    }
-
-    public void setDate(long date) {
-        this.date = date;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getFio() {
-        return fio;
+        return surname + " " + nameMiddleName;
     }
 
-    public void setFio(String fio) {
-        this.fio = fio;
+    public String getUserName() {
+        var parts = parseGn();
+        return parts.length > 0 ? parts[0] : "";
     }
 
-    public boolean isLegal() {
-        return legal;
+    public String getUserMiddleName() {
+        var parts = parseGn();
+        return parts.length == 2 ? parts[1] : "";
     }
 
-    public void setLegal(boolean legal) {
-        this.legal = legal;
-    }
+    private String[] parseGn() {
+        if (nameMiddleName == null || nameMiddleName.isBlank()) {
+            return new String[0];
+        }
 
-    public String getSignedData() {
-        return signedData;
-    }
-
-    public void setSignedData(String signedData) {
-        this.signedData = signedData;
-    }
-    
-    public boolean isTestCert() {
-        return testCert;
+        var multispace = Pattern.compile("\\s+");
+        var cleaned = multispace.matcher(nameMiddleName.replace('\u00A0', ' ').trim()).replaceAll(" ");
+        return cleaned.split(" ", 2);
     }
 }
 

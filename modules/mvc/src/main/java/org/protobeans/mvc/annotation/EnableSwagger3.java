@@ -10,14 +10,12 @@ import org.springdoc.core.configuration.SpringDocPageableConfiguration;
 import org.springdoc.core.configuration.SpringDocSecurityConfiguration;
 import org.springdoc.core.configuration.SpringDocSortConfiguration;
 import org.springdoc.core.properties.SpringDocConfigProperties;
-import org.springdoc.core.properties.SwaggerUiConfigParameters;
 import org.springdoc.core.properties.SwaggerUiConfigProperties;
 import org.springdoc.core.properties.SwaggerUiOAuthProperties;
 import org.springdoc.webmvc.core.configuration.MultipleOpenApiSupportConfiguration;
 import org.springdoc.webmvc.core.configuration.SpringDocWebMvcConfiguration;
 import org.springdoc.webmvc.ui.SwaggerConfig;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Retention(RetentionPolicy.RUNTIME)
@@ -36,10 +34,8 @@ import org.springframework.context.annotation.Import;
          //ui jar
          SwaggerConfig.class,
          SwaggerUiConfigProperties.class,
-         SwaggerUiConfigParameters.class,
          SwaggerUiOAuthProperties.class
          })
-@Configuration
 @EnableConfigurationProperties
 public @interface EnableSwagger3 {
     //empty

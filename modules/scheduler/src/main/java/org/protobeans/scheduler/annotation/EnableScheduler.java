@@ -6,15 +6,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.protobeans.scheduler.config.SchedulerConfig;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Import(SchedulerConfig.class)
-@Configuration
 public @interface EnableScheduler {
     String poolSize() default "1";
     
-    boolean interruptOnClose() default false;
+    boolean waitOnShutdown() default true;
 }

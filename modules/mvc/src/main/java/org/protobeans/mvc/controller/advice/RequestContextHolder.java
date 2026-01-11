@@ -9,11 +9,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class RequestContextHolder {
-    @Autowired
-    private HttpServletRequest request;
+    @Autowired HttpServletRequest request;
     
-    @Autowired
-    private HttpServletResponse response;
+    @Autowired HttpServletResponse response;
     
     public RequestContext getRequestContext() {
         return new RequestContext(request, response);

@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SignatureException;
 import java.security.UnrecoverableEntryException;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.util.Base64;
 
@@ -29,7 +30,7 @@ public class CryptoPro {
     }
     
     public synchronized JCPPrivateKeyEntry getPrivateKeyEntry(String alias, String password) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, UnrecoverableEntryException {
-        KeyStore keyStore = KeyStore.getInstance(JCP.HD_STORE_NAME);
+        var keyStore = KeyStore.getInstance(JCP.HD_STORE_NAME);
         keyStore.load(null, null);
         
         var privateKey = loadByAlias(keyStore, alias, password);
@@ -55,7 +56,11 @@ public class CryptoPro {
     }
     
     public static byte[] createCmsSignature(JCPPrivateKeyEntry e, byte[] data, boolean detached) throws NoSuchAlgorithmException, CertificateException, IOException, InvalidKeyException, NoSuchProviderException, SignatureException, Asn1Exception {
-        return Cms.CMSSignEx(data, e.getPrivateKey(), e.getCertificate(), detached);
+        return Cms.signCms(e, data, detached);
+    }
+    
+    public static byte[] createCadesBesSignature(JCPPrivateKeyEntry e, byte[] data, boolean detached) throws CertificateEncodingException, CAdESException, IOException {
+        return Cades.signCadesBes(e, data, detached);
     }
         
     public void checkSignature(String signature) throws CAdESException {

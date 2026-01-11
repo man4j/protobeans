@@ -36,9 +36,9 @@ public @interface EnableUndertow {
 
     String uploadLocation() default "/tmp";
 
-    long maxFileSize() default 20_971_520;
+    int maxFileSizeMb() default 20;
 
-    long maxRequestSize() default 20_971_520;
+    int maxRequestSizeMb() default 20;
 
-    int fileSizeThreshold() default 1_048_576;
+    int fileSizeThresholdMb() default 1;
 }

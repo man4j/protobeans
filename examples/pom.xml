@@ -8,34 +8,42 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.compiler.release>24</maven.compiler.release>
-    <protobeans.version>6.2.7</protobeans.version>
-    <version.spring>6.2.7</version.spring>
-    <version.spring.security>6.5.0</version.spring.security>
-    <version.jackson>2.19.0</version.jackson>
+    
+    <maven.compiler.release>25</maven.compiler.release>
+    
+    <protobeans.version>7.0.1</protobeans.version>
+    <version.spring>7.0.1</version.spring>
+    <version.spring.security>7.0.0</version.spring.security>
+    <version.jackson>3.0.2</version.jackson>
+    <version.junit>6.0.1</version.junit>
   </properties>
 
   <modules>
     <module>freemarker</module>
-    <module>i18n</module>
     <module>webapp</module>
     <module>client</module>
     <module>scheduler</module>
     <module>undertow</module>
     <module>kafka</module>
   </modules>
-
+  
   <dependencies>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.36</version>
+      <version>1.18.42</version>
+    </dependency>
+  
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>2.0.17</version>
     </dependency>
 
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.5.18</version>
+      <version>1.5.21</version>
     </dependency>
 
     <dependency>
@@ -48,14 +56,14 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.13.1</version>
+      <version>${version.junit}</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-launcher</artifactId>
-      <version>1.13.1</version>
+      <version>${version.junit}</version>
       <scope>test</scope>
     </dependency>
 
@@ -70,12 +78,6 @@
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>org.protobeans</groupId>
-        <artifactId>protobeans-http-client</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-      </dependency>
-
       <dependency>
         <groupId>org.protobeans</groupId>
         <artifactId>protobeans-postgresql</artifactId>
@@ -129,17 +131,24 @@
         <artifactId>protobeans-scheduler</artifactId>
         <version>${protobeans.version}</version>
       </dependency>
+      
+      <!-- example module -->   
+      <dependency>
+        <groupId>org.protobeans</groupId>
+        <artifactId>protobeans-http-client</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+      </dependency>
 
       <dependency>
         <groupId>jakarta.validation</groupId>
         <artifactId>jakarta.validation-api</artifactId>
-        <version>3.1.0</version>
+        <version>3.1.1</version>
       </dependency>
 
       <dependency>
         <groupId>io.swagger.core.v3</groupId>
         <artifactId>swagger-annotations-jakarta</artifactId>
-        <version>2.2.27</version>
+        <version>2.2.41</version>
       </dependency>
 
       <!-- for Spring MVC TestFramework -->
@@ -164,7 +173,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.14.0</version>
+        <version>3.14.1</version>
         <configuration>
           <compilerArgs>
             <arg>-parameters</arg>

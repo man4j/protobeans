@@ -31,13 +31,13 @@
               <div class="row control-group">
                 <div class="form-group col-xs-12 floating-label-form-group controls">
                   <label><@f.i18n 'page.signin.password' 'Password'/></label>
-                  <@f.formPasswordInput 'form.password' 'form-control' 'err form-control' 'placeholder="${f.fi18n("page.signin.password", "Password")}" maxlength="50" autocomplete="off"' />
+                  <@f.formInput 'form.password' 'form-control' 'err form-control' 'placeholder="${f.fi18n("page.signin.password", "Password")}" maxlength="50" autocomplete="off"' />
                 </div>
               </div>
               <div class="row control-group">
                 <div class="form-group col-xs-12 floating-label-form-group controls">
                   <label><@f.i18n 'page.changepw.confirmPassword' 'Confirm password' /></label>
-                  <@f.formPasswordInput 'form.confirmPassword' 'form-control' 'err form-control' 'placeholder="${f.fi18n("page.changepw.confirmPassword", "Confirm Password")}" maxlength="50" autocomplete="off"' />
+                  <@f.formInput 'form.confirmPassword' 'form-control' 'err form-control' 'placeholder="${f.fi18n("page.changepw.confirmPassword", "Confirm Password")}" maxlength="50" autocomplete="off"' />
                 </div>
               </div>
               <br />

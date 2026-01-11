@@ -1,21 +1,20 @@
 package org.protobeans.postgresql.config;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
 import org.flywaydb.core.Flyway;
-import org.hibernate.type.format.jackson.JacksonJsonFormatMapper;
+import org.hibernate.cfg.BatchSettings;
+import org.hibernate.cfg.JdbcSettings;
+import org.hibernate.cfg.MappingSettings;
+import org.hibernate.cfg.StatisticsSettings;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.postgresql.annotation.EnablePostgreSql;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.protobeans.postgresql.mapper.ProtobeansJsonFormatMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,17 +25,17 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zaxxer.hikari.HikariDataSource;
 
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
+import tools.jackson.databind.json.JsonMapper;
 
 @Configuration
 @InjectFrom(EnablePostgreSql.class)
 @EnableTransactionManagement(proxyTargetClass = true)
+@Slf4j
 public class PostgreSqlConfig {
-    private static Logger logger = LoggerFactory.getLogger(PostgreSqlConfig.class);
-    
     private String dbHost;
     
     private String dbPort;
@@ -51,10 +50,6 @@ public class PostgreSqlConfig {
     
     private String transactionIsolation;
     
-    private boolean reindexOnStart;
-    
-    private boolean disablePreparedStatements;
-    
     private String showSql;
     
     private String enableStatistics;
@@ -65,29 +60,25 @@ public class PostgreSqlConfig {
     
     private String migrationsPath;
     
-    @Autowired(required = false)
-    private ObjectMapper mapper;
+    @Autowired JsonMapper mapper;
     
     @Bean(destroyMethod = "close")
     public DataSource pgDataSource() throws Exception {
-        String url = String.format("jdbc:postgresql://%s:%s/postgres", dbHost, dbPort);
+        var url = String.format("jdbc:postgresql://%s:%s/postgres", dbHost, dbPort);
+        log.info("Check database exists: {}", url);
         
-        logger.info("Check database exists: {}", url);
-        
-        org.postgresql.Driver driver = new org.postgresql.Driver();
-
-        Properties props = new Properties();
+        var props = new Properties();
         props.put("user", user);
         props.put("password", password);
         props.put("ssl", false);
         
-        try (Connection conn = driver.connect(url, props);
+        try (var conn = new org.postgresql.Driver().connect(url, props);
              PreparedStatement ps = conn.prepareStatement("SELECT FROM pg_database WHERE datname = ?");) {
             ps.setString(1, schema);
             
-            try (ResultSet rs = ps.executeQuery()) {
+            try (var rs = ps.executeQuery()) {
                 if (!rs.next()) {
-                    logger.info("Create database: {}", schema);
+                    log.info("Create database: {}", schema);
                     
                     try (PreparedStatement ps1 = conn.prepareStatement(String.format("CREATE DATABASE %s", schema))) {
                         ps1.execute();
@@ -97,14 +88,12 @@ public class PostgreSqlConfig {
                         ps1.execute();
                     }
                 } else {
-                    logger.info("Database {} already exists", schema);
+                    log.info("Database {} already exists", schema);
                 }
             }
         }
         
-        HikariDataSource ds = new HikariDataSource();
-        
-        PGSimpleDataSource pgSimpleDataSource = new PGSimpleDataSource();
+        var pgSimpleDataSource = new PGSimpleDataSource();
         pgSimpleDataSource.setUser(user);
         pgSimpleDataSource.setPassword(password);
         pgSimpleDataSource.setServerNames(new String[] {dbHost});
@@ -114,75 +103,45 @@ public class PostgreSqlConfig {
         pgSimpleDataSource.setSsl(false);
         pgSimpleDataSource.setReWriteBatchedInserts(true);
         
-        if (disablePreparedStatements) {
-            pgSimpleDataSource.setPrepareThreshold(0);
-        }
+        log.info("[PROTOBEANS]: Use postgres URL: " + pgSimpleDataSource.getUrl());
         
-        System.out.println("[PROTOBEANS]: Use postgres URL: " + pgSimpleDataSource.getUrl());
-        
+        var ds = new HikariDataSource();
         ds.setDataSource(pgSimpleDataSource);
-
-        if (maxPoolSize.equals("auto")) {
-            ds.setMaximumPoolSize(Runtime.getRuntime().availableProcessors() * 4);
-        } else {
-            ds.setMaximumPoolSize(Integer.parseInt(maxPoolSize));
-        }
-        
+        ds.setMaximumPoolSize(maxPoolSize.equals("auto") ? Runtime.getRuntime().availableProcessors() * 4 : Integer.parseInt(maxPoolSize));
         ds.setAutoCommit(false);
         ds.setTransactionIsolation(transactionIsolation);
         ds.setKeepaliveTime(60_000);
 
-        if (reindexOnStart) {
-            try(Connection con = ds.getConnection();            
-                Statement st = con.createStatement()) {
-                logger.info("[PROTOBEANS]: Start reindex database: " + schema);
-                
-                long t = System.currentTimeMillis();
-                
-                try (var rs = st.executeQuery("REINDEX DATABASE " + schema)) {
-                    logger.info("[PROTOBEANS]: Reindex database duration: " + (System.currentTimeMillis() - t) + " ms");
-                }
-            }
-        }
-        
         return ds;
     }
     
     @Bean
     public LocalContainerEntityManagerFactoryBean pgEntityManager() throws Exception {
-       LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        var jpaVendorAdapter = new HibernateJpaVendorAdapter();
+        jpaVendorAdapter.setShowSql("true".equals(showSql));
+        
+       var em = new LocalContainerEntityManagerFactoryBean();
        
        em.setDataSource(pgDataSource());
-       HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-       jpaVendorAdapter.setShowSql("true".equals(showSql));
-       
-       JacksonSupplier.objectMapper = mapper;
-       
-       System.setProperty("hypersistence.utils.jackson.object.mapper", JacksonSupplier.class.getName());
-       
-       em.setJpaPropertyMap(new HashMap<String, Object>() {{put("hibernate.id.new_generator_mappings", true);
-                                                            put("hibernate.format_sql", true);
-                                                            put("hibernate.jdbc.batch_size", batchSize);
-                                                            put("hibernate.order_inserts", true);
-                                                            put("hibernate.order_updates", true);
-                                                            put("hibernate.globally_quoted_identifiers", true);
-                                                            put("hibernate.auto_quote_keyword", true);
-                                                            put("hibernate.physical_naming_strategy", ProtobeansNamingStrategy.class.getName());
-                                                            put("hibernate.type.json_format_mapper", new JacksonJsonFormatMapper(mapper));
-                                                            
-                                                            //if connection pool already disables autocommit
-                                                            put("hibernate.connection.provider_disables_autocommit", true);
-                                                            
-                                                            //this option prevent connecting to database before flyway
-//                                                            put("hibernate.temp.use_jdbc_metadata_defaults", false);
-                                                            
-                                                            if ("true".equals(enableStatistics)) {
-                                                                put("hibernate.generate_statistics", true);
-                                                            }
-                                                          }});
+       em.setJpaPropertyMap(new HashMap<String, Object>() {{
+           put(JdbcSettings.FORMAT_SQL, true);
+           
+           // configuration property which tells Hibernate that the underlying JDBC Connections already disabled the auto-commit mode
+           put(JdbcSettings.CONNECTION_PROVIDER_DISABLES_AUTOCOMMIT, true);
+           
+           put(BatchSettings.STATEMENT_BATCH_SIZE, batchSize);
+           put(BatchSettings.ORDER_INSERTS, true);
+           put(BatchSettings.ORDER_UPDATES, true);
+           
+           put(MappingSettings.GLOBALLY_QUOTED_IDENTIFIERS, true);
+           put(MappingSettings.KEYWORD_AUTO_QUOTING_ENABLED, true);
+           put(MappingSettings.PHYSICAL_NAMING_STRATEGY, ProtobeansNamingStrategy.class.getName());
+           put(MappingSettings.JSON_FORMAT_MAPPER, new ProtobeansJsonFormatMapper(mapper));
+           
+           put(StatisticsSettings.GENERATE_STATISTICS, "true".equals(enableStatistics));
+       }});
        
        em.setJpaVendorAdapter(jpaVendorAdapter);
-       
        em.setPackagesToScan(basePackages);
        
        return em;
@@ -201,12 +160,12 @@ public class PostgreSqlConfig {
     
     @PostConstruct
     public void migrate() throws Exception {
-        Flyway fw = Flyway.configure().ignoreMigrationPatterns("*:missing")
-                                      .validateOnMigrate(false)
-                                      .locations("classpath:" + migrationsPath)
-                                      .dataSource(pgDataSource())
-                                      .baselineOnMigrate(true)
-                                      .load();
+        var fw = Flyway.configure().ignoreMigrationPatterns("*:missing")
+                                   .validateOnMigrate(false)
+                                   .locations("classpath:" + migrationsPath)
+                                   .dataSource(pgDataSource())
+                                   .baselineOnMigrate(true)
+                                   .load();
         
         while (true) {
             try {
@@ -214,16 +173,15 @@ public class PostgreSqlConfig {
                 break;
             } catch (Exception e) {
                 if (e.getMessage() != null && e.getMessage().contains("Unable to obtain Jdbc connection")) {
-                    logger.warn(e.getMessage(), e);
-                    logger.warn("Waiting for database...");
+                    log.warn(e.getMessage(), e);
+                    log.warn("Waiting for database...");
                     
                     Thread.sleep(1000);
                     
                     continue;
                 }
 
-                logger.error("", e);
-                
+                log.error("", e);
                 System.exit(1);
             }
         }

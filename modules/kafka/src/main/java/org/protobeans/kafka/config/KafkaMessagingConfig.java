@@ -10,8 +10,8 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.kafka.annotation.EnableKafkaMessaging;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.protobeans.kafka.listener.DeadLetterPublishingErrorHandler;
+import org.protobeans.kafka.listener.SimpleRetryErrorHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -24,18 +24,15 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.listener.DefaultErrorHandler;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.util.backoff.ExponentialBackOff;
+
+import lombok.extern.slf4j.Slf4j;
 
 
 @Configuration
 @InjectFrom(EnableKafkaMessaging.class)
 @EnableKafka
-@EnableTransactionManagement(proxyTargetClass = true)
+@Slf4j
 public class KafkaMessagingConfig {
-    private static Logger logger = LoggerFactory.getLogger(KafkaMessagingConfig.class);
-    
     private String brokerList;
 
     private int concurrency;
@@ -44,32 +41,52 @@ public class KafkaMessagingConfig {
 
     private String maxPollRecords;
     
+    private String maxPollIntervalMs;
+    
     private String groupId;
     
-    @Autowired
-    private ApplicationContext ctx;
+    private boolean enableDeadLetterTopic;
     
+    private int idleBetweenPolls;
+    
+    private int dltIdleBetweenPolls;
+    
+    @Autowired ApplicationContext ctx;
+    
+    /**
+     * Основной контейнер
+     */
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         
-        var errorHandler = new DefaultErrorHandler(new ExponentialBackOff());
+        if (enableDeadLetterTopic) {
+            factory.setCommonErrorHandler(new DeadLetterPublishingErrorHandler(kafkaTemplate()));
+        } else {
+            factory.setCommonErrorHandler(new SimpleRetryErrorHandler());
+        }
         
-        errorHandler.setClassifications(Map.of(), true);
-        errorHandler.setRetryListeners((r, ex, attemp) -> {
-            if (attemp == 1 || attemp % 10 == 0) {
-                var exMsg = ex.getMessage();
-                var causeMsg = ex.getCause() != null ? "Caused by:" + ex.getCause().getMessage() : "";
-                logger.error("Message deliver failed: " + exMsg + "\n" + causeMsg);
-            }
-        });
+        factory.setConsumerFactory(consumerFactory());
+        factory.setConcurrency(concurrency == -1 ? Runtime.getRuntime().availableProcessors() : concurrency);
+        factory.getContainerProperties().setLogContainerConfig(true);
+        factory.getContainerProperties().setIdleBetweenPolls(idleBetweenPolls);
+
+        return factory;
+    }
+    
+    /**
+     * Контейнер который разгребает DLT топики
+     */
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaDeadLeterListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         
-        factory.setCommonErrorHandler(errorHandler);
+        factory.setCommonErrorHandler(new SimpleRetryErrorHandler());
         factory.setBatchListener(true);
         factory.setConsumerFactory(consumerFactory());
         factory.setConcurrency(concurrency == -1 ? Runtime.getRuntime().availableProcessors() : concurrency);
-        
         factory.getContainerProperties().setLogContainerConfig(true);
+        factory.getContainerProperties().setIdleBetweenPolls(dltIdleBetweenPolls);
 
         return factory;
     }
@@ -81,6 +98,7 @@ public class KafkaMessagingConfig {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, brokerList);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, maxPollRecords);
+        props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, maxPollIntervalMs);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset);

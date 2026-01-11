@@ -6,9 +6,7 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.bouncycastle.util.CollectionStore;
 
@@ -21,9 +19,9 @@ import ru.CryptoPro.JCP.tools.AlgorithmUtility;
 
 public class Cades {
     public static byte[] signCadesBes(JCPPrivateKeyEntry e, byte[] data, boolean detached) throws CAdESException, CertificateEncodingException, IOException {
-        List<X509Certificate> chain = new ArrayList<>(Arrays.asList((X509Certificate[]) e.getCertificateChain()));
+        var chain = new ArrayList<>(Arrays.asList((X509Certificate[]) e.getCertificateChain()));
         
-        CAdESSignature cades = new CAdESSignature(detached);
+        var cades = new CAdESSignature(detached);
         
         cades.addSigner(
         JCP.PROVIDER_NAME,
@@ -38,9 +36,9 @@ public class Cades {
         null,   // unsigned attrs
         null);  // CRLs list
         
-        List<X509CertificateHolder> holders = new ArrayList<>();
+        var holders = new ArrayList<>();
         
-        for (X509Certificate cert : chain) {
+        for (var cert : chain) {
             holders.add(new JcaX509CertificateHolder(cert));
         }
         
@@ -48,7 +46,7 @@ public class Cades {
         
         byte[] signature;
 
-        try (ByteArrayOutputStream sigOut = new ByteArrayOutputStream()) {
+        try (var sigOut = new ByteArrayOutputStream()) {
             cades.open(sigOut);
             cades.update(data);
             cades.close();

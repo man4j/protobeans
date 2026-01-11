@@ -15,7 +15,7 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 public class SchedulerConfig implements SchedulingConfigurer {
     private String poolSize;
     
-    private boolean interruptOnClose;
+    private boolean waitOnShutdown;
     
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
@@ -29,7 +29,7 @@ public class SchedulerConfig implements SchedulingConfigurer {
         scheduler.setPoolSize(Integer.parseInt(poolSize));
         scheduler.setAwaitTerminationSeconds(Integer.MAX_VALUE);
         scheduler.setRemoveOnCancelPolicy(true);
-        scheduler.setWaitForTasksToCompleteOnShutdown(!interruptOnClose);
+        scheduler.setWaitForTasksToCompleteOnShutdown(waitOnShutdown);
         scheduler.setThreadNamePrefix("ProtoBeansTaskScheduler-");
         scheduler.setExecuteExistingDelayedTasksAfterShutdownPolicy(false);
         

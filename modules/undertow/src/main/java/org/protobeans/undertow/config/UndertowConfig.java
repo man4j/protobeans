@@ -12,8 +12,6 @@ import org.protobeans.core.annotation.InjectFrom;
 import org.protobeans.undertow.annotation.EnableUndertow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.MimeType;
-import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.SpringServletContainerInitializer;
 import org.springframework.web.WebApplicationInitializer;
 
@@ -30,9 +28,7 @@ import io.undertow.server.handlers.proxy.LoadBalancingProxyClient;
 import io.undertow.server.handlers.proxy.ProxyHandler;
 import io.undertow.server.handlers.resource.ClassPathResourceManager;
 import io.undertow.servlet.Servlets;
-import io.undertow.servlet.api.DeploymentInfo;
 import io.undertow.servlet.api.DeploymentManager;
-import io.undertow.servlet.api.MimeMapping;
 import io.undertow.servlet.api.ServletContainerInitializerInfo;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -40,41 +36,32 @@ import jakarta.servlet.MultipartConfigElement;
 import jakarta.servlet.ServletContainerInitializer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.HandlesTypes;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @InjectFrom(EnableUndertow.class)
+@Slf4j
 public class UndertowConfig {
     private String host;
-
     private String port;
-
     private Undertow undertow;
 
     private String resourcesPath;
-
     private String welcomePage;
-
     private String errorPage;
-
     private int sessionTimeout;
 
     private String[] ignoreProxyPathPrefix;
-
     private String proxyBackend;
-
     private int proxyConnectionsCount;
 
     private String workerThreads;
-
     private String ioThreads;
 
     private String uploadLocation;
-
-    private long maxFileSize;
-
-    private long maxRequestSize;
-
-    private int fileSizeThreshold;
+    private int maxFileSizeMb;
+    private int maxRequestSizeMb;
+    private int fileSizeThresholdMb;
 
     @Autowired(required = false)
     private List<Class<? extends ServletContainerInitializer>> initializers = new ArrayList<>();
@@ -85,27 +72,17 @@ public class UndertowConfig {
     @SuppressWarnings("resource")
     @PostConstruct
     public void start() throws ServletException {
-        DeploymentInfo deploymentInfo = Servlets.deployment();
+        var deploymentInfo = Servlets.deployment();
         
         deploymentInfo.setContextPath("/")
                       .setDeploymentName("app.war")
                       .setClassLoader(this.getClass().getClassLoader())
                       .setDefaultSessionTimeout(sessionTimeout)
                       .addWelcomePage(welcomePage)
-                      .addMimeMapping(new MimeMapping("jsf", "application/xhtml+xml"))
-                      .addMimeMapping(new MimeMapping("ttf", "application/font-sfnt"))
-                      .addMimeMapping(new MimeMapping("woff", "application/font-woff"))
-                      .addMimeMapping(new MimeMapping("woff2", "application/font-woff2"))
-                      .addMimeMapping(new MimeMapping("eot", "application/vnd.ms-fontobject"))
-                      .addMimeMapping(new MimeMapping("eot?#iefix", "application/vnd.ms-fontobject"))
-                      .addMimeMapping(new MimeMapping("svg", "image/svg+xml"))
-                      .addMimeMapping(new MimeMapping("svg#exosemibold", "image/svg+xml"))
-                      .addMimeMapping(new MimeMapping("svg#exobolditalic", "image/svg+xml"))
-                      .addMimeMapping(new MimeMapping("svg#exomedium", "image/svg+xml"))
-                      .addMimeMapping(new MimeMapping("svg#exoregular", "image/svg+xml"))
-                      .addMimeMapping(new MimeMapping("svg#fontawesomeregular", "image/svg+xml"))
                       .setResourceManager(new ClassPathResourceManager(this.getClass().getClassLoader(), resourcesPath))
-                      .setDefaultMultipartConfig(new MultipartConfigElement(uploadLocation, maxFileSize, maxRequestSize, fileSizeThreshold))
+                      .setDefaultMultipartConfig(new MultipartConfigElement(uploadLocation, maxFileSizeMb * 1024 * 1024, 
+                                                                                                                    maxRequestSizeMb * 1024 * 1024, 
+                                                                                                                    fileSizeThresholdMb * 1024 * 1024))
                       .setExecutor(Executors.newVirtualThreadPerTaskExecutor());
 
         if (!errorPage.isEmpty()) {
@@ -115,7 +92,7 @@ public class UndertowConfig {
         for (var initializer : initializers) {
             Set<Class<?>> handlesTypes = new HashSet<>();
 
-            HandlesTypes annotation = initializer.getAnnotation(HandlesTypes.class);
+            var annotation = initializer.getAnnotation(HandlesTypes.class);
 
             if (annotation != null) {
                 handlesTypes.addAll(Set.of(annotation.value()));
@@ -135,16 +112,21 @@ public class UndertowConfig {
         }
 
         HttpHandler firstHandler = null;
+        
+        Predicate compressibleTypes = new CompressibleMimeTypePredicate(
+            "text/html",
+            "text/xml",
+            "text/plain",
+            "text/css",
+            "text/javascript",
+            "application/javascript",
+            "application/json");
 
         final EncodingHandler encodingHandler = new EncodingHandler(new ContentEncodingRepository().addEncodingHandler("gzip",
-                new GzipEncodingProvider(8), 50, Predicates.and(Predicates.requestLargerThan(1024),
-                                                                new CompressibleMimeTypePredicate("text/html",
-                                                                                                  "text/xml",
-                                                                                                  "text/plain",
-                                                                                                  "text/css",
-                                                                                                  "text/javascript",
-                                                                                                  "application/javascript",
-                                                                                                  "application/json"))));                                                           
+                new GzipEncodingProvider(8), 
+                50, 
+                Predicates.and(Predicates.requestLargerThan(1024), compressibleTypes)));
+        
         if (!proxyBackend.isEmpty()) {
             LoadBalancingProxyClient proxyClient = new LoadBalancingProxyClient() {
                 @Override
@@ -170,7 +152,7 @@ public class UndertowConfig {
                 }
             };
 
-            System.out.println("Proxy connections per thread: " + proxyConnectionsCount);
+            log.info("Proxy connections per thread: " + proxyConnectionsCount);
             proxyClient.setConnectionsPerThread(proxyConnectionsCount);
 
             try {
@@ -184,18 +166,20 @@ public class UndertowConfig {
             firstHandler = encodingHandler;
         }
 
-        Builder builder = Undertow.builder().addHttpListener(Integer.parseInt(port), host);                                            
+        Builder builder = Undertow.builder().addHttpListener(Integer.parseInt(port), host);
+        
+        log.info("Undertow started on the port: " + port);
 
         int iWorkerThreads = Integer.parseInt(workerThreads);
         int iIoThreads = Integer.parseInt(ioThreads);
 
         if (iWorkerThreads > 0) {
-            System.out.println("Worker threads: " + iWorkerThreads);
+            log.info("Worker threads: " + iWorkerThreads);
             builder.setWorkerThreads(iWorkerThreads);
         }
 
         if (iIoThreads > 0) {
-            System.out.println("IO threads: " + iIoThreads);
+            log.info("IO threads: " + iIoThreads);
             builder.setIoThreads(iIoThreads);
         }
         
@@ -208,31 +192,5 @@ public class UndertowConfig {
     @PreDestroy
     public void stop() {
         undertow.stop();
-    }
-
-    private static class CompressibleMimeTypePredicate implements Predicate {
-        private final List<MimeType> mimeTypes;
-
-        public CompressibleMimeTypePredicate(String... mimeTypes) {
-            this.mimeTypes = new ArrayList<>(mimeTypes.length);
-            for (String mimeTypeString : mimeTypes) {
-                this.mimeTypes.add(MimeTypeUtils.parseMimeType(mimeTypeString));
-            }
-        }
-
-        @Override
-        public boolean resolve(HttpServerExchange value) {
-            String contentType = value.getResponseHeaders().getFirst("Content-Type");
-
-            if (contentType != null) {
-                for (MimeType mimeType : this.mimeTypes) {
-                    if (mimeType.isCompatibleWith(MimeTypeUtils.parseMimeType(contentType))) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
     }
 }

@@ -52,4 +52,9 @@ public class UserProfile implements AbstractProfile {
     public String getId() {
         return email;
     }
+    
+    @Override
+    public boolean isEnabled() {
+        return isConfirmed();
+    }
 }

@@ -1,5 +1,10 @@
 package org.protobeans.mvc.interceptor;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class OperationProfile {
     private long totalTime;
     private long count;
@@ -11,22 +16,6 @@ public class OperationProfile {
 
     public OperationProfile(long totalTime, long count) {
         this.totalTime = totalTime;
-        this.count = count;
-    }
-
-    public long getTotalTime() {
-        return totalTime;
-    }
-    
-    public void setTotalTime(long totalTime) {
-        this.totalTime = totalTime;
-    }
-    
-    public long getCount() {
-        return count;
-    }
-    
-    public void setCount(long count) {
         this.count = count;
     }
 }

@@ -25,6 +25,11 @@ public class UserProfileService implements ProfileService {
     public UserProfile getByLogin(String login) {
         return userProfileRepository.findByEmail(login);
     }
+    
+    @WithTransaction(readOnly=true)
+    public UserProfile getByToken(String token) {
+        return userProfileRepository.findByConfirmUuid(token);
+    }
 
     @WithTransaction
     @Override

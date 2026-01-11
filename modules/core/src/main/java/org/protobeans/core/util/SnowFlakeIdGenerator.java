@@ -7,8 +7,8 @@ public class SnowFlakeIdGenerator {
     //Т.к. мы их отнимаем, то максимальный таймстемп = 2199023255551 + 1288834974657 = Wed Jul 10 20:30:30 MSK 2080
     private static final long TIMESTAMP_BITS = 41L;
     private static final long TWEPOCH = 1288834974657L;
-    private volatile int AVAILABLE_BITS;//Необходимо для работы со знаковыми числами
-    private volatile long TIMESTAMP_SHIFT;
+    private static final int AVAILABLE_BITS = Long.SIZE - 1; //Необходимо для работы со знаковыми числами
+    private static final long TIMESTAMP_SHIFT = AVAILABLE_BITS - TIMESTAMP_BITS;
     
     private final int clientId;
     private final int sequenceMax;
@@ -21,17 +21,6 @@ public class SnowFlakeIdGenerator {
     private volatile long sequenceOverflowCount;
     
     public SnowFlakeIdGenerator(long maxClients, int clientId) {
-        this(maxClients, clientId, Long.SIZE - 1);
-    }
-    
-    /**
-     * @param maxClients Max planned clients in your cluster
-     * @param clientId Client ID from 0 to (maxClients - 1)
-     */
-    public SnowFlakeIdGenerator(long maxClients, int clientId, int availableBits) {
-        this.AVAILABLE_BITS = availableBits;
-        this.TIMESTAMP_SHIFT = AVAILABLE_BITS - TIMESTAMP_BITS;
-        
         if (maxClients <= 0 || maxClients > 1024) {
             throw new IllegalStateException("Too many clients");
         }

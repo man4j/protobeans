@@ -20,7 +20,15 @@ public @interface EnableKafkaMessaging {
 
     String autoOffsetReset() default "earliest";
 
-    String maxPollRecords() default "500";
+    String maxPollRecords() default "100";
+    
+    String maxPollIntervalMs() default "300000"; // 5 minutes
+    
+    boolean enableDeadLetterTopic() default false;
     
     String groupId() default "DEFAULT.GROUP";
+    
+    int idleBetweenPolls() default 0;
+    
+    int dltIdleBetweenPolls() default 0;
 }

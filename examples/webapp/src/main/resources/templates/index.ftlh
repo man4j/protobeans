@@ -24,7 +24,7 @@
           <div class="col-lg-12">
             <img class="img-responsive" src="<@u.r 'img/profile.png' />" alt="">
             <div class="intro-text">
-              <span class="skills"><@f.i18n 'page.welcome' 'Welcome' />, ${user.login}!</span>
+              <span class="skills"><@f.i18n 'page.welcome' 'Welcome' />, ${principal}!</span>
               <hr class="star-light">
               <span class="skills"><@f.i18n 'page.main.content' 'This is main page'/></span>
             </div>

@@ -7,7 +7,6 @@ import java.lang.annotation.Target;
 
 import org.protobeans.postgresql.config.PostgreSqlConfig;
 import org.protobeans.postgresql.repository.ProtobeansJpaRepositoryImpl;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -20,7 +19,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
                        entityManagerFactoryRef = "pgEntityManager", 
                        transactionManagerRef = "pgTransactionManager",
                        repositoryBaseClass = ProtobeansJpaRepositoryImpl.class)
-@Configuration
 public @interface EnablePostgreSql {
     String dbHost();
     
@@ -36,10 +34,6 @@ public @interface EnablePostgreSql {
     
     String transactionIsolation() default "TRANSACTION_READ_COMMITTED";
     
-    boolean reindexOnStart() default false;
-    
-    boolean disablePreparedStatements() default false;
-    
     String showSql() default "false";
     
     /**
@@ -52,5 +46,5 @@ public @interface EnablePostgreSql {
     
     int batchSize() default 1_000;
     
-    String migrationsPath() default "postgres/migrations";
+    String migrationsPath() default "migrations/postgres";
 }

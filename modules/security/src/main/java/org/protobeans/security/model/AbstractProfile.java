@@ -32,7 +32,7 @@ public interface AbstractProfile extends UserDetails, CredentialsContainer {
     }
     
     @Override
-    default Collection<? extends GrantedAuthority> getAuthorities() {
+    default Collection<GrantedAuthority> getAuthorities() {
         return getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
     

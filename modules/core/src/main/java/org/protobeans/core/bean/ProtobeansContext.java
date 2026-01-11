@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ProtobeansContext {
-    private Map<String, Object> context = new ConcurrentHashMap<>();
+    private final Map<String, Object> context = new ConcurrentHashMap<>();
     
     public void putValue(String key, Object value) {
         context.put(key, value);

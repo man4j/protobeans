@@ -64,6 +64,7 @@ public class FreeMarkerConfig {
      * Needs for FreeMarkerView
      */
     @Bean
+    @Lazy
     public FreeMarkerConfigurer freeMarkerConfigurer(freemarker.template.Configuration cfg) {
         FreeMarkerConfigurer fmc = new FreeMarkerConfigurer();
         

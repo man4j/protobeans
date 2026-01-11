@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.security.cert.Certificate;
@@ -35,6 +34,7 @@ import ru.CryptoPro.JCP.ASN.CryptographicMessageSyntax.SignerInfo;
 import ru.CryptoPro.JCP.ASN.CryptographicMessageSyntax.SignerInfos;
 import ru.CryptoPro.JCP.ASN.PKIX1Explicit88.CertificateSerialNumber;
 import ru.CryptoPro.JCP.ASN.PKIX1Explicit88.Name;
+import ru.CryptoPro.JCP.KeyStore.JCPPrivateKeyEntry;
 import ru.CryptoPro.JCP.params.OID;
 import ru.CryptoPro.JCP.tools.AlgorithmUtility;
 
@@ -42,35 +42,38 @@ public class Cms {
     public static final String STR_CMS_OID_DATA = "1.2.840.113549.1.7.1";
     public static final String STR_CMS_OID_SIGNED = "1.2.840.113549.1.7.2";
 
-    public static byte[] CMSSignEx(byte[] data, PrivateKey key, Certificate cert, boolean detached) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException, CertificateEncodingException, Asn1Exception, IOException {
-        String signOid = AlgorithmUtility.keyAlgToSignatureOid(key.getAlgorithm());
-    
+    public static byte[] signCms(JCPPrivateKeyEntry e, byte[] data, boolean detached) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException, CertificateEncodingException, Asn1Exception, IOException {
+        var key = e.getPrivateKey();
+        var cert = e.getCertificate();
+        
+        var signOid = AlgorithmUtility.keyAlgToSignatureOid(key.getAlgorithm());
+        
         // sign
-        final Signature signature = Signature.getInstance(signOid, JCP.PROVIDER_NAME);
+        var signature = Signature.getInstance(signOid, JCP.PROVIDER_NAME);
         signature.initSign(key);
         signature.update(data);
     
-        final byte[] sign = signature.sign();
+        var sign = signature.sign();
     
         // create cms format
         return createCMSEx(data, sign, cert, detached);
     }
 
-    public static byte[] createCMSEx(byte[] buffer, byte[] sign, Certificate cert, boolean detached) throws CertificateEncodingException, Asn1Exception, IOException {
-        String pubKeyAlg = cert.getPublicKey().getAlgorithm();
-        String digestOid = AlgorithmUtility.keyAlgToDigestOid(pubKeyAlg);
-        String keyOid    = AlgorithmUtility.keyAlgToKeyAlgorithmOid(pubKeyAlg); // алгоритм ключа подписи
+    private static byte[] createCMSEx(byte[] buffer, byte[] sign, Certificate cert, boolean detached) throws CertificateEncodingException, Asn1Exception, IOException {
+        var pubKeyAlg = cert.getPublicKey().getAlgorithm();
+        var digestOid = AlgorithmUtility.keyAlgToDigestOid(pubKeyAlg);
+        var keyOid    = AlgorithmUtility.keyAlgToKeyAlgorithmOid(pubKeyAlg); // алгоритм ключа подписи
 
-        final ContentInfo all = new ContentInfo();
+        var all = new ContentInfo();
         all.contentType = new Asn1ObjectIdentifier(new OID(STR_CMS_OID_SIGNED).value);
         
-        final SignedData cms = new SignedData();
+        var cms = new SignedData();
         all.content = cms;
         cms.version = new CMSVersion(1);
 
         // digest
         cms.digestAlgorithms = new DigestAlgorithmIdentifiers(1);
-        final DigestAlgorithmIdentifier a = new DigestAlgorithmIdentifier(new OID(digestOid).value);
+        var a = new DigestAlgorithmIdentifier(new OID(digestOid).value);
 
         a.parameters = new Asn1Null();
         cms.digestAlgorithms.elements[0] = a;
@@ -83,8 +86,8 @@ public class Cms {
     
         // certificate
         cms.certificates = new CertificateSet(1);
-        final ru.CryptoPro.JCP.ASN.PKIX1Explicit88.Certificate certificate = new ru.CryptoPro.JCP.ASN.PKIX1Explicit88.Certificate();
-        final Asn1BerDecodeBuffer decodeBuffer = new Asn1BerDecodeBuffer(cert.getEncoded());
+        var certificate = new ru.CryptoPro.JCP.ASN.PKIX1Explicit88.Certificate();
+        var decodeBuffer = new Asn1BerDecodeBuffer(cert.getEncoded());
         certificate.decode(decodeBuffer);
     
         cms.certificates.elements = new CertificateChoices[1];
@@ -97,12 +100,12 @@ public class Cms {
         cms.signerInfos.elements[0].version = new CMSVersion(1);
         cms.signerInfos.elements[0].sid = new SignerIdentifier();
     
-        final byte[] encodedName = ((X509Certificate) cert).getIssuerX500Principal().getEncoded();
-        final Asn1BerDecodeBuffer nameBuf = new Asn1BerDecodeBuffer(encodedName);
-        final Name name = new Name();
+        byte[] encodedName = ((X509Certificate) cert).getIssuerX500Principal().getEncoded();
+        var nameBuf = new Asn1BerDecodeBuffer(encodedName);
+        var name = new Name();
         name.decode(nameBuf);
     
-        final CertificateSerialNumber num = new CertificateSerialNumber(((X509Certificate) cert).getSerialNumber());
+        var num = new CertificateSerialNumber(((X509Certificate) cert).getSerialNumber());
         cms.signerInfos.elements[0].sid.set_issuerAndSerialNumber(new IssuerAndSerialNumber(name, num));
         cms.signerInfos.elements[0].digestAlgorithm = new DigestAlgorithmIdentifier(new OID(digestOid).value);
         cms.signerInfos.elements[0].digestAlgorithm.parameters = new Asn1Null();
@@ -111,7 +114,7 @@ public class Cms {
         cms.signerInfos.elements[0].signature = new SignatureValue(sign);
     
         // encode
-        final Asn1BerEncodeBuffer asnBuf = new Asn1BerEncodeBuffer();
+        var asnBuf = new Asn1BerEncodeBuffer();
         all.encode(asnBuf, true);
         return asnBuf.getMsgCopy();
     }

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CoreConfig {
     @Bean
-    public InjectFromAnnotationBeanPostProcessor injectFromParamProcessor() {
+    public static InjectFromAnnotationBeanPostProcessor injectFromParamProcessor() {
         return new InjectFromAnnotationBeanPostProcessor();
     }
     
