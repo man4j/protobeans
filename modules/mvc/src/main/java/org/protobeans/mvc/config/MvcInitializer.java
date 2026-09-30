@@ -38,6 +38,7 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
     
     @Override
     protected Filter[] getServletFilters() {
+        filters.add(new CharacterEncodingFilter(StandardCharsets.UTF_8.name(), true, true));
         return filters.toArray(new Filter[] {});
     }
 
@@ -53,13 +54,6 @@ public class MvcInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-        var encodingFilter = new CharacterEncodingFilter(StandardCharsets.UTF_8.name(), 
-                                                         true, 
-                                                         true);
-        
-        servletContext.addFilter("encodingFilter", encodingFilter)
-                      .addMappingForUrlPatterns(null, false, "/*");
-        
         servletContext.addListener(RequestContextListener.class);//Для того, чтобы запрос был доступен в фильтрах
         servletContext.setSessionTrackingModes(Collections.singleton(SessionTrackingMode.COOKIE));
         

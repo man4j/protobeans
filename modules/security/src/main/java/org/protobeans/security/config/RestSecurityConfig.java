@@ -63,7 +63,7 @@ public class RestSecurityConfig {
             .securityContext(c -> c.requireExplicitSave(false))
             .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .csrf(csrf -> csrf.disable());
-
+        
         return http.build();
     }
 }

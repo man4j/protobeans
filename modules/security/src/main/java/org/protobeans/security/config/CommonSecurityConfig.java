@@ -55,9 +55,4 @@ public class CommonSecurityConfig {
     public EvaluationContextExtension securityExtension() {
         return new SecurityEvaluationContextExtension();
     }
-    
-    @Bean
-    public SecurityService securityService() {
-        return new SecurityService();
-    }
 }

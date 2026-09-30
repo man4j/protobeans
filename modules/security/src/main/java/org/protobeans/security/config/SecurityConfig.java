@@ -91,8 +91,16 @@ public class SecurityConfig {
     @Order(50)
     public SecurityFilterChain resourcesFilterChain(HttpSecurity http) throws Exception {
         var resourceUrl = PathUtils.dashedPath(MvcConfig._resourcesUrl) + "**";
+        var patterns = new String[] {resourceUrl, 
+                                     "/favicon.ico", 
+                                     "/swagger-ui.html/**", 
+                                     "/swagger-ui/**", 
+                                     "/swagger-resources/**", 
+                                     "/v3/api-docs/**", 
+                                     "/webjars/**", 
+                                     "/csrf"};
         
-        http.securityMatcher(resourceUrl)
+        http.securityMatcher(patterns)
             .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
             .requestCache(cache -> cache.disable())
             .securityContext(с -> с.disable())
@@ -110,7 +118,6 @@ public class SecurityConfig {
         
         http.authorizeHttpRequests(c ->
                 c.requestMatchers(permitAllPatterns).permitAll()
-                 .requestMatchers("/favicon.ico", "/swagger-ui.html/**", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/webjars/**", "/csrf").permitAll()
                  .requestMatchers(anonymousPatterns).access(new DefaultAuthorizationManagerFactory<>().anonymous())
                  .anyRequest().authenticated())
             .rememberMe(c -> c.rememberMeServices(rememberMeServices()).authenticationSuccessHandler(new CurrentUrlAuthenticationSuccessHandler()))

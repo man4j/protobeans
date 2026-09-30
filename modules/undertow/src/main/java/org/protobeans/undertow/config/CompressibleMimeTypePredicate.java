@@ -10,11 +10,19 @@ import io.undertow.predicate.Predicate;
 import io.undertow.server.HttpServerExchange;
 
 public class CompressibleMimeTypePredicate implements Predicate {
-    private final List<MimeType> mimeTypes;
+    private final List<MimeType> mimeTypes = new ArrayList<>();
 
-    public CompressibleMimeTypePredicate(String... mimeTypes) {
-        this.mimeTypes = new ArrayList<>(mimeTypes.length);
-        for (String mimeTypeString : mimeTypes) {
+    public CompressibleMimeTypePredicate() {
+        var mimeStringTypes = List.of(
+        "text/html",
+        "text/xml",
+        "text/plain",
+        "text/css",
+        "text/javascript",
+        "application/javascript",
+        "application/json");
+        
+        for (String mimeTypeString : mimeStringTypes) {
             this.mimeTypes.add(MimeTypeUtils.parseMimeType(mimeTypeString));
         }
     }

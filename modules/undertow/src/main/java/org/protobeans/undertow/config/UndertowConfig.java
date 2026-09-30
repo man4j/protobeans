@@ -31,7 +31,6 @@ import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.DeploymentManager;
 import io.undertow.servlet.api.ServletContainerInitializerInfo;
 import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import jakarta.servlet.MultipartConfigElement;
 import jakarta.servlet.ServletContainerInitializer;
 import jakarta.servlet.ServletException;
@@ -44,8 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UndertowConfig {
     private String host;
     private String port;
-    private Undertow undertow;
-
+    
     private String resourcesPath;
     private String welcomePage;
     private String errorPage;
@@ -103,24 +101,17 @@ public class UndertowConfig {
 
         if (!springInitializers.isEmpty()) {
             Set<Class<?>> springInitializersSet = new HashSet<>();
-
+            
             for (var initializer : springInitializers) {
                 springInitializersSet.add(initializer);
             }
-
+            
             deploymentInfo.addServletContainerInitializer(new ServletContainerInitializerInfo(SpringServletContainerInitializer.class, springInitializersSet));
         }
-
+        
         HttpHandler firstHandler = null;
         
-        Predicate compressibleTypes = new CompressibleMimeTypePredicate(
-            "text/html",
-            "text/xml",
-            "text/plain",
-            "text/css",
-            "text/javascript",
-            "application/javascript",
-            "application/json");
+        Predicate compressibleTypes = new CompressibleMimeTypePredicate();
 
         final EncodingHandler encodingHandler = new EncodingHandler(new ContentEncodingRepository().addEncodingHandler("gzip",
                 new GzipEncodingProvider(8), 
@@ -187,10 +178,5 @@ public class UndertowConfig {
         manager.deploy();                
         encodingHandler.setNext(manager.start());
         builder.setHandler(firstHandler).build().start();
-    }
-    
-    @PreDestroy
-    public void stop() {
-        undertow.stop();
     }
 }
